@@ -20,12 +20,18 @@ export const INITIAL_TRACKS = [
     { row: 4, col: 0 },
     { row: 5, col: 0 },
     { row: 6, col: 0 },
-]
+];
 
-export const getPositionFromRowAndCol = (row, col, size = SPRITE_SIZE, scale = SPRITE_SCALE, isTrain = false) => ({
+export const getPositionFromRowAndCol = (
+    row,
+    col,
+    size = SPRITE_SIZE,
+    scale = SPRITE_SCALE,
+    isTrain = false
+) => ({
     x: (col + size) * scale - HORIZONTAL_PADDING,
     y: VERTICAL_PADDING - (row + size) * scale,
-    z: isTrain ? TRAIN_DEPTH : SPRITE_DEPTH
+    z: isTrain ? TRAIN_DEPTH : SPRITE_DEPTH,
 });
 
 export const getGridPositionFromCoordinates = ({ x, y }) => {
@@ -33,16 +39,15 @@ export const getGridPositionFromCoordinates = ({ x, y }) => {
     const scale = SPRITE_SCALE;
 
     return {
-        col: Math.floor(((x + HORIZONTAL_PADDING) / scale) - size),
-        row: Math.ceil((-(y - VERTICAL_PADDING)/scale) - size) 
-    }
+        col: Math.floor((x + HORIZONTAL_PADDING) / scale - size),
+        row: Math.ceil(-(y - VERTICAL_PADDING) / scale - size),
+    };
 };
 
 export const sumGridPositions = (posA, posB) => ({
     row: posA.row + posB.row,
-    col: posA.col + posB.col
+    col: posA.col + posB.col,
 });
 
-export const areGridPositionsEqual = (posA, posB) => (
-    posA.row === posB.row && posA.col === posB.col
-);
+export const areGridPositionsEqual = (posA, posB) =>
+    posA.row === posB.row && posA.col === posB.col;
