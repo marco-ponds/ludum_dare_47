@@ -675,12 +675,14 @@ module.exports = function(originalModule) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
-/* harmony import */ var _intro__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./intro */ "./src/intro/index.js");
+/* harmony import */ var _level__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./level */ "./src/level/index.js");
 
 
 var assets = {
   textures: {
-    'player': '/assets/textures/player.png'
+    'player': '/assets/textures/player.png',
+    'train_head': '/assets/textures/train_head.png',
+    'train_carriage': '/assets/textures/train_carriage.png'
   }
 };
 var config = {
@@ -707,15 +709,51 @@ var config = {
   }
 };
 window.addEventListener('load', function () {
-  mage_engine__WEBPACK_IMPORTED_MODULE_0__["Router"].on('/', _intro__WEBPACK_IMPORTED_MODULE_1__["default"]);
+  mage_engine__WEBPACK_IMPORTED_MODULE_0__["Router"].on('/', _level__WEBPACK_IMPORTED_MODULE_1__["default"]);
   mage_engine__WEBPACK_IMPORTED_MODULE_0__["Router"].start(config, assets, '#gameContainer');
 });
 
 /***/ }),
 
-/***/ "./src/intro/index.js":
+/***/ "./src/level/grid.js":
+/*!***************************!*\
+  !*** ./src/level/grid.js ***!
+  \***************************/
+/*! exports provided: GRID_WIDTH, GRID_HEIGHT, SPRITE_SIZE, SPRITE_SCALE, SPRITE_DEPTH, HORIZONTAL_PADDING, VERTICAL_PADDING, getPositionFromRowAndCol */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GRID_WIDTH", function() { return GRID_WIDTH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GRID_HEIGHT", function() { return GRID_HEIGHT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SPRITE_SIZE", function() { return SPRITE_SIZE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SPRITE_SCALE", function() { return SPRITE_SCALE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SPRITE_DEPTH", function() { return SPRITE_DEPTH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HORIZONTAL_PADDING", function() { return HORIZONTAL_PADDING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VERTICAL_PADDING", function() { return VERTICAL_PADDING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPositionFromRowAndCol", function() { return getPositionFromRowAndCol; });
+var GRID_WIDTH = 18;
+var GRID_HEIGHT = 12;
+var SPRITE_SIZE = 4;
+var SPRITE_SCALE = 0.1;
+var SPRITE_DEPTH = -1.2;
+var HORIZONTAL_PADDING = 1.25;
+var VERTICAL_PADDING = 1;
+var getPositionFromRowAndCol = function getPositionFromRowAndCol(row, col) {
+  var size = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : SPRITE_SIZE;
+  var scale = arguments.length > 3 ? arguments[3] : undefined;
+  return {
+    x: (col + size) * scale - HORIZONTAL_PADDING,
+    y: VERTICAL_PADDING - (row + size) * scale,
+    z: SPRITE_DEPTH
+  };
+};
+
+/***/ }),
+
+/***/ "./src/level/index.js":
 /*!****************************!*\
-  !*** ./src/intro/index.js ***!
+  !*** ./src/level/index.js ***!
   \****************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -738,6 +776,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
 
 
 
@@ -751,6 +790,8 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 
+
+var BACKGROUND = 0x2f3640;
 
 var Intro = /*#__PURE__*/function (_Level) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Intro, _Level);
@@ -784,16 +825,25 @@ var Intro = /*#__PURE__*/function (_Level) {
   }
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Intro, [{
+    key: "buildLevel",
+    value: function buildLevel() {
+      for (var row = 0; row < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_HEIGHT"]; row++) {
+        for (var col = 0; col < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_WIDTH"]; col++) {
+          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]);
+          var sprite = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], 'train_carriage');
+          sprite.setScale({
+            x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
+            y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
+          });
+          sprite.setPosition(position);
+        }
+      }
+    }
+  }, {
     key: "onCreate",
     value: function onCreate() {
-      var player = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](4, 4, 'player');
-      player.setPosition({
-        z: -1
-      });
-      player.setScale({
-        x: 0.1,
-        y: 0.1
-      });
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scene"].setClearColor(BACKGROUND);
+      this.buildLevel();
     }
   }]);
 
