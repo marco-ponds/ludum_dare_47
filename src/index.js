@@ -2,7 +2,9 @@ import { Router } from 'mage-engine';
 import Intro from './intro';
 
 const assets = {
-    
+    textures: {
+        'player': '/assets/textures/player.png'
+    }
 };
 
 const config = {
