@@ -3,9 +3,13 @@ import Level from './level';
 
 const assets = {
     textures: {
-        'player': '/assets/textures/player.png',
+        'cursor': '/assets/textures/cursor.png',
         'train_head': '/assets/textures/train_head.png',
-        'train_carriage': '/assets/textures/train_carriage.png'
+        'train_carriage': '/assets/textures/train_carriage.png',
+        'dirt': '/assets/textures/dirt.png',
+        'grass_1': '/assets/textures/grass_1.png',
+        'grass_2': '/assets/textures/grass_2.png',
+        'grass_3': '/assets/textures/grass_3.png',
     }
 };
 
