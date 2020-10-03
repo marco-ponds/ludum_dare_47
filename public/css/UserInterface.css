@@ -1,0 +1,36 @@
+.main-menu {
+    margin: 1rem;
+}
+
+.game-title {
+    color: #ffffff;
+    font-size: 42pt;
+    font-family: cursive;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.game-subtitle {
+    text-align: center;
+    font-size: 12pt;
+    margin: 0;
+}
+
+.start-button {
+    margin: 1rem;
+    padding: 0.35em 1em;
+    background-color: #2f3640;
+    border: 0.1em solid #ffffff;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: cursive;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.start-button:hover {
+    color: #000000;
+    background-color: #ffffff;
+}

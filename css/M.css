@@ -40,6 +40,7 @@ canvas {
     position: absolute;
     z-index: 101;
     height: 100%;
+    width: 100%;
 }
 
 .loader {
@@ -75,20 +76,20 @@ canvas {
 
 .text-blink {
     color: #dcdde1;
-    animation: blink-animation .6s steps(3, start) infinite;
-    -webkit-animation: blink-animation .6s steps(3, start) infinite;
+    animation: blink-animation 0.6s steps(3, start) infinite;
+    -webkit-animation: blink-animation 0.6s steps(3, start) infinite;
 }
 
 .text-blink.one {
-    animation-delay: .1s;
+    animation-delay: 0.1s;
 }
 
 .text-blink.two {
-    animation-delay: .2s;
+    animation-delay: 0.2s;
 }
 
 .text-blink.three {
-    animation-delay: .3s;
+    animation-delay: 0.3s;
 }
 
 @keyframes blink-animation {
