@@ -6,6 +6,6 @@ const MainMenu = ({ onStart }) => (
             Start
         </button>
     </div>
-)
+);
 
-export default MainMenu
+export default MainMenu;

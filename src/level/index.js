@@ -1,27 +1,27 @@
-import { Level, Sprite, Scene } from 'mage-engine'
+import { Level, Sprite, Scene } from 'mage-engine';
 import {
     GRID_HEIGHT,
     GRID_WIDTH,
     getPositionFromRowAndCol,
     SPRITE_SIZE,
     SPRITE_SCALE,
-} from './grid'
-import UserInterface from '../ui/UserInterface'
+} from './grid';
+import UserInterface from '../ui/UserInterface';
 
-const BACKGROUND = 0x2f3640
+const BACKGROUND = 0x2f3640;
 
 export default class Intro extends Level {
     progressAnimation = (callback) => {
-        const loader = document.querySelector('.loader')
-        loader.classList.remove('fadeout', 'invisible')
+        const loader = document.querySelector('.loader');
+        loader.classList.remove('fadeout', 'invisible');
         setTimeout(() => {
-            loader.classList.add('fadeout')
-            callback()
-        }, 1000)
+            loader.classList.add('fadeout');
+            callback();
+        }, 1000);
         setTimeout(() => {
-            loader.classList.add('invisible')
-        }, 2000)
-    }
+            loader.classList.add('invisible');
+        }, 2000);
+    };
 
     buildLevel = () => {
         for (let row = 0; row < GRID_HEIGHT; row++) {
@@ -31,25 +31,25 @@ export default class Intro extends Level {
                     col,
                     SPRITE_SIZE,
                     SPRITE_SCALE
-                )
+                );
                 const sprite = new Sprite(
                     SPRITE_SIZE,
                     SPRITE_SIZE,
                     'train_carriage'
-                )
+                );
 
-                sprite.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE })
-                sprite.setPosition(position)
+                sprite.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE });
+                sprite.setPosition(position);
             }
         }
-    }
+    };
 
     startGame = () => {
-        this.buildLevel()
-    }
+        this.buildLevel();
+    };
 
     onCreate() {
-        Scene.setClearColor(BACKGROUND)
-        this.enableUI(UserInterface)
+        Scene.setClearColor(BACKGROUND);
+        this.enableUI(UserInterface);
     }
 }

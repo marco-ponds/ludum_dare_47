@@ -1,18 +1,18 @@
-import { Component } from 'inferno'
-import MainMenu from './MainMenu'
-import GameInterface from './GameInterface'
-import GameOver from './GameOver'
+import { Component } from 'inferno';
+import MainMenu from './MainMenu';
+import GameInterface from './GameInterface';
+import GameOver from './GameOver';
 
 class UserInterface extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             gameState: 'menu',
-        }
+        };
     }
 
     render() {
-        let component
+        let component;
         switch (this.state.gameState) {
             case 'menu':
                 component = (
@@ -23,21 +23,21 @@ class UserInterface extends Component {
                             }))
                         }
                     />
-                )
-                break
+                );
+                break;
             case 'inGame':
                 component = (
                     <GameInterface
                         onComponentDidMount={this.props.scene.startGame}
                     />
-                )
-                break
+                );
+                break;
             case 'gameOver':
-                component = <GameOver />
-                break
+                component = <GameOver />;
+                break;
         }
-        return component
+        return component;
     }
 }
 
-export default UserInterface
+export default UserInterface;

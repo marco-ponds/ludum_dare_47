@@ -8,8 +8,13 @@ export const SPRITE_DEPTH = -1.2;
 export const HORIZONTAL_PADDING = 1.25;
 export const VERTICAL_PADDING = 1;
 
-export const getPositionFromRowAndCol = (row, col, size = SPRITE_SIZE, scale) => ({
+export const getPositionFromRowAndCol = (
+    row,
+    col,
+    size = SPRITE_SIZE,
+    scale
+) => ({
     x: (col + size) * scale - HORIZONTAL_PADDING,
     y: VERTICAL_PADDING - (row + size) * scale,
-    z: SPRITE_DEPTH
+    z: SPRITE_DEPTH,
 });
