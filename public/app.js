@@ -3148,6 +3148,8 @@ var CursorScript = /*#__PURE__*/function (_BaseScript) {
           _Input$mouse$getInter2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_Input$mouse$getInter, 1),
           intersection = _Input$mouse$getInter2[0];
 
+      console.log(intersection);
+
       if (intersection && intersection.mesh.hasTag('background')) {
         _this.cursor.setPosition(intersection.mesh.getPosition());
       }
@@ -3296,7 +3298,18 @@ var Intro = /*#__PURE__*/function (_Level) {
       }, 2000);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "addCursor", function () {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "startGame", function () {
+      _this.buildLevel();
+
+      _this.addCursor();
+    });
+
+    return _this;
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Intro, [{
+    key: "addCursor",
+    value: function addCursor() {
       var cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
       var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(0, 0, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["CURSOR_SCALE"]);
       cursor.setScale({
@@ -3305,9 +3318,10 @@ var Intro = /*#__PURE__*/function (_Level) {
       });
       cursor.setPosition(position);
       cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "buildLevel", function () {
+    }
+  }, {
+    key: "buildLevel",
+    value: function buildLevel() {
       for (var row = 0; row < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_HEIGHT"]; row++) {
         for (var col = 0; col < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_WIDTH"]; col++) {
           var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]);
@@ -3329,18 +3343,8 @@ var Intro = /*#__PURE__*/function (_Level) {
           grass.setPosition(position);
         }
       }
-    });
-
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "startGame", function () {
-      _this.buildLevel();
-
-      _this.addCursor();
-    });
-
-    return _this;
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Intro, [{
+    }
+  }, {
     key: "onCreate",
     value: function onCreate() {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scene"].setClearColor(BACKGROUND);
@@ -3391,7 +3395,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var GameInterface = function GameInterface() {
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title-ingame fancy-text", "Ferrovia Folle", 16);
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "in-game-container", Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "fancy-text", "Ferrovia Folle", 16), 2);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (GameInterface);

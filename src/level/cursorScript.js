@@ -1,8 +1,6 @@
 import { BaseScript, Input } from 'mage-engine';
 
-
 export default class CursorScript extends BaseScript {
-
     constructor() {
         super('cursor');
     }
@@ -15,7 +13,7 @@ export default class CursorScript extends BaseScript {
 
     handleMouseMove = () => {
         const [intersection] = Input.mouse.getIntersections();
-
+        console.log(intersection);
         if (intersection && intersection.mesh.hasTag('background')) {
             this.cursor.setPosition(intersection.mesh.getPosition());
         }

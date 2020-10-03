@@ -26,7 +26,7 @@ export default class Intro extends Level {
         }, 2000);
     };
 
-    addCursor = () => {
+    addCursor() {
         const cursor = new Sprite(SPRITE_SIZE, SPRITE_SIZE, CURSOR);
         const position = getPositionFromRowAndCol(
             0,
@@ -38,9 +38,9 @@ export default class Intro extends Level {
         cursor.setScale({ x: CURSOR_SCALE, y: CURSOR_SCALE });
         cursor.setPosition(position);
         cursor.addScript(CURSOR);
-    };
+    }
 
-    buildLevel = () => {
+    buildLevel() {
         for (let row = 0; row < GRID_HEIGHT; row++) {
             for (let col = 0; col < GRID_WIDTH; col++) {
                 const position = getPositionFromRowAndCol(
@@ -70,7 +70,7 @@ export default class Intro extends Level {
                 grass.setPosition(position);
             }
         }
-    };
+    }
 
     startGame = () => {
         this.buildLevel();
