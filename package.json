@@ -1,0 +1,34 @@
+{
+    "name": "ludum_dare_47",
+    "version": "1.0.0",
+    "description": "Ludum Dare 47",
+    "main": "index.js",
+    "scripts": {
+        "dev": "npm run build && npm run start -- 8085",
+        "clean": "rimraf dist && rimraf public",
+        "prebuild": "npm run clean",
+        "build": "webpack --config webpack.config.js",
+        "start": "http-server ./public -p"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/core": "^7.9.6",
+        "@babel/plugin-proposal-class-properties": "^7.8.3",
+        "@babel/plugin-transform-runtime": "^7.9.6",
+        "@babel/preset-env": "^7.9.6",
+        "babel-loader": "^8.1.0",
+        "babel-plugin-inferno": "^6.1.1",
+        "copy-webpack-plugin": "6.0.2",
+        "glob": "^7.1.6",
+        "http-server": "^0.12.3",
+        "jimp": "^0.16.0",
+        "rimraf": "^3.0.2",
+        "webpack": "^4.43.0",
+        "webpack-cli": "^3.3.11"
+    },
+    "dependencies": {
+        "inferno": "^7.4.2",
+        "mage-engine": "3.0.1"
+    }
+}
