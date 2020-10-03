@@ -1,5 +1,5 @@
 import { Router } from 'mage-engine';
-import Intro from './intro';
+import Level from './level';
 
 const assets = {
     textures: {
@@ -39,6 +39,7 @@ const config = {
 
 
 window.addEventListener('load', () => {
-    Router.on('/', Intro);
+    Router.on('/', Level);
+
     Router.start(config, assets, '#gameContainer');
 });

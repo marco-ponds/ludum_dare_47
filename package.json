@@ -4,6 +4,7 @@
     "description": "Ludum Dare 47",
     "main": "index.js",
     "scripts": {
+        "resize": "node resize.js",
         "dev": "npm run build && npm run start -- 8085",
         "clean": "rimraf dist && rimraf public",
         "prebuild": "npm run clean",
