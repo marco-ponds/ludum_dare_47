@@ -3,7 +3,9 @@ import Intro from './intro';
 
 const assets = {
     textures: {
-        'player': '/assets/textures/player.png'
+        'player': '/assets/textures/player.png',
+        'train_head': '/assets/textures/train_head.png',
+        'train_carriage': '/assets/textures/train_carriage.png'
     }
 };
 
