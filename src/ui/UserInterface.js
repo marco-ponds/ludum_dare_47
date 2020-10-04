@@ -2,7 +2,7 @@ import { Component } from 'inferno';
 import MainMenu from './MainMenu';
 import GameInterface from './GameInterface';
 import GameOver from './GameOver';
-import { GAME_OVER_EVENT, GAME_RETRY_EVENT } from '../level';
+import { GAME_OVER_EVENT, GAME_RETRY_EVENT, GAME_SCORE_EVENT } from '../level';
 
 class UserInterface extends Component {
     
@@ -10,7 +10,8 @@ class UserInterface extends Component {
         super(props);
         this.state = {
             gameState: 'menu',
-            over: false
+            over: false,
+            score: 0
         };
     }
 
@@ -19,6 +20,13 @@ class UserInterface extends Component {
 
         scene.addEventListener(GAME_OVER_EVENT.type, this.handleGameOver);
         scene.addEventListener(GAME_RETRY_EVENT.type, this.handleGameRetry);
+        scene.addEventListener(GAME_SCORE_EVENT.type, this.handleScore);
+    }
+
+    handleScore = ({ score }) => {
+        this.setState({
+            score
+        });
     }
 
     handleGameOver = () => {
@@ -31,7 +39,8 @@ class UserInterface extends Component {
         console.log('received retry');
         this.setState({
             gameState: 'inGame',
-            over: false
+            over: false,
+            score: 0
         });
     }
 
@@ -50,6 +59,7 @@ class UserInterface extends Component {
             onRetry={this.props.scene.handleRetry}
             onToolbarSelection={this.props.scene.handleToolbarSelection}
             onComponentDidMount={this.props.scene.startGame}
+            score={this.state.score}
             isOver={this.state.over}
         />
     );

@@ -32,7 +32,7 @@ import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
 import CarriageScript from './scripts/carriage';
 import BoulderScript from './scripts/boulder';
 
-import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE } from './tracks';
+import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL } from './tracks';
 import UserInterface from '../ui/UserInterface';
 import { playEngineSound, playCrashSound, stopEngineSound } from './sounds';
 
@@ -45,6 +45,10 @@ export const GAME_OVER_EVENT = {
 
 export const GAME_RETRY_EVENT = {
     type: 'gameRetry'
+};
+
+export const GAME_SCORE_EVENT = {
+    type: 'gameScore'
 };
 
 export default class Intro extends Level {
@@ -220,7 +224,10 @@ export default class Intro extends Level {
         playCrashSound();
         stopEngineSound();
 
-        this.dispatchEvent(GAME_OVER_EVENT);
+        this.dispatchEvent({
+            ...GAME_OVER_EVENT,
+            score: this.score
+        });
     }
 
     createTrackAtPosition(position, type) {
@@ -323,6 +330,19 @@ export default class Intro extends Level {
 
             this.tracks.push(this.createTrackAtPosition(position, type));
         }
+    }
+
+    updateScore(track) {
+        if (track.type === VERTICAL && track.type === HORIZONTAL) {
+            this.score += 100; // each straight track is 100m
+        } else {
+            this.score += 50; // each curve is a bit less
+        }
+
+        this.dispatchEvent({
+            ...GAME_SCORE_EVENT,
+            score: this.score
+        });
     }
 
     onCreate() {

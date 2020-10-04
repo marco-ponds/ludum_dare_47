@@ -3409,13 +3409,14 @@ var isInGrid = function isInGrid(_ref2) {
 /*!****************************!*\
   !*** ./src/level/index.js ***!
   \****************************/
-/*! exports provided: GAME_OVER_EVENT, GAME_RETRY_EVENT, default */
+/*! exports provided: GAME_OVER_EVENT, GAME_RETRY_EVENT, GAME_SCORE_EVENT, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_OVER_EVENT", function() { return GAME_OVER_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_RETRY_EVENT", function() { return GAME_RETRY_EVENT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_SCORE_EVENT", function() { return GAME_SCORE_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Intro; });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
@@ -3483,6 +3484,9 @@ var GAME_OVER_EVENT = {
 };
 var GAME_RETRY_EVENT = {
   type: 'gameRetry'
+};
+var GAME_SCORE_EVENT = {
+  type: 'gameScore'
 };
 
 var Intro = /*#__PURE__*/function (_Level) {
@@ -3712,7 +3716,9 @@ var Intro = /*#__PURE__*/function (_Level) {
     value: function handleFailure() {
       Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["playCrashSound"])();
       Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["stopEngineSound"])();
-      this.dispatchEvent(GAME_OVER_EVENT);
+      this.dispatchEvent(_objectSpread(_objectSpread({}, GAME_OVER_EVENT), {}, {
+        score: this.score
+      }));
     }
   }, {
     key: "createTrackAtPosition",
@@ -3780,6 +3786,19 @@ var Intro = /*#__PURE__*/function (_Level) {
       } finally {
         _iterator.f();
       }
+    }
+  }, {
+    key: "updateScore",
+    value: function updateScore(track) {
+      if (track.type === _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"] && track.type === _tracks__WEBPACK_IMPORTED_MODULE_15__["HORIZONTAL"]) {
+        this.score += 100; // each straight track is 100m
+      } else {
+        this.score += 50; // each curve is a bit less
+      }
+
+      this.dispatchEvent(_objectSpread(_objectSpread({}, GAME_SCORE_EVENT), {}, {
+        score: this.score
+      }));
     }
   }, {
     key: "onCreate",
@@ -3944,7 +3963,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
 /* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
-/* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../sounds */ "./src/level/sounds.js");
 
 
 
@@ -3954,7 +3972,6 @@ __webpack_require__.r(__webpack_exports__);
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
 
 
 
@@ -3979,7 +3996,7 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
       this.trainHead = trainHead;
       this.trainCarriage = trainCarriage;
       this.level = level;
-      this.speed = 800;
+      this.speed = 1000;
       this.position = {
         row: 2,
         col: 3
@@ -4003,8 +4020,6 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
   }, {
     key: "handleFailure",
     value: function handleFailure() {
-      // playCrashSound();
-      // stopEngineSound();
       this.level.handleFailure();
     }
   }, {
@@ -4245,7 +4260,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       this.tracks = tracks;
       this.train = train;
       this.level = level;
-      this.speed = 800;
+      this.speed = 1000;
       this.position = {
         row: 3,
         col: 3
@@ -4274,9 +4289,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
   }, {
     key: "handleFailure",
     value: function handleFailure() {
-      this.oldDirection = null; // playCrashSound();
-      // stopEngineSound();
-
+      this.oldDirection = null;
       this.level.handleFailure();
     }
   }, {
@@ -4301,6 +4314,8 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
           };
 
           if (_this.calculateNewDirection(track)) {
+            _this.level.updateScore(track);
+
             _this.moveTrain();
           } else {
             _this.handleFailure();
@@ -4556,8 +4571,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
 /* harmony import */ var _ToolbarItem__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ToolbarItem */ "./src/ui/GameInterface/ToolbarItem.js");
 /* harmony import */ var _level_tracks__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../level/tracks */ "./src/level/tracks.js");
-/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
-/* harmony import */ var _level_sounds__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../level/sounds */ "./src/level/sounds.js");
+/* harmony import */ var _level_sounds__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../level/sounds */ "./src/level/sounds.js");
+/* harmony import */ var _utils_parseScore__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../utils/parseScore */ "./src/utils/parseScore.js");
 
 
 
@@ -4577,6 +4592,11 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 var TYPES = [_level_tracks__WEBPACK_IMPORTED_MODULE_9__["VERTICAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["HORIZONTAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_RIGHT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_RIGHT"]];
+
+var Score = function Score(_ref) {
+  var score = _ref.score;
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createVNode"])(1, "li", 'score', Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createVNode"])(1, "p", null, Object(_utils_parseScore__WEBPACK_IMPORTED_MODULE_11__["parseScore"])(score), 0), 2);
+};
 
 var Toolbar = /*#__PURE__*/function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Toolbar, _Component);
@@ -4617,13 +4637,15 @@ var Toolbar = /*#__PURE__*/function (_Component) {
         selection: type
       }); // play sound
 
-      Object(_level_sounds__WEBPACK_IMPORTED_MODULE_11__["playClickSound"])();
+      Object(_level_sounds__WEBPACK_IMPORTED_MODULE_10__["playClickSound"])();
       onToolbarSelection(type);
     }
   }, {
     key: "render",
     value: function render() {
-      return Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createVNode"])(1, "div", 'toolbar', Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createVNode"])(1, "ul", 'toolbar-container', this.mapTypesToToolbarItem(), 0), 2);
+      return Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createVNode"])(1, "div", 'toolbar', Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createVNode"])(1, "ul", 'toolbar-container', [Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createComponentVNode"])(2, Score, {
+        "score": this.props.score
+      }), this.mapTypesToToolbarItem()], 0), 2);
     }
   }]);
 
@@ -4654,7 +4676,7 @@ var ToolbarItem = function ToolbarItem(_ref) {
       isSelected = _ref$isSelected === void 0 ? false : _ref$isSelected,
       onClick = _ref.onClick;
   var texture = _level_tracks__WEBPACK_IMPORTED_MODULE_1__["TRACK_TYPES_TO_SPRITE_MAP"][type];
-  var classname = isSelected ? 'selected' : '';
+  var classname = isSelected ? 'toolbar-item selected' : 'toolbar-item';
   return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "li", classname, Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "img", null, null, 1, {
     "src": "assets/textures/".concat(texture, ".png")
   }), 2, {
@@ -4685,10 +4707,13 @@ __webpack_require__.r(__webpack_exports__);
 var GameInterface = function GameInterface(_ref) {
   var onToolbarSelection = _ref.onToolbarSelection,
       onRetry = _ref.onRetry,
-      isOver = _ref.isOver;
+      isOver = _ref.isOver,
+      score = _ref.score;
   return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createFragment"])([Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title small", "Ferrovia Folle", 16), isOver ? Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _GameOver__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    "score": score,
     "onRetry": onRetry
   }) : Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _Toolbar__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    "score": score,
     "onToolbarSelection": onToolbarSelection
   })], 0);
 };
@@ -4707,13 +4732,15 @@ var GameInterface = function GameInterface(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
+/* harmony import */ var _utils_parseScore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/parseScore */ "./src/utils/parseScore.js");
+
 
 
 var GameOver = function GameOver(_ref) {
   var _ref$score = _ref.score,
       score = _ref$score === void 0 ? 0 : _ref$score,
       onRetry = _ref.onRetry;
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'box game-over', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-over-text", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-label', "Your score: ", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-value', [score, Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(" km")], 0)], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", 'button game-over-button', "Try again, maybe?", 16, {
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'box game-over', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-over-text", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-label', "Your score: ", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-value', [Object(_utils_parseScore__WEBPACK_IMPORTED_MODULE_1__["parseScore"])(score), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(" km")], 0)], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", 'button game-over-button', "Try again, maybe?", 16, {
     "onClick": onRetry
   })], 4);
 };
@@ -4814,6 +4841,14 @@ var UserInterface = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleScore", function (_ref) {
+      var score = _ref.score;
+
+      _this.setState({
+        score: score
+      });
+    });
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleGameOver", function () {
       _this.setState({
         over: true
@@ -4825,7 +4860,8 @@ var UserInterface = /*#__PURE__*/function (_Component) {
 
       _this.setState({
         gameState: 'inGame',
-        over: false
+        over: false,
+        score: 0
       });
     });
 
@@ -4845,6 +4881,7 @@ var UserInterface = /*#__PURE__*/function (_Component) {
       return Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createComponentVNode"])(2, _GameInterface__WEBPACK_IMPORTED_MODULE_9__["default"], {
         "onRetry": _this.props.scene.handleRetry,
         "onToolbarSelection": _this.props.scene.handleToolbarSelection,
+        "score": _this.state.score,
         "isOver": _this.state.over
       }, null, {
         "onComponentDidMount": _this.props.scene.startGame
@@ -4853,7 +4890,8 @@ var UserInterface = /*#__PURE__*/function (_Component) {
 
     _this.state = {
       gameState: 'menu',
-      over: false
+      over: false,
+      score: 0
     };
     return _this;
   }
@@ -4864,6 +4902,7 @@ var UserInterface = /*#__PURE__*/function (_Component) {
       var scene = this.props.scene;
       scene.addEventListener(_level__WEBPACK_IMPORTED_MODULE_11__["GAME_OVER_EVENT"].type, this.handleGameOver);
       scene.addEventListener(_level__WEBPACK_IMPORTED_MODULE_11__["GAME_RETRY_EVENT"].type, this.handleGameRetry);
+      scene.addEventListener(_level__WEBPACK_IMPORTED_MODULE_11__["GAME_SCORE_EVENT"].type, this.handleScore);
     }
   }, {
     key: "render",
@@ -4931,6 +4970,22 @@ var getRandomInitialEdgePositionAndDirection = function getRandomInitialEdgePosi
   }
 
   return rowColDirection;
+};
+
+/***/ }),
+
+/***/ "./src/utils/parseScore.js":
+/*!*********************************!*\
+  !*** ./src/utils/parseScore.js ***!
+  \*********************************/
+/*! exports provided: parseScore */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseScore", function() { return parseScore; });
+var parseScore = function parseScore(score) {
+  return score > 1000 ? score / 1000 : score;
 };
 
 /***/ }),

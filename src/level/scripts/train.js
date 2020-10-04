@@ -26,7 +26,7 @@ export default class TrainScript extends BaseScript {
         this.train = train;
         this.level = level;
 
-        this.speed = 800;
+        this.speed = 1000;
 
         this.position = { row: 3, col: 3 };
         this.oldDirection = DIRECTIONS.DOWN;
@@ -57,9 +57,6 @@ export default class TrainScript extends BaseScript {
 
     handleFailure() {
         this.oldDirection = null;
-        // playCrashSound();
-        // stopEngineSound();
-
         this.level.handleFailure();
     }
 
@@ -83,6 +80,8 @@ export default class TrainScript extends BaseScript {
             if (track) {
                 this.position = { row, col };
                 if (this.calculateNewDirection(track)) {
+                    this.level.updateScore(track);
+                    
                     this.moveTrain();
                 } else {
                     this.handleFailure();
