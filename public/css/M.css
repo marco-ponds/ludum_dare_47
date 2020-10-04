@@ -5,6 +5,7 @@ body {
     height: 100%;
     width: 100%;
     position: absolute;
+    font-family: Bangers, cursive;
 }
 
 .visible {
@@ -163,8 +164,4 @@ canvas {
     color: #dcdde1;
     padding: 5px;
     width: 0;
-}
-
-body {
-    font-family: 'Share Tech Mono';
 }

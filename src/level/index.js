@@ -83,6 +83,7 @@ export default class Intro extends Level {
 
         this.trainHead.addScript(TRAIN, true, { tracks: this.tracks });
     }
+
     addTrainCarriage() {
         this.trainCarriage = new Sprite(
             SPRITE_SIZE,
@@ -134,12 +135,13 @@ export default class Intro extends Level {
         });
     };
 
-    createTrackAtPosition(position, type = VERTICAL) {
-        const track = new Sprite(
-            SPRITE_SIZE,
-            SPRITE_SIZE,
-            TRACK_TYPES_TO_SPRITE_MAP[type]
-        );
+    handleToolbarSelection = (selection) => {
+        this.toolbarSelection = selection;
+    }
+
+    createTrackAtPosition(position) {
+        const sprite = TRACK_TYPES_TO_SPRITE_MAP[this.toolbarSelection];
+        const track = new Sprite(SPRITE_SIZE, SPRITE_SIZE, sprite);
 
         track.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE });
         track.addTags([TRACK]);
@@ -148,7 +150,7 @@ export default class Intro extends Level {
 
         track.setOpacity(0.8);
 
-        track.type = type;
+        track.type = this.toolbarSelection || VERTICAL;
         track.gridPosition = getGridPositionFromCoordinates(position);
 
         return track;
@@ -211,6 +213,7 @@ export default class Intro extends Level {
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);
 
         this.tracks = [];
+        this.toolbarSelection = VERTICAL;
 
         this.enableUI(UserInterface);
     }

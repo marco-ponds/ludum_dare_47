@@ -1,7 +1,10 @@
-const GameInterface = () => (
-    <div className="in-game-container">
+import Toolbar from "./Toolbar";
+
+const GameInterface = ({ onToolbarSelection }) => (
+    <>
         <h1 className="fancy-text">Ferrovia Folle</h1>
-    </div>
+        <Toolbar onToolbarSelection={onToolbarSelection}/>
+    </>
 );
 
 export default GameInterface;
