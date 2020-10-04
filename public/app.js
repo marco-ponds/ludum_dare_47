@@ -3537,7 +3537,7 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "createTrackAtPosition",
     value: function createTrackAtPosition(position) {
-      var sprite = _tracks__WEBPACK_IMPORTED_MODULE_12__["TRACK_TYPES_TO_SPRITE_MAP"][this.toolbarSelection];
+      var sprite = _tracks__WEBPACK_IMPORTED_MODULE_13__["TRACK_TYPES_TO_SPRITE_MAP"][this.toolbarSelection];
       var track = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], sprite);
       track.setScale({
         x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
@@ -3547,7 +3547,7 @@ var Intro = /*#__PURE__*/function (_Level) {
       track.setPosition(position);
       track.setColor(WHITE);
       track.setOpacity(0.8);
-      track.type = this.toolbarSelection || _tracks__WEBPACK_IMPORTED_MODULE_12__["VERTICAL"];
+      track.type = this.toolbarSelection || _tracks__WEBPACK_IMPORTED_MODULE_13__["VERTICAL"];
       track.gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getGridPositionFromCoordinates"])(position);
       return track;
     }
@@ -3605,8 +3605,8 @@ var Intro = /*#__PURE__*/function (_Level) {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_11__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__["default"]);
       this.tracks = [];
-      this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_12__["VERTICAL"];
-      this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_13__["default"]);
+      this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_13__["VERTICAL"];
+      this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_14__["default"]);
     }
   }]);
 
@@ -3637,7 +3637,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
 /* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
 

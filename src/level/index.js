@@ -83,6 +83,7 @@ export default class Intro extends Level {
 
         this.trainHead.addScript(TRAIN, true, { tracks: this.tracks });
     }
+
     addTrainCarriage() {
         this.trainCarriage = new Sprite(
             SPRITE_SIZE,
