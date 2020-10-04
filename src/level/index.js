@@ -32,7 +32,7 @@ import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
 import CarriageScript from './scripts/carriage';
 import BoulderScript from './scripts/boulder';
 
-import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL } from './tracks';
+import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL, transformTrackLifeToOpacity } from './tracks';
 import UserInterface from '../ui/UserInterface';
 import { playEngineSound, playCrashSound, stopEngineSound } from './sounds';
 
@@ -168,7 +168,7 @@ export default class Intro extends Level {
 
     rollForObstacle = () => {
         const result = Math.random();
-        if (result < 0.3) {
+        if (result < 0.2) {
             this.addBoulder();
         }
     };
@@ -185,13 +185,12 @@ export default class Intro extends Level {
     };
 
     handleRemoveTrack = (removedTrack) => {
-        this.tracks = this.tracks.filter(
-            track => !areGridPositionsEqual(track.gridPosition, removedTrack.gridPosition)
+        const index = this.tracks.findIndex(track => 
+            areGridPositionsEqual(track.gridPosition, removedTrack.gridPosition)
         );
 
-        console.log(this.tracks, this.tracks.length);
-
-        removedTrack.dispose();
+        this.tracks[index].dispose();
+        this.tracks.splice(index, 1);
 
         this.trainHead.dispatchEvent({
             ...TRACK_CHANGE_EVENT,
@@ -205,15 +204,19 @@ export default class Intro extends Level {
             areGridPositionsEqual(track.gridPosition, event.track.gridPosition)
         );
 
-        this.tracks[index].type = this.toolbarSelection;
-        this.tracks[index].setTextureMap(
-            TRACK_TYPES_TO_SPRITE_MAP[this.toolbarSelection]
-        );
+        if (this.tracks[index]) {
+            this.tracks[index].type = this.toolbarSelection;
+            this.tracks[index].setTextureMap(
+                TRACK_TYPES_TO_SPRITE_MAP[this.toolbarSelection]
+            );
+            this.tracks[index].life = MAX_TRACK_LIFE;
+            this.tracks[index].setOpacity(1);
 
-        this.trainHead.dispatchEvent({
-            ...TRACK_CHANGE_EVENT,
-            tracks: this.tracks,
-        });
+            this.trainHead.dispatchEvent({
+                ...TRACK_CHANGE_EVENT,
+                tracks: this.tracks,
+            });
+        }
     };
 
     handleToolbarSelection = (selection) => {
@@ -345,8 +348,19 @@ export default class Intro extends Level {
         });
     }
 
+    deteriorateTrack = (track) => {
+        track.life = track.life - 1;
+        const opacity = transformTrackLifeToOpacity(track);
+
+        if (track.life > 0) {
+            track.setOpacity(opacity);
+        } else {
+            this.handleRemoveTrack(track);
+        }
+    } 
+
     onCreate() {
-        Audio.setVolume(2);
+        Audio.setVolume(0.1);
         //Scene.setClearColor(BACKGROUND);
         Scripts.create(CURSOR, CursorScript);
         Scripts.create(TRAIN, TrainScript);

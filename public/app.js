@@ -3536,11 +3536,16 @@ var Intro = /*#__PURE__*/function (_Level) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleRemoveTrack", function (removedTrack) {
-      _this.tracks = _this.tracks.filter(function (track) {
-        return !Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, removedTrack.gridPosition);
-      });
-      console.log(_this.tracks, _this.tracks.length);
-      removedTrack.dispose();
+      var index = _this.tracks.findIndex(function (track) {
+        return Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, removedTrack.gridPosition);
+      }); // this.tracks = this.tracks.filter(
+      //     track => !areGridPositionsEqual(track.gridPosition, removedTrack.gridPosition)
+      // );
+
+
+      _this.tracks[index].dispose();
+
+      _this.tracks.splice(index, 1);
 
       _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
@@ -3553,13 +3558,19 @@ var Intro = /*#__PURE__*/function (_Level) {
         return Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
       });
 
-      _this.tracks[index].type = _this.toolbarSelection;
+      if (_this.tracks[index]) {
+        _this.tracks[index].type = _this.toolbarSelection;
 
-      _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][_this.toolbarSelection]);
+        _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][_this.toolbarSelection]);
 
-      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
-        tracks: _this.tracks
-      }));
+        _this.tracks[index].life = _tracks__WEBPACK_IMPORTED_MODULE_15__["MAX_TRACK_LIFE"];
+
+        _this.tracks[index].setOpacity(1);
+
+        _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
+          tracks: _this.tracks
+        }));
+      }
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleToolbarSelection", function (selection) {
@@ -3602,8 +3613,7 @@ var Intro = /*#__PURE__*/function (_Level) {
 
       _this.buildInitialtracks();
 
-      _this.boulders = [];
-      _this.obstacleInterval = setInterval(_this.rollForObstacle, 1000);
+      _this.boulders = []; // this.obstacleInterval = setInterval(this.rollForObstacle, 1000);
 
       _this.addTrain();
 
@@ -3618,6 +3628,17 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.tracks = [];
       _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
       clearInterval(_this.obstacleInterval);
+    });
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "deteriorateTrack", function (track) {
+      track.life = track.life - 1;
+      var opacity = Object(_tracks__WEBPACK_IMPORTED_MODULE_15__["transformTrackLifeToOpacity"])(track);
+
+      if (track.life > 0) {
+        track.setOpacity(opacity);
+      } else {
+        _this.handleRemoveTrack(track);
+      }
     });
 
     return _this;
@@ -3803,7 +3824,7 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "onCreate",
     value: function onCreate() {
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(2); //Scene.setClearColor(BACKGROUND);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(0.1); //Scene.setClearColor(BACKGROUND);
 
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_12__["default"]);
@@ -4316,6 +4337,8 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
           if (_this.calculateNewDirection(track)) {
             _this.level.updateScore(track);
 
+            _this.level.deteriorateTrack(track);
+
             _this.moveTrain();
           } else {
             _this.handleFailure();
@@ -4419,7 +4442,7 @@ var getGrassSprite = function getGrassSprite() {
 /*!*****************************!*\
   !*** ./src/level/tracks.js ***!
   \*****************************/
-/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, getNextRotation, isOnTrack */
+/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, getNextRotation, isOnTrack, transformTrackLifeToOpacity */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4445,6 +4468,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "convertTrackTypeToNewDirection", function() { return convertTrackTypeToNewDirection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextRotation", function() { return getNextRotation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOnTrack", function() { return isOnTrack; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "transformTrackLifeToOpacity", function() { return transformTrackLifeToOpacity; });
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
 
 var DIRECTIONS = {
@@ -4526,7 +4550,7 @@ var TRACK_TYPES_MAP = {
   }
 };
 var TRACKS_ROTATION = [VERTICAL, TOP_RIGHT, HORIZONTAL, BOTTOM_RIGHT, BOTTOM_LEFT, HORIZONTAL2, TOP_LEFT];
-var MAX_TRACK_LIFE = 5;
+var MAX_TRACK_LIFE = 3;
 var convertTrackTypeToNewDirection = function convertTrackTypeToNewDirection(track, direction) {
   var trackType = TRACK_TYPES_MAP[track.type];
   return trackType ? trackType[direction.type] : null;
@@ -4541,6 +4565,9 @@ var isOnTrack = function isOnTrack(position, tracks) {
     return Object(_grid__WEBPACK_IMPORTED_MODULE_0__["areGridPositionsEqual"])(track.gridPosition, gridPosition);
   }).pop();
   return track;
+};
+var transformTrackLifeToOpacity = function transformTrackLifeToOpacity(track) {
+  return track.life / MAX_TRACK_LIFE;
 };
 
 /***/ }),
@@ -4740,7 +4767,7 @@ var GameOver = function GameOver(_ref) {
   var _ref$score = _ref.score,
       score = _ref$score === void 0 ? 0 : _ref$score,
       onRetry = _ref.onRetry;
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'box game-over', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-over-text", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-label', "Your score: ", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-value', [Object(_utils_parseScore__WEBPACK_IMPORTED_MODULE_1__["parseScore"])(score), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(" km")], 0)], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", 'button game-over-button', "Try again, maybe?", 16, {
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'box game-over', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-over-text", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-label', "score: ", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-value', Object(_utils_parseScore__WEBPACK_IMPORTED_MODULE_1__["parseScore"])(score), 0)], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", 'button game-over-button', "Try again, maybe?", 16, {
     "onClick": onRetry
   })], 4);
 };
@@ -4985,7 +5012,7 @@ var getRandomInitialEdgePositionAndDirection = function getRandomInitialEdgePosi
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseScore", function() { return parseScore; });
 var parseScore = function parseScore(score) {
-  return score > 1000 ? score / 1000 : score;
+  return score > 1000 ? "".concat(score / 1000, " km") : "".concat(score, " m");
 };
 
 /***/ }),

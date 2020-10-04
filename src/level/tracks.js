@@ -73,7 +73,7 @@ export const TRACKS_ROTATION = [
     TOP_LEFT,
 ];
 
-export const MAX_TRACK_LIFE = 5;
+export const MAX_TRACK_LIFE = 3;
 
 export const convertTrackTypeToNewDirection = (track, direction) => {
     const trackType = TRACK_TYPES_MAP[track.type];
@@ -98,4 +98,8 @@ export const isOnTrack = (position, tracks) => {
         .pop();
 
     return track;
+};
+
+export const transformTrackLifeToOpacity = (track) => {
+    return track.life / MAX_TRACK_LIFE;
 };

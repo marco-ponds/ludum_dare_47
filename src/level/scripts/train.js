@@ -81,6 +81,7 @@ export default class TrainScript extends BaseScript {
                 this.position = { row, col };
                 if (this.calculateNewDirection(track)) {
                     this.level.updateScore(track);
+                    this.level.deteriorateTrack(track);
                     
                     this.moveTrain();
                 } else {
