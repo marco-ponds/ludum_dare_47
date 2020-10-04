@@ -271,7 +271,7 @@ export default class Intro extends Level {
 
     onCreate() {
         Audio.setVolume(2);
-        Scene.setClearColor(BACKGROUND);
+        //Scene.setClearColor(BACKGROUND);
         Scripts.create(CURSOR, CursorScript);
         Scripts.create(TRAIN, TrainScript);
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);

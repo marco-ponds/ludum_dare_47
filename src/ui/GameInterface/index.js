@@ -2,7 +2,7 @@ import Toolbar from "./Toolbar";
 
 const GameInterface = ({ onToolbarSelection }) => (
     <>
-        <h1 className="fancy-text">Ferrovia Folle</h1>
+        <h1 className="game-title small">Ferrovia Folle</h1>
         <Toolbar onToolbarSelection={onToolbarSelection}/>
     </>
 );

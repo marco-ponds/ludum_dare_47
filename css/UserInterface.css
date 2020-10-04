@@ -3,10 +3,28 @@
 }
 
 .main-menu {
-    margin: 1rem;
     width: 100%;
     height: 100%;
     text-align: center;
+    color: black;
+    position: absolute;
+    z-index: 104;
+    /* background: #E5DECF; */
+    background: repeating-linear-gradient(45deg, #E5DECF, #E5DECF 30px, #DDD7CC 0, #DDD7CC 60px)
+}
+
+.menu-container {
+    height: 400px;
+    width: 800px;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.box {
+    background: #F0EDE5;
+    border-radius: 4px;
+    border: 1px solid #B7B6B3;
+    box-shadow: 0px 6px #C1C0C1, 0px 8px #A7A6A4, 0px 13px 2px #C7BEB2;
 }
 
 .in-game-container {
@@ -16,37 +34,58 @@
 }
 
 .game-title {
-    color: #2c3e50;
     font-size: 42pt;
     margin-bottom: 0.5rem;
     margin: 0;
+    letter-spacing: 8px;
+    padding: 24px;
+    /* color: #494139; */
+    text-shadow: 1px 6px #A9CC7D, -4px 6px #EFBA54, 4px 12px #BDD5E4;
+    font-weight: 10;
+    padding-bottom: 16px;
+}
+
+.game-title.small {
+    font-size: 32px;
+    padding: 16px;
+    padding-bottom: 8px;
+    width: 600px;
+    margin: auto;
+    text-align: center;
 }
 
 .game-subtitle {
-    font-size: 12pt;
+    font-size: 16pt;
     margin: 0;
 }
 
 .game-instructions {
+    height: 132px;
     margin-top: 2rem;
 }
 
 .start-button {
-    margin: 1rem auto;
-    padding: 0.35em 1em;
-    background-color: #2f3640;
-    border: 0.1em solid #ffffff;
+    background-color: #EFBA54;
     border-radius: 0.12em;
     box-sizing: border-box;
     text-decoration: none;
-    color: #ffffff;
     text-align: center;
-    transition: all 0.2s;
+    font-family: Kamatic;
+    height: 50px;
+    width: 150px;
+    border-radius: 4px;
+    box-shadow: 0px 4px #B1893E, 0px 6px #6D5530, 0px 12px #C9C2B3;
+    border: 1px solid #6D5530;
+    outline: none;
+    user-select: none;
 }
 
-.start-button:hover {
-    color: #000000;
-    background-color: #ffffff;
+.start-button:hover,
+.start-button:active {
+    background: #E09D37;
+    border: 1px solid #6C4B19;
+    box-shadow: 0px 2px #8E5D1F, 0px 4px #614B25, 0px 8px #BDB2A1;
+    margin-top: 4px;
 }
 
 .toolbar {
@@ -60,6 +99,7 @@
     width: 560px;
     margin: auto;
     padding: 8px 0;
+    padding-bottom: 16px;
     margin-bottom: 16px;
     background: #f0ede5;
     border: 1px solid #acaba8;

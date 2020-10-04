@@ -1,24 +1,7 @@
 body {
-    background: #2f3640;
-    color: #dcdde1;
-}
-
-.bar {
-    background: transparent;
-}
-
-.progress {
-    background: #dcdde1;
-    color: #dcdde1;
+    background: #E4DDCE;
 }
 
 a {
     text-decoration: none !important;
-}
-
-.overlay {
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    background: repeating-linear-gradient(45deg, #f1c40f, #f1c40f 30px, #f39c12 0, #f39c12 60px);
 }

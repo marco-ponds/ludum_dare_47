@@ -3133,13 +3133,13 @@ var GRID_WIDTH = 18;
 var GRID_HEIGHT = 12;
 var SPRITE_SIZE = 4;
 var SPRITE_SCALE = 0.1;
-var SPRITE_DEPTH = -1.2;
+var SPRITE_DEPTH = -0.8;
 var TRAIN_SCALE = 0.1;
-var TRAIN_DEPTH = -1.19999;
+var TRAIN_DEPTH = -0.79999;
 var CURSOR_SCALE = 0.12;
-var CURSOR_DEPTH = -1.1999;
+var CURSOR_DEPTH = -0.7999;
 var HORIZONTAL_PADDING = 1.25;
-var VERTICAL_PADDING = 1;
+var VERTICAL_PADDING = 0.95;
 var INITIAL_TRACKS = [{
   row: 4,
   col: 3,
@@ -3307,14 +3307,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
-<<<<<<< HEAD
-
-
-var BACKGROUND = 0x2f3640;
-=======
 var BACKGROUND = 0xe3dbcc; //0x2f3640;
 
->>>>>>> styled toolbar, added sound on click
 var WHITE = 0xffffff;
 
 var Intro = /*#__PURE__*/function (_Level) {
@@ -3562,12 +3556,11 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "onCreate",
     value: function onCreate() {
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(2);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scene"].setClearColor(BACKGROUND);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_12__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_13__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(2); //Scene.setClearColor(BACKGROUND);
+
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_11__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__["default"]);
       this.tracks = [];
       this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
       window.tracks = this.tracks;
@@ -4425,7 +4418,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var GameInterface = function GameInterface(_ref) {
   var onToolbarSelection = _ref.onToolbarSelection;
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createFragment"])([Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "fancy-text", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _Toolbar__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createFragment"])([Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title small", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _Toolbar__WEBPACK_IMPORTED_MODULE_1__["default"], {
     "onToolbarSelection": onToolbarSelection
   })], 4);
 };
@@ -4464,13 +4457,21 @@ var GameOver = function GameOver() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
+
 
 
 var MainMenu = function MainMenu(_ref) {
   var onStart = _ref.onStart;
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "main-menu fancy-text", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-subtitle", "(Crazy Railway)", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-instructions", "Instructions go here", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", "start-button", "Start", 16, {
-    "onClick": onStart
-  })], 4);
+
+  var handleClick = function handleClick() {
+    new mage_engine__WEBPACK_IMPORTED_MODULE_1__["Sound"]('click').start();
+    onStart();
+  };
+
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "main-menu fancy-text", Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'menu-container box', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-subtitle", "(Crazy Railway)", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-instructions", "Instructions go here", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", "start-button", "Start", 16, {
+    "onClick": handleClick
+  })], 4), 2);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (MainMenu);
