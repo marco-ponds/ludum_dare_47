@@ -13,14 +13,12 @@ import {
 } from './grid';
 import {
     DIRT,
-    GRASS,
     getGrassSprite,
     CURSOR,
     TRACK,
     TRAIN_HEAD,
     TRAIN,
     TRAIN_CARRIAGE,
-    TRACK_VERTICAL,
 } from './sprites';
 import CursorScript, {
     PLACE_TRACK_EVENT,
@@ -137,10 +135,11 @@ export default class Intro extends Level {
 
     handleToolbarSelection = (selection) => {
         this.toolbarSelection = selection;
-    }
+    };
 
-    createTrackAtPosition(position) {
-        const sprite = TRACK_TYPES_TO_SPRITE_MAP[this.toolbarSelection];
+    createTrackAtPosition(position, type) {
+        const trackType = type ? type : this.toolbarSelection;
+        const sprite = TRACK_TYPES_TO_SPRITE_MAP[trackType];
         const track = new Sprite(SPRITE_SIZE, SPRITE_SIZE, sprite);
 
         track.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE });
@@ -150,7 +149,7 @@ export default class Intro extends Level {
 
         track.setOpacity(0.8);
 
-        track.type = this.toolbarSelection || VERTICAL;
+        track.type = trackType;
         track.gridPosition = getGridPositionFromCoordinates(position);
 
         return track;

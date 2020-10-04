@@ -8,6 +8,7 @@ const assets = {
         cursor: '/assets/textures/cursor.png',
         train_head: '/assets/textures/train_head.png',
         train_carriage: '/assets/textures/train_carriage.png',
+        boulder: '/assets/textures/boulder.png',
         dirt: '/assets/textures/dirt.png',
         grass_1: '/assets/textures/grass_1.png',
         grass_2: '/assets/textures/grass_2.png',
