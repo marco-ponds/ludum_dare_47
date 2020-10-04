@@ -5,16 +5,16 @@ export const GRID_HEIGHT = 12;
 
 export const SPRITE_SIZE = 4;
 export const SPRITE_SCALE = 0.1;
-export const SPRITE_DEPTH = -1.2;
+export const SPRITE_DEPTH = -0.8;
 
 export const TRAIN_SCALE = 0.1;
-export const TRAIN_DEPTH = -1.19999;
+export const TRAIN_DEPTH = -0.79999;
 
 export const CURSOR_SCALE = 0.12;
-export const CURSOR_DEPTH = -1.1999;
+export const CURSOR_DEPTH = -0.7999;
 
 export const HORIZONTAL_PADDING = 1.25;
-export const VERTICAL_PADDING = 1;
+export const VERTICAL_PADDING = 0.95;
 
 export const INITIAL_TRACKS = [
     { row: 4, col: 3, type: VERTICAL },

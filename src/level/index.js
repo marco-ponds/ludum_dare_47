@@ -1,4 +1,4 @@
-import { Level, Sprite, Scene, Scripts } from 'mage-engine';
+import { Level, Sprite, Scene, Scripts, Audio } from 'mage-engine';
 import { getRandomInitialEdgePositionAndDirection } from '../utils/getRandomInitialEdgePositionAndDirection';
 import {
     GRID_HEIGHT,
@@ -35,7 +35,7 @@ import BoulderScript from './scripts/boulder';
 import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP } from './tracks';
 import UserInterface from '../ui/UserInterface';
 
-const BACKGROUND = 0x2f3640;
+const BACKGROUND = 0xe3dbcc;//0x2f3640;
 const WHITE = 0xffffff;
 
 export default class Intro extends Level {
@@ -270,7 +270,8 @@ export default class Intro extends Level {
     }
 
     onCreate() {
-        Scene.setClearColor(BACKGROUND);
+        Audio.setVolume(2);
+        //Scene.setClearColor(BACKGROUND);
         Scripts.create(CURSOR, CursorScript);
         Scripts.create(TRAIN, TrainScript);
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);
