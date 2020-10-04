@@ -1,5 +1,6 @@
 export const DIRT = 'dirt';
 export const GRASS_TYPES = ['grass_1', 'grass_2', 'grass_3'];
+export const BOULDER = 'boulder';
 
 export const CURSOR = 'cursor';
 export const TRACK = 'track';
@@ -15,5 +16,5 @@ export const TRACK_TOP_RIGHT = 'tracks_top_right';
 export const TRACK_BOTTOM_LEFT = 'tracks_bottom_left';
 export const TRACK_BOTTOM_RIGHT = 'tracks_bottom_right';
 
-export const getGrassSprite = () => GRASS_TYPES[Math.floor(Math.random() * GRASS_TYPES.length)];
-
+export const getGrassSprite = () =>
+    GRASS_TYPES[Math.floor(Math.random() * GRASS_TYPES.length)];

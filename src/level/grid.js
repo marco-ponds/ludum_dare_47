@@ -55,3 +55,6 @@ export const sumGridPositions = (posA, posB) => ({
 
 export const areGridPositionsEqual = (posA, posB) =>
     posA.row === posB.row && posA.col === posB.col;
+
+export const isInGrid = ({ row, col }) =>
+    row >= 0 && row <= GRID_HEIGHT && col >= 0 && col <= GRID_WIDTH;

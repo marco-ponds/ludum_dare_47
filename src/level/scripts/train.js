@@ -8,7 +8,11 @@ import {
     TRAIN_SCALE,
     SPRITE_SCALE,
 } from '../grid';
-import { convertTrackTypeToNewDirection, DIRECTIONS } from '../tracks';
+import {
+    convertTrackTypeToNewDirection,
+    isOnTrack,
+    DIRECTIONS,
+} from '../tracks';
 
 export const TRACK_CHANGE_EVENT = {
     type: 'newTrack',
@@ -23,7 +27,7 @@ export default class TrainScript extends BaseScript {
         this.tracks = tracks;
         this.train = train;
 
-        this.speed = 500;
+        this.speed = 2000;
 
         this.position = { row: 3, col: 3 };
         this.oldDirection = DIRECTIONS.down;
@@ -38,16 +42,16 @@ export default class TrainScript extends BaseScript {
         this.moveTrain();
     }
 
-    isOnTrack(position) {
-        const gridPosition = getGridPositionFromCoordinates(position);
-        const track = this.tracks
-            .filter((track) =>
-                areGridPositionsEqual(track.gridPosition, gridPosition)
-            )
-            .pop();
-
-        return track;
-    }
+    // isOnTrack(position) {
+    //     const gridPosition = getGridPositionFromCoordinates(position);
+    //     const track = this.tracks
+    //         .filter((track) =>
+    //             areGridPositionsEqual(track.gridPosition, gridPosition)
+    //         )
+    //         .pop();
+    //
+    //     return track;
+    // }
 
     calculateNewDirection(track) {
         const newDirection = convertTrackTypeToNewDirection(
@@ -88,7 +92,7 @@ export default class TrainScript extends BaseScript {
         this.train.setRotation(orientation * (Math.PI / 180));
 
         this.train.goTo(position, this.speed).then(() => {
-            const track = this.isOnTrack(position);
+            const track = isOnTrack(position, this.tracks);
 
             if (track) {
                 this.position = { row, col };

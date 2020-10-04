@@ -3053,6 +3053,7 @@ var assets = {
     cursor: '/assets/textures/cursor.png',
     train_head: '/assets/textures/train_head.png',
     train_carriage: '/assets/textures/train_carriage.png',
+    boulder: '/assets/textures/boulder.png',
     dirt: '/assets/textures/dirt.png',
     grass_1: '/assets/textures/grass_1.png',
     grass_2: '/assets/textures/grass_2.png',
@@ -3099,7 +3100,7 @@ window.addEventListener('load', function () {
 /*!***************************!*\
   !*** ./src/level/grid.js ***!
   \***************************/
-/*! exports provided: GRID_WIDTH, GRID_HEIGHT, SPRITE_SIZE, SPRITE_SCALE, SPRITE_DEPTH, TRAIN_SCALE, TRAIN_DEPTH, CURSOR_SCALE, CURSOR_DEPTH, HORIZONTAL_PADDING, VERTICAL_PADDING, INITIAL_TRACKS, getPositionFromRowAndCol, getGridPositionFromCoordinates, sumGridPositions, areGridPositionsEqual */
+/*! exports provided: GRID_WIDTH, GRID_HEIGHT, SPRITE_SIZE, SPRITE_SCALE, SPRITE_DEPTH, TRAIN_SCALE, TRAIN_DEPTH, CURSOR_SCALE, CURSOR_DEPTH, HORIZONTAL_PADDING, VERTICAL_PADDING, INITIAL_TRACKS, getPositionFromRowAndCol, getGridPositionFromCoordinates, sumGridPositions, areGridPositionsEqual, isInGrid */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3120,6 +3121,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGridPositionFromCoordinates", function() { return getGridPositionFromCoordinates; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sumGridPositions", function() { return sumGridPositions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "areGridPositionsEqual", function() { return areGridPositionsEqual; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isInGrid", function() { return isInGrid; });
 /* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tracks */ "./src/level/tracks.js");
 
 var GRID_WIDTH = 18;
@@ -3188,6 +3190,11 @@ var sumGridPositions = function sumGridPositions(posA, posB) {
 var areGridPositionsEqual = function areGridPositionsEqual(posA, posB) {
   return posA.row === posB.row && posA.col === posB.col;
 };
+var isInGrid = function isInGrid(_ref2) {
+  var row = _ref2.row,
+      col = _ref2.col;
+  return row >= 0 && row <= GRID_HEIGHT && col >= 0 && col <= GRID_WIDTH;
+};
 
 /***/ }),
 
@@ -3216,13 +3223,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
-/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
-/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
-/* harmony import */ var _scripts_cursor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/cursor */ "./src/level/scripts/cursor.js");
-/* harmony import */ var _scripts_train__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/train */ "./src/level/scripts/train.js");
-/* harmony import */ var _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/carriage */ "./src/level/scripts/carriage.js");
-/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./tracks */ "./src/level/tracks.js");
-/* harmony import */ var _ui_UserInterface__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../ui/UserInterface */ "./src/ui/UserInterface.js");
+/* harmony import */ var _utils_getRandomInitialEdgePositionAndDirection__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/getRandomInitialEdgePositionAndDirection */ "./src/utils/getRandomInitialEdgePositionAndDirection.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
+/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
+/* harmony import */ var _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/cursor */ "./src/level/scripts/cursor.js");
+/* harmony import */ var _scripts_train__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/train */ "./src/level/scripts/train.js");
+/* harmony import */ var _scripts_carriage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/carriage */ "./src/level/scripts/carriage.js");
+/* harmony import */ var _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/boulder */ "./src/level/scripts/boulder.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tracks */ "./src/level/tracks.js");
+/* harmony import */ var _ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../ui/UserInterface */ "./src/ui/UserInterface.js");
 
 
 
@@ -3244,6 +3253,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+
 
 
 
@@ -3284,28 +3295,49 @@ var Intro = /*#__PURE__*/function (_Level) {
       }, 2000);
     });
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "rollForObstacle", function () {
+      var result = Math.random();
+
+      if (result < 0.3) {
+        _this.addBoulder();
+      }
+    });
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handlePlaceTrack", function (event) {
       var position = event.position;
 
       _this.tracks.push(_this.createTrackAtPosition(position));
 
-      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_11__["TRACK_CHANGE_EVENT"]), {}, {
+      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
       }));
     });
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleRemoveTrack", function (removedTrack) {
+      console.log('removedTrack');
+      console.log(removedTrack);
+      console.log('pre');
+      console.log(_this.tracks);
+      var gridPosition = removedTrack.gridPosition;
+      _this.tracks = _this.tracks.filter(function (track) {
+        return track.gridPosition !== gridPosition;
+      });
+      console.log(_this.tracks);
+      console.log('post');
+    });
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleTrackClick", function (event) {
-      var nextRotation = Object(_tracks__WEBPACK_IMPORTED_MODULE_13__["getNextRotation"])(event.track);
+      var nextRotation = Object(_tracks__WEBPACK_IMPORTED_MODULE_15__["getNextRotation"])(event.track);
 
       var index = _this.tracks.findIndex(function (track) {
-        return Object(_grid__WEBPACK_IMPORTED_MODULE_8__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
+        return Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
       });
 
       _this.tracks[index].type = nextRotation;
 
-      _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_13__["TRACK_TYPES_TO_SPRITE_MAP"][nextRotation]);
+      _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][nextRotation]);
 
-      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_11__["TRACK_CHANGE_EVENT"]), {}, {
+      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
       }));
     });
@@ -3318,6 +3350,9 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.buildLevel();
 
       _this.buildInitialtracks();
+
+      _this.boulders = [];
+      _this.obstacleInterval = setInterval(_this.rollForObstacle, 1000);
 
       _this.addTrain();
 
@@ -3332,86 +3367,126 @@ var Intro = /*#__PURE__*/function (_Level) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Intro, [{
     key: "addCursor",
     value: function addCursor() {
-      var cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(0, 0, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"], false, true);
+      var cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(0, 0, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], false, true);
       cursor.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_8__["CURSOR_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_8__["CURSOR_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_9__["CURSOR_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_9__["CURSOR_SCALE"]
       });
-      cursor.addTag(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
+      cursor.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
       cursor.setPosition(position);
-      cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
-      cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["PLACE_TRACK_EVENT"].type, this.handlePlaceTrack);
-      cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["TRACK_CLICK_EVENT"].type, this.handleTrackClick);
+      cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
+      cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["PLACE_TRACK_EVENT"].type, this.handlePlaceTrack);
+      cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["TRACK_CLICK_EVENT"].type, this.handleTrackClick);
     }
   }, {
     key: "addTrain",
     value: function addTrain() {
-      this.trainHead = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_HEAD"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(3, 3, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"], true);
+      this.trainHead = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_HEAD"]);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(3, 3, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
       this.trainHead.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
       });
-      this.trainHead.addTag(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_HEAD"]);
+      this.trainHead.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_HEAD"]);
       this.trainHead.setPosition(position);
-      this.trainHead.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], true, {
+      this.trainHead.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], true, {
         tracks: this.tracks
       });
     }
   }, {
     key: "addTrainCarriage",
     value: function addTrainCarriage() {
-      this.trainCarriage = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(2, 3, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"], true);
+      this.trainCarriage = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"]);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(2, 3, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
       this.trainCarriage.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
       });
-      this.trainCarriage.addTag(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"]);
+      this.trainCarriage.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"]);
       this.trainCarriage.setPosition(position);
-      this.trainCarriage.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], true, {
+      this.trainCarriage.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], true, {
         trainHead: this.trainHead
       });
+    }
+  }, {
+    key: "addBoulder",
+    value: function addBoulder() {
+      // get rid of disposed boulders from array
+      this.boulders = this.boulders.filter(function (boulder) {
+        return boulder.scripts[0];
+      }); // max 5 boulders at a time
+
+      if (this.boulders.length <= 5) {
+        // create new boulder sprite
+        var newBoulder = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"]); // get starting grid position and direction of boulder
+
+        var _getRandomInitialEdge = Object(_utils_getRandomInitialEdgePositionAndDirection__WEBPACK_IMPORTED_MODULE_8__["getRandomInitialEdgePositionAndDirection"])(),
+            row = _getRandomInitialEdge.row,
+            col = _getRandomInitialEdge.col,
+            direction = _getRandomInitialEdge.direction; // get 'actual' starting position in 3D space
+
+
+        var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
+        var startingPos = {
+          row: row,
+          col: col
+        };
+        newBoulder.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"]);
+        newBoulder.setPosition(position);
+        newBoulder.setScale({
+          x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
+          y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
+        }); // start the boulder
+
+        newBoulder.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], true, {
+          startingPos: startingPos,
+          direction: direction,
+          tracks: this.tracks,
+          level: this
+        }); // add the boulder to the array
+
+        this.boulders.push(newBoulder);
+      }
     }
   }, {
     key: "createTrackAtPosition",
     value: function createTrackAtPosition(position, type) {
       var trackType = type ? type : this.toolbarSelection;
-      var sprite = _tracks__WEBPACK_IMPORTED_MODULE_13__["TRACK_TYPES_TO_SPRITE_MAP"][trackType];
-      var track = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], sprite);
+      var sprite = _tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][trackType];
+      var track = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], sprite);
       track.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
       });
-      track.addTags([_sprites__WEBPACK_IMPORTED_MODULE_9__["TRACK"]]);
+      track.addTags([_sprites__WEBPACK_IMPORTED_MODULE_10__["TRACK"]]);
       track.setPosition(position);
       track.setColor(WHITE);
       track.setOpacity(0.8);
       track.type = trackType;
-      track.gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getGridPositionFromCoordinates"])(position);
+      track.gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getGridPositionFromCoordinates"])(position);
       return track;
     }
   }, {
     key: "buildLevel",
     value: function buildLevel() {
-      for (var row = 0; row < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_HEIGHT"]; row++) {
-        for (var col = 0; col < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_WIDTH"]; col++) {
-          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]);
-          var dirt = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["DIRT"]);
-          var grass = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], Object(_sprites__WEBPACK_IMPORTED_MODULE_9__["getGrassSprite"])());
+      for (var row = 0; row < _grid__WEBPACK_IMPORTED_MODULE_9__["GRID_HEIGHT"]; row++) {
+        for (var col = 0; col < _grid__WEBPACK_IMPORTED_MODULE_9__["GRID_WIDTH"]; col++) {
+          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]);
+          var dirt = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["DIRT"]);
+          var grass = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], Object(_sprites__WEBPACK_IMPORTED_MODULE_10__["getGrassSprite"])());
           dirt.addTags(['background', 'dirt']);
           grass.addTags(['background', 'grass']);
           dirt.setOpacity(0.5);
           grass.setOpacity(0.7);
           dirt.setScale({
-            x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
-            y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
+            x: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"],
+            y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
           });
           dirt.setPosition(position);
           grass.setScale({
-            x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
-            y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
+            x: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"],
+            y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
           });
           grass.setPosition(position);
         }
@@ -3420,7 +3495,7 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "buildInitialtracks",
     value: function buildInitialtracks() {
-      var _iterator = _createForOfIteratorHelper(_grid__WEBPACK_IMPORTED_MODULE_8__["INITIAL_TRACKS"]),
+      var _iterator = _createForOfIteratorHelper(_grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_TRACKS"]),
           _step;
 
       try {
@@ -3429,7 +3504,7 @@ var Intro = /*#__PURE__*/function (_Level) {
           var row = trackPosition.row,
               col = trackPosition.col,
               type = trackPosition.type;
-          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(row, col);
+          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(row, col);
           this.tracks.push(this.createTrackAtPosition(position, type));
         }
       } catch (err) {
@@ -3442,17 +3517,141 @@ var Intro = /*#__PURE__*/function (_Level) {
     key: "onCreate",
     value: function onCreate() {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scene"].setClearColor(BACKGROUND);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_11__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_12__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_13__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__["default"]);
       this.tracks = [];
-      this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_13__["VERTICAL"];
-      this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_14__["default"]);
+      this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
+      this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__["default"]);
+    }
+  }, {
+    key: "onBeforeDispose",
+    value: function onBeforeDispose() {
+      clearInterval(this.obstacleInterval);
     }
   }]);
 
   return Intro;
 }(mage_engine__WEBPACK_IMPORTED_MODULE_7__["Level"]);
+
+
+
+/***/ }),
+
+/***/ "./src/level/scripts/boulder.js":
+/*!**************************************!*\
+  !*** ./src/level/scripts/boulder.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BoulderScript; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+
+
+
+
+
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var UP = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].UP,
+    DOWN = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
+
+var BoulderScript = /*#__PURE__*/function (_BaseScript) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(BoulderScript, _BaseScript);
+
+  var _super = _createSuper(BoulderScript);
+
+  function BoulderScript() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, BoulderScript);
+
+    return _super.call(this, 'boulder');
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(BoulderScript, [{
+    key: "start",
+    value: function start(boulder, _ref) {
+      var startingPos = _ref.startingPos,
+          direction = _ref.direction,
+          tracks = _ref.tracks,
+          level = _ref.level;
+      this.boulder = boulder;
+      this.speed = 1500;
+      this.position = startingPos;
+      this.direction = direction;
+      this.tracks = tracks;
+      this.level = level;
+      this.orientation = 0;
+      this.moveBoulder();
+    }
+  }, {
+    key: "handleFailure",
+    value: function handleFailure() {
+      this.boulder.dispose();
+    }
+  }, {
+    key: "moveBoulder",
+    value: function moveBoulder() {
+      var _this = this;
+
+      var _sumGridPositions = Object(_grid__WEBPACK_IMPORTED_MODULE_6__["sumGridPositions"])(this.position, this.direction),
+          row = _sumGridPositions.row,
+          col = _sumGridPositions.col;
+
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_6__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_6__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_6__["SPRITE_SCALE"], true);
+
+      if (this.direction !== UP && this.direction !== DOWN) {
+        this.orientation = this.orientation === 360 ? 0 : this.orientation + 90;
+        this.boulder.setRotation(this.orientation * (Math.PI / 180));
+      }
+
+      this.boulder.goTo(position, this.speed).then(function () {
+        var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, _this.tracks);
+
+        if (track) {
+          _this.level.handleRemoveTrack(track);
+
+          track.dispose();
+        }
+
+        console.log(track);
+        _this.position = {
+          row: row,
+          col: col
+        };
+
+        if (Object(_grid__WEBPACK_IMPORTED_MODULE_6__["isInGrid"])(_this.position)) {
+          _this.moveBoulder();
+        } else {
+          _this.handleFailure();
+        }
+      });
+    }
+  }]);
+
+  return BoulderScript;
+}(mage_engine__WEBPACK_IMPORTED_MODULE_5__["BaseScript"]);
 
 
 
@@ -3467,7 +3666,7 @@ var Intro = /*#__PURE__*/function (_Level) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TrainScript; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CarriageScript; });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
@@ -3495,24 +3694,24 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
-var TrainScript = /*#__PURE__*/function (_BaseScript) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(TrainScript, _BaseScript);
+var CarriageScript = /*#__PURE__*/function (_BaseScript) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(CarriageScript, _BaseScript);
 
-  var _super = _createSuper(TrainScript);
+  var _super = _createSuper(CarriageScript);
 
-  function TrainScript() {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, TrainScript);
+  function CarriageScript() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, CarriageScript);
 
     return _super.call(this, 'train_carriage');
   }
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(TrainScript, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(CarriageScript, [{
     key: "start",
     value: function start(trainCarriage, _ref) {
       var trainHead = _ref.trainHead;
       this.trainHead = trainHead;
       this.trainCarriage = trainCarriage;
-      this.speed = 500;
+      this.speed = 2000;
       this.position = {
         row: 2,
         col: 3
@@ -3524,8 +3723,6 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
   }, {
     key: "calculateNewDirection",
     value: function calculateNewDirection(trainHead) {
-      console.log('trainHead.scripts[0].script.oldDirection');
-      console.log(trainHead.scripts[0].script.oldDirection);
       var newDirection = trainHead.scripts[0].script.oldDirection;
 
       if (newDirection) {
@@ -3567,7 +3764,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
     }
   }]);
 
-  return TrainScript;
+  return CarriageScript;
 }(mage_engine__WEBPACK_IMPORTED_MODULE_5__["BaseScript"]);
 
 
@@ -3772,7 +3969,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       var tracks = _ref.tracks;
       this.tracks = tracks;
       this.train = train;
-      this.speed = 500;
+      this.speed = 2000;
       this.position = {
         row: 3,
         col: 3
@@ -3782,16 +3979,17 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       this.train.setRotation(_tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN.orientation * (Math.PI / 180));
       this.train.addEventListener(TRACK_CHANGE_EVENT.type, this.handleTrackChange);
       this.moveTrain();
-    }
-  }, {
-    key: "isOnTrack",
-    value: function isOnTrack(position) {
-      var gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_6__["getGridPositionFromCoordinates"])(position);
-      var track = this.tracks.filter(function (track) {
-        return Object(_grid__WEBPACK_IMPORTED_MODULE_6__["areGridPositionsEqual"])(track.gridPosition, gridPosition);
-      }).pop();
-      return track;
-    }
+    } // isOnTrack(position) {
+    //     const gridPosition = getGridPositionFromCoordinates(position);
+    //     const track = this.tracks
+    //         .filter((track) =>
+    //             areGridPositionsEqual(track.gridPosition, gridPosition)
+    //         )
+    //         .pop();
+    //
+    //     return track;
+    // }
+
   }, {
     key: "calculateNewDirection",
     value: function calculateNewDirection(track) {
@@ -3830,7 +4028,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       var position = Object(_grid__WEBPACK_IMPORTED_MODULE_6__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_6__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_6__["SPRITE_SCALE"], true);
       this.train.setRotation(orientation * (Math.PI / 180));
       this.train.goTo(position, this.speed).then(function () {
-        var track = _this.isOnTrack(position);
+        var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, _this.tracks);
 
         if (track) {
           _this.position = {
@@ -3861,13 +4059,14 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
 /*!******************************!*\
   !*** ./src/level/sprites.js ***!
   \******************************/
-/*! exports provided: DIRT, GRASS_TYPES, CURSOR, TRACK, TRAIN, TRAIN_HEAD, TRAIN_CARRIAGE, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, getGrassSprite */
+/*! exports provided: DIRT, GRASS_TYPES, BOULDER, CURSOR, TRACK, TRAIN, TRAIN_HEAD, TRAIN_CARRIAGE, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, getGrassSprite */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DIRT", function() { return DIRT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GRASS_TYPES", function() { return GRASS_TYPES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BOULDER", function() { return BOULDER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CURSOR", function() { return CURSOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK", function() { return TRACK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRAIN", function() { return TRAIN; });
@@ -3882,6 +4081,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGrassSprite", function() { return getGrassSprite; });
 var DIRT = 'dirt';
 var GRASS_TYPES = ['grass_1', 'grass_2', 'grass_3'];
+var BOULDER = 'boulder';
 var CURSOR = 'cursor';
 var TRACK = 'track';
 var TRAIN = 'train';
@@ -3903,7 +4103,7 @@ var getGrassSprite = function getGrassSprite() {
 /*!*****************************!*\
   !*** ./src/level/tracks.js ***!
   \*****************************/
-/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, convertTrackTypeToNewDirection, getNextRotation */
+/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, convertTrackTypeToNewDirection, getNextRotation, isOnTrack */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3927,6 +4127,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACKS_ROTATION", function() { return TRACKS_ROTATION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "convertTrackTypeToNewDirection", function() { return convertTrackTypeToNewDirection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextRotation", function() { return getNextRotation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOnTrack", function() { return isOnTrack; });
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
+
 var DIRECTIONS = {
   UP: {
     row: -1,
@@ -4013,6 +4216,13 @@ var convertTrackTypeToNewDirection = function convertTrackTypeToNewDirection(tra
 var getNextRotation = function getNextRotation(track) {
   var index = TRACKS_ROTATION.indexOf(track.type);
   return index === TRACKS_ROTATION.length - 1 ? TRACKS_ROTATION[0] : TRACKS_ROTATION[index + 1];
+};
+var isOnTrack = function isOnTrack(position, tracks) {
+  var gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_0__["getGridPositionFromCoordinates"])(position);
+  var track = tracks.filter(function (track) {
+    return Object(_grid__WEBPACK_IMPORTED_MODULE_0__["areGridPositionsEqual"])(track.gridPosition, gridPosition);
+  }).pop();
+  return track;
 };
 
 /***/ }),
@@ -4312,6 +4522,78 @@ var UserInterface = /*#__PURE__*/function (_Component) {
 }(inferno__WEBPACK_IMPORTED_MODULE_5__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (UserInterface);
+
+/***/ }),
+
+/***/ "./src/utils/getRandomInitialEdgePositionAndDirection.js":
+/*!***************************************************************!*\
+  !*** ./src/utils/getRandomInitialEdgePositionAndDirection.js ***!
+  \***************************************************************/
+/*! exports provided: getRandomInitialEdgePositionAndDirection */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRandomInitialEdgePositionAndDirection", function() { return getRandomInitialEdgePositionAndDirection; });
+/* harmony import */ var _level_grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../level/grid */ "./src/level/grid.js");
+/* harmony import */ var _randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
+/* harmony import */ var _level_tracks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../level/tracks */ "./src/level/tracks.js");
+
+
+
+var UP = _level_tracks__WEBPACK_IMPORTED_MODULE_2__["DIRECTIONS"].UP,
+    DOWN = _level_tracks__WEBPACK_IMPORTED_MODULE_2__["DIRECTIONS"].DOWN,
+    LEFT = _level_tracks__WEBPACK_IMPORTED_MODULE_2__["DIRECTIONS"].LEFT,
+    RIGHT = _level_tracks__WEBPACK_IMPORTED_MODULE_2__["DIRECTIONS"].RIGHT;
+var getRandomInitialEdgePositionAndDirection = function getRandomInitialEdgePositionAndDirection() {
+  var isGoingAcross = Math.random() > 0.5;
+  var isPositiveDirection = Math.random() > 0.5;
+  var rowColDirection;
+
+  if (isGoingAcross && isPositiveDirection) {
+    rowColDirection = {
+      row: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"]),
+      col: 1,
+      direction: RIGHT
+    };
+  } else if (isGoingAcross && !isPositiveDirection) {
+    rowColDirection = {
+      row: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"]),
+      col: _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"],
+      direction: LEFT
+    };
+  } else if (!isGoingAcross && isPositiveDirection) {
+    rowColDirection = {
+      row: 1,
+      col: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"]),
+      direction: DOWN
+    };
+  } else {
+    rowColDirection = {
+      row: _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"],
+      col: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"]),
+      direction: UP
+    };
+  }
+
+  return rowColDirection;
+};
+
+/***/ }),
+
+/***/ "./src/utils/randomIntegerInRange.js":
+/*!*******************************************!*\
+  !*** ./src/utils/randomIntegerInRange.js ***!
+  \*******************************************/
+/*! exports provided: randomIntegerInRange */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomIntegerInRange", function() { return randomIntegerInRange; });
+var randomIntegerInRange = function randomIntegerInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
 /***/ })
 

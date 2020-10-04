@@ -8,7 +8,7 @@ import {
 } from '../grid';
 import { DIRECTIONS } from '../tracks';
 
-export default class TrainScript extends BaseScript {
+export default class CarriageScript extends BaseScript {
     constructor() {
         super('train_carriage');
     }
@@ -17,7 +17,7 @@ export default class TrainScript extends BaseScript {
         this.trainHead = trainHead;
         this.trainCarriage = trainCarriage;
 
-        this.speed = 500;
+        this.speed = 2000;
 
         this.position = { row: 2, col: 3 };
 
@@ -30,8 +30,6 @@ export default class TrainScript extends BaseScript {
     }
 
     calculateNewDirection(trainHead) {
-        console.log('trainHead.scripts[0].script.oldDirection');
-        console.log(trainHead.scripts[0].script.oldDirection);
         const newDirection = trainHead.scripts[0].script.oldDirection;
 
         if (newDirection) {
