@@ -19,6 +19,7 @@ import {
     TRACK,
     TRAIN_HEAD,
     TRAIN,
+    TRAIN_CARRIAGE,
     TRACK_VERTICAL,
 } from './sprites';
 import CursorScript, {
@@ -26,6 +27,7 @@ import CursorScript, {
     TRACK_CLICK_EVENT,
 } from './scripts/cursor';
 import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
+import CarriageScript from './scripts/carriage';
 import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP } from './tracks';
 import UserInterface from '../ui/UserInterface';
 
@@ -51,7 +53,9 @@ export default class Intro extends Level {
             0,
             0,
             SPRITE_SIZE,
-            SPRITE_SCALE
+            SPRITE_SCALE,
+            false,
+            true
         );
 
         cursor.setScale({ x: CURSOR_SCALE, y: CURSOR_SCALE });
@@ -66,8 +70,8 @@ export default class Intro extends Level {
     addTrain() {
         this.trainHead = new Sprite(SPRITE_SIZE, SPRITE_SIZE, TRAIN_HEAD);
         const position = getPositionFromRowAndCol(
-            0,
-            0,
+            3,
+            3,
             SPRITE_SIZE,
             SPRITE_SCALE,
             true
@@ -78,6 +82,28 @@ export default class Intro extends Level {
         this.trainHead.setPosition(position);
 
         this.trainHead.addScript(TRAIN, true, { tracks: this.tracks });
+    }
+    addTrainCarriage() {
+        this.trainCarriage = new Sprite(
+            SPRITE_SIZE,
+            SPRITE_SIZE,
+            TRAIN_CARRIAGE
+        );
+        const position = getPositionFromRowAndCol(
+            2,
+            3,
+            SPRITE_SIZE,
+            SPRITE_SCALE,
+            true
+        );
+
+        this.trainCarriage.setScale({ x: TRAIN_SCALE, y: TRAIN_SCALE });
+        this.trainCarriage.addTag(TRAIN_CARRIAGE);
+        this.trainCarriage.setPosition(position);
+
+        this.trainCarriage.addScript(TRAIN_CARRIAGE, true, {
+            trainHead: this.trainHead,
+        });
     }
 
     handlePlaceTrack = (event) => {
@@ -109,7 +135,11 @@ export default class Intro extends Level {
     };
 
     createTrackAtPosition(position, type = VERTICAL) {
-        const track = new Sprite(SPRITE_SIZE, SPRITE_SIZE, TRACK_VERTICAL);
+        const track = new Sprite(
+            SPRITE_SIZE,
+            SPRITE_SIZE,
+            TRACK_TYPES_TO_SPRITE_MAP[type]
+        );
 
         track.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE });
         track.addTags([TRACK]);
@@ -161,17 +191,16 @@ export default class Intro extends Level {
         this.buildInitialtracks();
 
         this.addTrain();
+        this.addTrainCarriage();
         this.addCursor();
     };
 
     buildInitialtracks() {
         for (let trackPosition of INITIAL_TRACKS) {
-            const position = getPositionFromRowAndCol(
-                trackPosition.row,
-                trackPosition.col
-            );
+            const { row, col, type } = trackPosition;
+            const position = getPositionFromRowAndCol(row, col);
 
-            this.tracks.push(this.createTrackAtPosition(position));
+            this.tracks.push(this.createTrackAtPosition(position, type));
         }
     }
 
@@ -179,6 +208,7 @@ export default class Intro extends Level {
         Scene.setClearColor(BACKGROUND);
         Scripts.create(CURSOR, CursorScript);
         Scripts.create(TRAIN, TrainScript);
+        Scripts.create(TRAIN_CARRIAGE, CarriageScript);
 
         this.tracks = [];
 
