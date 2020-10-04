@@ -7,7 +7,6 @@ import {
     SPRITE_SCALE,
 } from '../grid';
 import { DIRECTIONS } from '../tracks';
-import { playCrashSound, stopEngineSound } from '../sounds';
 
 export default class CarriageScript extends BaseScript {
     constructor() {
@@ -19,7 +18,7 @@ export default class CarriageScript extends BaseScript {
         this.trainCarriage = trainCarriage;
         this.level = level;
 
-        this.speed = 800;
+        this.speed = 1000;
 
         this.position = { row: 2, col: 3 };
 
@@ -43,8 +42,6 @@ export default class CarriageScript extends BaseScript {
     }
 
     handleFailure() {
-        // playCrashSound();
-        // stopEngineSound();
         this.level.handleFailure();
     }
 

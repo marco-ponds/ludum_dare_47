@@ -1,10 +1,16 @@
 import ToolbarItem from "./ToolbarItem";
 import { VERTICAL, HORIZONTAL, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT } from "../../level/tracks";
 import { Component } from "inferno";
-import { Sound } from "mage-engine";
 import { playClickSound } from "../../level/sounds";
+import { parseScore } from "../../utils/parseScore";
 
 const TYPES = [VERTICAL, HORIZONTAL, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT];
+
+const Score = ({ score }) => {
+    return <li className='score'>
+        <p>{parseScore(score)} km</p>
+    </li>
+}
 
 class Toolbar extends Component {
 
@@ -40,6 +46,7 @@ class Toolbar extends Component {
         return (
             <div className='toolbar'>
                 <ul className='toolbar-container'>
+                    <Score score={this.props.score} />
                     { this.mapTypesToToolbarItem() }
                 </ul>
             </div>

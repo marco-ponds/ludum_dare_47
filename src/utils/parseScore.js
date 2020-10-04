@@ -1,0 +1,1 @@
+export const parseScore = score => score > 1000 ? (score/1000) : score;
