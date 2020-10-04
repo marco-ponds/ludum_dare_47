@@ -13,12 +13,12 @@ export const TOP_RIGHT = 'TOP_RIGHT';
 export const BOTTOM_LEFT = 'BOTTOM_LEFT';
 export const BOTTOM_RIGHT = 'BOTTOM_RIGHT';
 
-export const TRACK_VERTICAL = 'track_vertical';
-export const TRACK_HORIZONTAL = 'track_horizontal';
-export const TRACK_TOP_LEFT = 'track_top_left';
-export const TRACK_TOP_RIGHT = 'track_top_right';
-export const TRACK_BOTTOM_LEFT = 'track_bottom_left';
-export const TRACK_BOTTOM_RIGHT = 'track_bottom_right';
+export const TRACK_VERTICAL = 'tracks_vertical';
+export const TRACK_HORIZONTAL = 'tracks_horizontal';
+export const TRACK_TOP_LEFT = 'tracks_top_left';
+export const TRACK_TOP_RIGHT = 'tracks_top_right';
+export const TRACK_BOTTOM_LEFT = 'tracks_bottom_left';
+export const TRACK_BOTTOM_RIGHT = 'tracks_bottom_right';
 
 export const TRACK_TYPES_TO_SPRITE_MAP = {
     TOP_RIGHT: TRACK_TOP_RIGHT,

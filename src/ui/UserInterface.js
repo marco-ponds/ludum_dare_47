@@ -28,6 +28,7 @@ class UserInterface extends Component {
             case 'inGame':
                 component = (
                     <GameInterface
+                        onToolbarSelection={this.props.scene.handleToolbarSelection}
                         onComponentDidMount={this.props.scene.startGame}
                     />
                 );

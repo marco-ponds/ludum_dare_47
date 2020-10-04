@@ -1,5 +1,5 @@
 .fancy-text {
-    font-family: cursive;
+    margin: 0;
 }
 
 .main-menu {
@@ -46,4 +46,45 @@
 .start-button:hover {
     color: #000000;
     background-color: #ffffff;
+}
+
+.toolbar {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    z-index: 102;
+}
+
+.toolbar .toolbar-container {
+    width: 630px;
+    margin: auto;
+    padding: 0;
+}
+
+.toolbar li {
+    list-style: none;
+    display: inline-block;
+    padding: 8px;
+    border: 2px solid white;
+    width: 70px;
+    height: 70px;
+}
+
+.toolbar .selected {
+    border: 4px solid white;
+    padding: 6px;
+}
+
+.toolbar li img {
+    width: 48px;
+    height: 48px;
+    margin: auto;
+    display: block;
+    margin: 10px 11px;
+    position: relative;
+    display: block;
+}
+
+.toolbar li .text {
+    font-size: 16px;
 }
