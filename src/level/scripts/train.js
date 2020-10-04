@@ -2,10 +2,7 @@ import { BaseScript } from 'mage-engine';
 import {
     sumGridPositions,
     getPositionFromRowAndCol,
-    getGridPositionFromCoordinates,
-    areGridPositionsEqual,
     SPRITE_SIZE,
-    TRAIN_SCALE,
     SPRITE_SCALE,
 } from '../grid';
 import {
@@ -27,11 +24,12 @@ export default class TrainScript extends BaseScript {
         this.tracks = tracks;
         this.train = train;
 
-        this.speed = 2000;
+        this.speed = 800;
 
         this.position = { row: 3, col: 3 };
-        this.oldDirection = DIRECTIONS.down;
+        this.oldDirection = DIRECTIONS.DOWN;
         this.direction = DIRECTIONS.DOWN;
+
         this.train.setRotation(DIRECTIONS.DOWN.orientation * (Math.PI / 180));
 
         this.train.addEventListener(
@@ -41,17 +39,6 @@ export default class TrainScript extends BaseScript {
 
         this.moveTrain();
     }
-
-    // isOnTrack(position) {
-    //     const gridPosition = getGridPositionFromCoordinates(position);
-    //     const track = this.tracks
-    //         .filter((track) =>
-    //             areGridPositionsEqual(track.gridPosition, gridPosition)
-    //         )
-    //         .pop();
-    //
-    //     return track;
-    // }
 
     calculateNewDirection(track) {
         const newDirection = convertTrackTypeToNewDirection(
@@ -63,6 +50,9 @@ export default class TrainScript extends BaseScript {
             this.oldDirection = this.direction;
             this.direction = newDirection;
             return true;
+        } else {
+            this.direction = null;
+            this.oldDirection = null;
         }
 
         return false;

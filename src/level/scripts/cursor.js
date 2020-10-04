@@ -50,11 +50,12 @@ export default class CursorScript extends BaseScript {
         } else {
             const [intersection] = filtered.filter(this.isIntersectingTracks);
 
-            this.cursor.dispatchEvent({
-                ...TRACK_CLICK_EVENT,
-                track: intersection.mesh
-            });
+            if (intersection) {
+                this.cursor.dispatchEvent({
+                    ...TRACK_CLICK_EVENT,
+                    track: intersection.mesh
+                });
+            }
         }
-
     }
 }

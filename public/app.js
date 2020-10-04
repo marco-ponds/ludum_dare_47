@@ -3100,7 +3100,7 @@ window.addEventListener('load', function () {
 /*!***************************!*\
   !*** ./src/level/grid.js ***!
   \***************************/
-/*! exports provided: GRID_WIDTH, GRID_HEIGHT, SPRITE_SIZE, SPRITE_SCALE, SPRITE_DEPTH, TRAIN_SCALE, TRAIN_DEPTH, CURSOR_SCALE, CURSOR_DEPTH, HORIZONTAL_PADDING, VERTICAL_PADDING, INITIAL_TRACKS, getPositionFromRowAndCol, getGridPositionFromCoordinates, sumGridPositions, areGridPositionsEqual, isInGrid */
+/*! exports provided: GRID_WIDTH, GRID_HEIGHT, SPRITE_SIZE, SPRITE_SCALE, SPRITE_DEPTH, TRAIN_SCALE, TRAIN_DEPTH, CURSOR_SCALE, CURSOR_DEPTH, HORIZONTAL_PADDING, VERTICAL_PADDING, INITIAL_TRACKS, INITIAL_CARRIAGE_POSITION, INITIAL_TRAIN_POSITION, getPositionFromRowAndCol, getGridPositionFromCoordinates, sumGridPositions, areGridPositionsEqual, isInGrid */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3117,6 +3117,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HORIZONTAL_PADDING", function() { return HORIZONTAL_PADDING; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VERTICAL_PADDING", function() { return VERTICAL_PADDING; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INITIAL_TRACKS", function() { return INITIAL_TRACKS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INITIAL_CARRIAGE_POSITION", function() { return INITIAL_CARRIAGE_POSITION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INITIAL_TRAIN_POSITION", function() { return INITIAL_TRAIN_POSITION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPositionFromRowAndCol", function() { return getPositionFromRowAndCol; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGridPositionFromCoordinates", function() { return getGridPositionFromCoordinates; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sumGridPositions", function() { return sumGridPositions; });
@@ -3136,10 +3138,6 @@ var CURSOR_DEPTH = -1.1999;
 var HORIZONTAL_PADDING = 1.25;
 var VERTICAL_PADDING = 1;
 var INITIAL_TRACKS = [{
-  row: 3,
-  col: 3,
-  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["VERTICAL"]
-}, {
   row: 4,
   col: 3,
   type: _tracks__WEBPACK_IMPORTED_MODULE_0__["VERTICAL"]
@@ -3159,7 +3157,51 @@ var INITIAL_TRACKS = [{
   row: 7,
   col: 4,
   type: _tracks__WEBPACK_IMPORTED_MODULE_0__["HORIZONTAL"]
+}, {
+  row: 7,
+  col: 5,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["HORIZONTAL"]
+}, {
+  row: 7,
+  col: 6,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["BOTTOM_LEFT"]
+}, {
+  row: 6,
+  col: 6,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["VERTICAL"]
+}, {
+  row: 5,
+  col: 6,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["VERTICAL"]
+}, {
+  row: 4,
+  col: 6,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["VERTICAL"]
+}, {
+  row: 3,
+  col: 6,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["TOP_LEFT"]
+}, {
+  row: 3,
+  col: 5,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["HORIZONTAL"]
+}, {
+  row: 3,
+  col: 4,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["HORIZONTAL"]
+}, {
+  row: 3,
+  col: 3,
+  type: _tracks__WEBPACK_IMPORTED_MODULE_0__["TOP_RIGHT"]
 }];
+var INITIAL_CARRIAGE_POSITION = {
+  row: 4,
+  col: 3
+};
+var INITIAL_TRAIN_POSITION = {
+  row: 5,
+  col: 3
+};
 var getPositionFromRowAndCol = function getPositionFromRowAndCol(row, col) {
   var size = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : SPRITE_SIZE;
   var scale = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : SPRITE_SCALE;
@@ -3314,28 +3356,25 @@ var Intro = /*#__PURE__*/function (_Level) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleRemoveTrack", function (removedTrack) {
-      console.log('removedTrack');
-      console.log(removedTrack);
-      console.log('pre');
-      console.log(_this.tracks);
       var gridPosition = removedTrack.gridPosition;
       _this.tracks = _this.tracks.filter(function (track) {
         return track.gridPosition !== gridPosition;
       });
-      console.log(_this.tracks);
-      console.log('post');
+
+      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
+        tracks: _this.tracks
+      }));
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleTrackClick", function (event) {
-      var nextRotation = Object(_tracks__WEBPACK_IMPORTED_MODULE_15__["getNextRotation"])(event.track);
-
+      //const nextRotation = getNextRotation(event.track);
       var index = _this.tracks.findIndex(function (track) {
         return Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
       });
 
-      _this.tracks[index].type = nextRotation;
+      _this.tracks[index].type = _this.toolbarSelection;
 
-      _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][nextRotation]);
+      _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][_this.toolbarSelection]);
 
       _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
@@ -3354,9 +3393,8 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.boulders = [];
       _this.obstacleInterval = setInterval(_this.rollForObstacle, 1000);
 
-      _this.addTrain();
+      _this.addTrain(); //this.addTrainCarriage();
 
-      _this.addTrainCarriage();
 
       _this.addCursor();
     });
@@ -3383,7 +3421,7 @@ var Intro = /*#__PURE__*/function (_Level) {
     key: "addTrain",
     value: function addTrain() {
       this.trainHead = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_HEAD"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(3, 3, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(_grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_TRAIN_POSITION"].row, _grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_TRAIN_POSITION"].col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
       this.trainHead.setScale({
         x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
         y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
@@ -3398,7 +3436,7 @@ var Intro = /*#__PURE__*/function (_Level) {
     key: "addTrainCarriage",
     value: function addTrainCarriage() {
       this.trainCarriage = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(2, 3, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(_grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_CARRIAGE_POSITION"].row, _grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_CARRIAGE_POSITION"].col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
       this.trainCarriage.setScale({
         x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
         y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
@@ -3523,6 +3561,7 @@ var Intro = /*#__PURE__*/function (_Level) {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__["default"]);
       this.tracks = [];
       this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
+      window.tracks = this.tracks;
       this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__["default"]);
     }
   }, {
@@ -3711,7 +3750,7 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
       var trainHead = _ref.trainHead;
       this.trainHead = trainHead;
       this.trainCarriage = trainCarriage;
-      this.speed = 2000;
+      this.speed = 800;
       this.position = {
         row: 2,
         col: 3
@@ -3886,9 +3925,11 @@ var CursorScript = /*#__PURE__*/function (_BaseScript) {
             _filtered$filter2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_filtered$filter, 1),
             intersection = _filtered$filter2[0];
 
-        _this.cursor.dispatchEvent(_objectSpread(_objectSpread({}, TRACK_CLICK_EVENT), {}, {
-          track: intersection.mesh
-        }));
+        if (intersection) {
+          _this.cursor.dispatchEvent(_objectSpread(_objectSpread({}, TRACK_CLICK_EVENT), {}, {
+            track: intersection.mesh
+          }));
+        }
       }
     });
 
@@ -3969,27 +4010,17 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       var tracks = _ref.tracks;
       this.tracks = tracks;
       this.train = train;
-      this.speed = 2000;
+      this.speed = 800;
       this.position = {
         row: 3,
         col: 3
       };
-      this.oldDirection = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].down;
+      this.oldDirection = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
       this.direction = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
       this.train.setRotation(_tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN.orientation * (Math.PI / 180));
       this.train.addEventListener(TRACK_CHANGE_EVENT.type, this.handleTrackChange);
       this.moveTrain();
-    } // isOnTrack(position) {
-    //     const gridPosition = getGridPositionFromCoordinates(position);
-    //     const track = this.tracks
-    //         .filter((track) =>
-    //             areGridPositionsEqual(track.gridPosition, gridPosition)
-    //         )
-    //         .pop();
-    //
-    //     return track;
-    // }
-
+    }
   }, {
     key: "calculateNewDirection",
     value: function calculateNewDirection(track) {
@@ -3999,6 +4030,9 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
         this.oldDirection = this.direction;
         this.direction = newDirection;
         return true;
+      } else {
+        this.direction = null;
+        this.oldDirection = null;
       }
 
       return false;

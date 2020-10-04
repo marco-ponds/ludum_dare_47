@@ -17,7 +17,7 @@ export default class CarriageScript extends BaseScript {
         this.trainHead = trainHead;
         this.trainCarriage = trainCarriage;
 
-        this.speed = 2000;
+        this.speed = 800;
 
         this.position = { row: 2, col: 3 };
 
