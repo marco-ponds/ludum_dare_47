@@ -10,6 +10,8 @@ import {
     INITIAL_TRACKS,
     areGridPositionsEqual,
     TRAIN_SCALE,
+    INITIAL_CARRIAGE_POSITION,
+    INITIAL_TRAIN_POSITION,
 } from './grid';
 import {
     DIRT,
@@ -68,8 +70,8 @@ export default class Intro extends Level {
     addTrain() {
         this.trainHead = new Sprite(SPRITE_SIZE, SPRITE_SIZE, TRAIN_HEAD);
         const position = getPositionFromRowAndCol(
-            3,
-            3,
+            INITIAL_TRAIN_POSITION.row,
+            INITIAL_TRAIN_POSITION.col,
             SPRITE_SIZE,
             SPRITE_SCALE,
             true
@@ -89,8 +91,8 @@ export default class Intro extends Level {
             TRAIN_CARRIAGE
         );
         const position = getPositionFromRowAndCol(
-            2,
-            3,
+            INITIAL_CARRIAGE_POSITION.row,
+            INITIAL_CARRIAGE_POSITION.col,
             SPRITE_SIZE,
             SPRITE_SCALE,
             true
@@ -117,14 +119,14 @@ export default class Intro extends Level {
     };
 
     handleTrackClick = (event) => {
-        const nextRotation = getNextRotation(event.track);
+        //const nextRotation = getNextRotation(event.track);
         const index = this.tracks.findIndex((track) =>
             areGridPositionsEqual(track.gridPosition, event.track.gridPosition)
         );
 
-        this.tracks[index].type = nextRotation;
+        this.tracks[index].type = this.toolbarSelection;
         this.tracks[index].setTextureMap(
-            TRACK_TYPES_TO_SPRITE_MAP[nextRotation]
+            TRACK_TYPES_TO_SPRITE_MAP[this.toolbarSelection]
         );
 
         this.trainHead.dispatchEvent({
@@ -192,7 +194,7 @@ export default class Intro extends Level {
         this.buildInitialtracks();
 
         this.addTrain();
-        this.addTrainCarriage();
+        //this.addTrainCarriage();
         this.addCursor();
     };
 
@@ -213,6 +215,8 @@ export default class Intro extends Level {
 
         this.tracks = [];
         this.toolbarSelection = VERTICAL;
+
+        window.tracks = this.tracks;
 
         this.enableUI(UserInterface);
     }

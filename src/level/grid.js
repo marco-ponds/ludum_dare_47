@@ -1,4 +1,4 @@
-import { VERTICAL, BOTTOM_RIGHT, HORIZONTAL } from './tracks';
+import { VERTICAL, BOTTOM_RIGHT, HORIZONTAL, BOTTOM_LEFT, TOP_LEFT, TOP_RIGHT } from './tracks';
 
 export const GRID_WIDTH = 18;
 export const GRID_HEIGHT = 12;
@@ -17,13 +17,24 @@ export const HORIZONTAL_PADDING = 1.25;
 export const VERTICAL_PADDING = 1;
 
 export const INITIAL_TRACKS = [
-    { row: 3, col: 3, type: VERTICAL },
     { row: 4, col: 3, type: VERTICAL },
     { row: 5, col: 3, type: VERTICAL },
     { row: 6, col: 3, type: VERTICAL },
     { row: 7, col: 3, type: BOTTOM_RIGHT },
     { row: 7, col: 4, type: HORIZONTAL },
+    { row: 7, col: 5, type: HORIZONTAL },
+    { row: 7, col: 6, type: BOTTOM_LEFT },
+    { row: 6, col: 6, type: VERTICAL },
+    { row: 5, col: 6, type: VERTICAL },
+    { row: 4, col: 6, type: VERTICAL },
+    { row: 3, col: 6, type: TOP_LEFT },
+    { row: 3, col: 5, type: HORIZONTAL },
+    { row: 3, col: 4, type: HORIZONTAL },
+    { row: 3, col: 3, type: TOP_RIGHT },
 ];
+
+export const INITIAL_CARRIAGE_POSITION = { row: 4, col: 3 };
+export const INITIAL_TRAIN_POSITION = { row: 5, col: 3 };
 
 export const getPositionFromRowAndCol = (
     row,

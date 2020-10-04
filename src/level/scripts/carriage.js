@@ -17,7 +17,7 @@ export default class TrainScript extends BaseScript {
         this.trainHead = trainHead;
         this.trainCarriage = trainCarriage;
 
-        this.speed = 500;
+        this.speed = 800;
 
         this.position = { row: 2, col: 3 };
 
@@ -30,8 +30,6 @@ export default class TrainScript extends BaseScript {
     }
 
     calculateNewDirection(trainHead) {
-        console.log('trainHead.scripts[0].script.oldDirection');
-        console.log(trainHead.scripts[0].script.oldDirection);
         const newDirection = trainHead.scripts[0].script.oldDirection;
 
         if (newDirection) {
