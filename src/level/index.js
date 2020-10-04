@@ -32,12 +32,20 @@ import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
 import CarriageScript from './scripts/carriage';
 import BoulderScript from './scripts/boulder';
 
-import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP } from './tracks';
+import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE } from './tracks';
 import UserInterface from '../ui/UserInterface';
-import { playEngineSound } from './sounds';
+import { playEngineSound, playCrashSound, stopEngineSound } from './sounds';
 
 const BACKGROUND = 0xe3dbcc;//0x2f3640;
 const WHITE = 0xffffff;
+
+export const GAME_OVER_EVENT = {
+    type: 'gameOver'
+};
+
+export const GAME_RETRY_EVENT = {
+    type: 'gameRetry'
+};
 
 export default class Intro extends Level {
     progressAnimation = (callback) => {
@@ -53,7 +61,7 @@ export default class Intro extends Level {
     };
 
     addCursor() {
-        const cursor = new Sprite(SPRITE_SIZE, SPRITE_SIZE, CURSOR);
+        this.cursor = new Sprite(SPRITE_SIZE, SPRITE_SIZE, CURSOR);
         const position = getPositionFromRowAndCol(
             0,
             0,
@@ -63,13 +71,13 @@ export default class Intro extends Level {
             true
         );
 
-        cursor.setScale({ x: CURSOR_SCALE, y: CURSOR_SCALE });
-        cursor.addTag(CURSOR);
-        cursor.setPosition(position);
-        cursor.addScript(CURSOR);
+        this.cursor.setScale({ x: CURSOR_SCALE, y: CURSOR_SCALE });
+        this.cursor.addTag(CURSOR);
+        this.cursor.setPosition(position);
+        this.cursor.addScript(CURSOR);
 
-        cursor.addEventListener(PLACE_TRACK_EVENT.type, this.handlePlaceTrack);
-        cursor.addEventListener(TRACK_CLICK_EVENT.type, this.handleTrackClick);
+        this.cursor.addEventListener(PLACE_TRACK_EVENT.type, this.handlePlaceTrack);
+        this.cursor.addEventListener(TRACK_CLICK_EVENT.type, this.handleTrackClick);
     }
 
     addTrain() {
@@ -111,6 +119,7 @@ export default class Intro extends Level {
 
         this.trainCarriage.addScript(TRAIN_CARRIAGE, true, {
             trainHead: this.trainHead,
+            level: this
         });
     }
 
@@ -207,6 +216,13 @@ export default class Intro extends Level {
         this.toolbarSelection = selection;
     };
 
+    handleFailure() {
+        playCrashSound();
+        stopEngineSound();
+
+        this.dispatchEvent(GAME_OVER_EVENT);
+    }
+
     createTrackAtPosition(position, type) {
         const trackType = type ? type : this.toolbarSelection;
         const sprite = TRACK_TYPES_TO_SPRITE_MAP[trackType];
@@ -221,6 +237,7 @@ export default class Intro extends Level {
 
         track.type = trackType;
         track.gridPosition = getGridPositionFromCoordinates(position);
+        track.life = MAX_TRACK_LIFE;
 
         return track;
     }
@@ -253,11 +270,34 @@ export default class Intro extends Level {
 
                 grass.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE });
                 grass.setPosition(position);
+
+                this.environment.push(dirt);
+                this.environment.push(grass);
             }
         }
     }
 
+    handleRetry = () => {
+        this.tracks.forEach(track => track.dispose());
+        this.boulders.forEach(boulder => boulder.dispose());
+        this.environment.forEach(el => el.dispose());
+
+        this.trainHead.dispose();
+        this.trainCarriage.dispose();
+        this.cursor.dispose();
+
+        this.stopGame();
+        this.startGame();
+
+        this.dispatchEvent(GAME_RETRY_EVENT);
+    }
+
     startGame = () => {
+        this.tracks = [];
+        this.environment = [];
+        this.score = 0;
+        this.toolbarSelection = VERTICAL;
+
         this.buildLevel();
         this.buildInitialtracks();
         this.boulders = [];
@@ -265,7 +305,16 @@ export default class Intro extends Level {
         this.addTrain();
         this.addTrainCarriage();
         this.addCursor();
+
+        window.tracks = this.tracks;
     };
+
+    stopGame = () => {
+        this.tracks = [];
+        this.toolbarSelection = VERTICAL;
+
+        clearInterval(this.obstacleInterval);
+    }
 
     buildInitialtracks() {
         for (let trackPosition of INITIAL_TRACKS) {
@@ -283,16 +332,10 @@ export default class Intro extends Level {
         Scripts.create(TRAIN, TrainScript);
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);
         Scripts.create(BOULDER, BoulderScript);
-
-        this.tracks = [];
-        this.toolbarSelection = VERTICAL;
-
-        window.tracks = this.tracks;
-
         this.enableUI(UserInterface);
     }
 
     onBeforeDispose() {
-        clearInterval(this.obstacleInterval);
+        this.stopGame();
     }
 }

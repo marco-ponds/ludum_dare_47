@@ -73,6 +73,8 @@ export const TRACKS_ROTATION = [
     TOP_LEFT,
 ];
 
+export const MAX_TRACK_LIFE = 5;
+
 export const convertTrackTypeToNewDirection = (track, direction) => {
     const trackType = TRACK_TYPES_MAP[track.type];
 

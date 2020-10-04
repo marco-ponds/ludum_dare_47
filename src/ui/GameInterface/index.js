@@ -1,9 +1,10 @@
 import Toolbar from "./Toolbar";
+import GameOver from "../GameOver";
 
-const GameInterface = ({ onToolbarSelection }) => (
+const GameInterface = ({ onToolbarSelection, onRetry, isOver }) => (
     <>
         <h1 className="game-title small">Ferrovia Folle</h1>
-        <Toolbar onToolbarSelection={onToolbarSelection}/>
+        { isOver ? <GameOver onRetry={onRetry}/> : <Toolbar onToolbarSelection={onToolbarSelection}/> }
     </>
 );
 

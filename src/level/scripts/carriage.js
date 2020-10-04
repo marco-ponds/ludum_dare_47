@@ -14,9 +14,10 @@ export default class CarriageScript extends BaseScript {
         super('train_carriage');
     }
 
-    start(trainCarriage, { trainHead }) {
+    start(trainCarriage, { trainHead, level }) {
         this.trainHead = trainHead;
         this.trainCarriage = trainCarriage;
+        this.level = level;
 
         this.speed = 800;
 
@@ -42,8 +43,9 @@ export default class CarriageScript extends BaseScript {
     }
 
     handleFailure() {
-        playCrashSound();
-        stopEngineSound();
+        // playCrashSound();
+        // stopEngineSound();
+        this.level.handleFailure();
     }
 
     moveTrainCarriage() {

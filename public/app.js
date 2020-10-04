@@ -3409,11 +3409,13 @@ var isInGrid = function isInGrid(_ref2) {
 /*!****************************!*\
   !*** ./src/level/index.js ***!
   \****************************/
-/*! exports provided: default */
+/*! exports provided: GAME_OVER_EVENT, GAME_RETRY_EVENT, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_OVER_EVENT", function() { return GAME_OVER_EVENT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_RETRY_EVENT", function() { return GAME_RETRY_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Intro; });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
@@ -3476,6 +3478,12 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 var BACKGROUND = 0xe3dbcc; //0x2f3640;
 
 var WHITE = 0xffffff;
+var GAME_OVER_EVENT = {
+  type: 'gameOver'
+};
+var GAME_RETRY_EVENT = {
+  type: 'gameRetry'
+};
 
 var Intro = /*#__PURE__*/function (_Level) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Intro, _Level);
@@ -3554,7 +3562,38 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.toolbarSelection = selection;
     });
 
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleRetry", function () {
+      _this.tracks.forEach(function (track) {
+        return track.dispose();
+      });
+
+      _this.boulders.forEach(function (boulder) {
+        return boulder.dispose();
+      });
+
+      _this.environment.forEach(function (el) {
+        return el.dispose();
+      });
+
+      _this.trainHead.dispose();
+
+      _this.trainCarriage.dispose();
+
+      _this.cursor.dispose();
+
+      _this.stopGame();
+
+      _this.startGame();
+
+      _this.dispatchEvent(GAME_RETRY_EVENT);
+    });
+
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "startGame", function () {
+      _this.tracks = [];
+      _this.environment = [];
+      _this.score = 0;
+      _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
+
       _this.buildLevel();
 
       _this.buildInitialtracks();
@@ -3567,6 +3606,14 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.addTrainCarriage();
 
       _this.addCursor();
+
+      window.tracks = _this.tracks;
+    });
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "stopGame", function () {
+      _this.tracks = [];
+      _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
+      clearInterval(_this.obstacleInterval);
     });
 
     return _this;
@@ -3575,17 +3622,17 @@ var Intro = /*#__PURE__*/function (_Level) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Intro, [{
     key: "addCursor",
     value: function addCursor() {
-      var cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
+      this.cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
       var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(0, 0, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], false, true);
-      cursor.setScale({
+      this.cursor.setScale({
         x: _grid__WEBPACK_IMPORTED_MODULE_9__["CURSOR_SCALE"],
         y: _grid__WEBPACK_IMPORTED_MODULE_9__["CURSOR_SCALE"]
       });
-      cursor.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
-      cursor.setPosition(position);
-      cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
-      cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["PLACE_TRACK_EVENT"].type, this.handlePlaceTrack);
-      cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["TRACK_CLICK_EVENT"].type, this.handleTrackClick);
+      this.cursor.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
+      this.cursor.setPosition(position);
+      this.cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
+      this.cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["PLACE_TRACK_EVENT"].type, this.handlePlaceTrack);
+      this.cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["TRACK_CLICK_EVENT"].type, this.handleTrackClick);
     }
   }, {
     key: "addTrain",
@@ -3616,7 +3663,8 @@ var Intro = /*#__PURE__*/function (_Level) {
       this.trainCarriage.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"]);
       this.trainCarriage.setPosition(position);
       this.trainCarriage.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], true, {
-        trainHead: this.trainHead
+        trainHead: this.trainHead,
+        level: this
       });
     }
   }, {
@@ -3660,6 +3708,13 @@ var Intro = /*#__PURE__*/function (_Level) {
       }
     }
   }, {
+    key: "handleFailure",
+    value: function handleFailure() {
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["playCrashSound"])();
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["stopEngineSound"])();
+      this.dispatchEvent(GAME_OVER_EVENT);
+    }
+  }, {
     key: "createTrackAtPosition",
     value: function createTrackAtPosition(position, type) {
       var trackType = type ? type : this.toolbarSelection;
@@ -3675,6 +3730,7 @@ var Intro = /*#__PURE__*/function (_Level) {
       track.setOpacity(0.8);
       track.type = trackType;
       track.gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getGridPositionFromCoordinates"])(position);
+      track.life = _tracks__WEBPACK_IMPORTED_MODULE_15__["MAX_TRACK_LIFE"];
       return track;
     }
   }, {
@@ -3699,6 +3755,8 @@ var Intro = /*#__PURE__*/function (_Level) {
             y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
           });
           grass.setPosition(position);
+          this.environment.push(dirt);
+          this.environment.push(grass);
         }
       }
     }
@@ -3732,15 +3790,12 @@ var Intro = /*#__PURE__*/function (_Level) {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_12__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_13__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__["default"]);
-      this.tracks = [];
-      this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
-      window.tracks = this.tracks;
       this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__["default"]);
     }
   }, {
     key: "onBeforeDispose",
     value: function onBeforeDispose() {
-      clearInterval(this.obstacleInterval);
+      this.stopGame();
     }
   }]);
 
@@ -3818,8 +3873,8 @@ var BoulderScript = /*#__PURE__*/function (_BaseScript) {
       this.moveBoulder();
     }
   }, {
-    key: "handleFailure",
-    value: function handleFailure() {
+    key: "removeBoulder",
+    value: function removeBoulder() {
       this.boulder.dispose();
     }
   }, {
@@ -3853,7 +3908,7 @@ var BoulderScript = /*#__PURE__*/function (_BaseScript) {
         if (Object(_grid__WEBPACK_IMPORTED_MODULE_6__["isInGrid"])(_this.position)) {
           _this.moveBoulder();
         } else {
-          _this.handleFailure();
+          _this.removeBoulder();
         }
       });
     }
@@ -3919,9 +3974,11 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(CarriageScript, [{
     key: "start",
     value: function start(trainCarriage, _ref) {
-      var trainHead = _ref.trainHead;
+      var trainHead = _ref.trainHead,
+          level = _ref.level;
       this.trainHead = trainHead;
       this.trainCarriage = trainCarriage;
+      this.level = level;
       this.speed = 800;
       this.position = {
         row: 2,
@@ -3946,8 +4003,9 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
   }, {
     key: "handleFailure",
     value: function handleFailure() {
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["playCrashSound"])();
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["stopEngineSound"])();
+      // playCrashSound();
+      // stopEngineSound();
+      this.level.handleFailure();
     }
   }, {
     key: "moveTrainCarriage",
@@ -4194,11 +4252,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       };
       this.oldDirection = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
       this.direction = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
-      this.train.setRotation(_tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN.orientation * (Math.PI / 180)); // this.train.addEventListener(
-      //     TRACK_CHANGE_EVENT.type,
-      //     this.handleTrackChange
-      // );
-
+      this.train.setRotation(_tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN.orientation * (Math.PI / 180));
       this.moveTrain();
     }
   }, {
@@ -4216,16 +4270,14 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       }
 
       return false;
-    } // handleTrackChange({ tracks }) {
-    //     this.tracks = tracks;
-    // }
-
+    }
   }, {
     key: "handleFailure",
     value: function handleFailure() {
-      this.oldDirection = null;
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["playCrashSound"])();
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["stopEngineSound"])();
+      this.oldDirection = null; // playCrashSound();
+      // stopEngineSound();
+
+      this.level.handleFailure();
     }
   }, {
     key: "moveTrain",
@@ -4352,7 +4404,7 @@ var getGrassSprite = function getGrassSprite() {
 /*!*****************************!*\
   !*** ./src/level/tracks.js ***!
   \*****************************/
-/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, convertTrackTypeToNewDirection, getNextRotation, isOnTrack */
+/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, getNextRotation, isOnTrack */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4374,6 +4426,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_TYPES_TO_SPRITE_MAP", function() { return TRACK_TYPES_TO_SPRITE_MAP; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_TYPES_MAP", function() { return TRACK_TYPES_MAP; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACKS_ROTATION", function() { return TRACKS_ROTATION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_TRACK_LIFE", function() { return MAX_TRACK_LIFE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "convertTrackTypeToNewDirection", function() { return convertTrackTypeToNewDirection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextRotation", function() { return getNextRotation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOnTrack", function() { return isOnTrack; });
@@ -4458,6 +4511,7 @@ var TRACK_TYPES_MAP = {
   }
 };
 var TRACKS_ROTATION = [VERTICAL, TOP_RIGHT, HORIZONTAL, BOTTOM_RIGHT, BOTTOM_LEFT, HORIZONTAL2, TOP_LEFT];
+var MAX_TRACK_LIFE = 5;
 var convertTrackTypeToNewDirection = function convertTrackTypeToNewDirection(track, direction) {
   var trackType = TRACK_TYPES_MAP[track.type];
   return trackType ? trackType[direction.type] : null;
@@ -4623,14 +4677,20 @@ var ToolbarItem = function ToolbarItem(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
 /* harmony import */ var _Toolbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Toolbar */ "./src/ui/GameInterface/Toolbar.js");
+/* harmony import */ var _GameOver__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameOver */ "./src/ui/GameOver/index.js");
+
 
 
 
 var GameInterface = function GameInterface(_ref) {
-  var onToolbarSelection = _ref.onToolbarSelection;
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createFragment"])([Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title small", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _Toolbar__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  var onToolbarSelection = _ref.onToolbarSelection,
+      onRetry = _ref.onRetry,
+      isOver = _ref.isOver;
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createFragment"])([Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title small", "Ferrovia Folle", 16), isOver ? Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _GameOver__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    "onRetry": onRetry
+  }) : Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _Toolbar__WEBPACK_IMPORTED_MODULE_1__["default"], {
     "onToolbarSelection": onToolbarSelection
-  })], 4);
+  })], 0);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (GameInterface);
@@ -4649,8 +4709,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
 
 
-var GameOver = function GameOver() {
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", null, [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title-over", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-title-over", "You fucked it.", 16)], 4);
+var GameOver = function GameOver(_ref) {
+  var _ref$score = _ref.score,
+      score = _ref$score === void 0 ? 0 : _ref$score,
+      onRetry = _ref.onRetry;
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'box game-over', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-over-text", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-label', "Your score: ", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "span", 'score-value', [score, Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(" km")], 0)], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", 'button game-over-button', "Try again, maybe?", 16, {
+    "onClick": onRetry
+  })], 4);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (GameOver);
@@ -4681,7 +4746,7 @@ var MainMenu = function MainMenu(_ref) {
     onStart();
   };
 
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "main-menu fancy-text", Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'menu-container box', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-subtitle", "(Crazy Railway)", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-instructions", "Instructions go here", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", "start-button", "Start", 16, {
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "main-menu fancy-text", Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", 'menu-container box', [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-subtitle", "(Crazy Railway)", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", "game-instructions", "Instructions go here", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", "button", "Start", 16, {
     "onClick": handleClick
   })], 4), 2);
 };
@@ -4703,16 +4768,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
-/* harmony import */ var _MainMenu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MainMenu */ "./src/ui/MainMenu/index.js");
-/* harmony import */ var _GameInterface__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./GameInterface */ "./src/ui/GameInterface/index.js");
-/* harmony import */ var _GameOver__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./GameOver */ "./src/ui/GameOver/index.js");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
+/* harmony import */ var _MainMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./MainMenu */ "./src/ui/MainMenu/index.js");
+/* harmony import */ var _GameInterface__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./GameInterface */ "./src/ui/GameInterface/index.js");
+/* harmony import */ var _GameOver__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./GameOver */ "./src/ui/GameOver/index.js");
+/* harmony import */ var _level__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../level */ "./src/level/index.js");
 
 
 
@@ -4720,7 +4790,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
+
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -4729,8 +4801,9 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
+
 var UserInterface = /*#__PURE__*/function (_Component) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(UserInterface, _Component);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(UserInterface, _Component);
 
   var _super = _createSuper(UserInterface);
 
@@ -4740,51 +4813,67 @@ var UserInterface = /*#__PURE__*/function (_Component) {
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, UserInterface);
 
     _this = _super.call(this, props);
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleGameOver", function () {
+      _this.setState({
+        over: true
+      });
+    });
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleGameRetry", function () {
+      console.log('received retry');
+
+      _this.setState({
+        gameState: 'inGame',
+        over: false
+      });
+    });
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "getMainMenu", function () {
+      return Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createComponentVNode"])(2, _MainMenu__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        "onStart": function onStart() {
+          return _this.setState(function () {
+            return {
+              gameState: 'inGame'
+            };
+          });
+        }
+      });
+    });
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "getGameInterface", function () {
+      return Object(inferno__WEBPACK_IMPORTED_MODULE_7__["createComponentVNode"])(2, _GameInterface__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        "onRetry": _this.props.scene.handleRetry,
+        "onToolbarSelection": _this.props.scene.handleToolbarSelection,
+        "isOver": _this.state.over
+      }, null, {
+        "onComponentDidMount": _this.props.scene.startGame
+      });
+    });
+
     _this.state = {
-      gameState: 'menu'
+      gameState: 'menu',
+      over: false
     };
     return _this;
   }
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(UserInterface, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var scene = this.props.scene;
+      scene.addEventListener(_level__WEBPACK_IMPORTED_MODULE_11__["GAME_OVER_EVENT"].type, this.handleGameOver);
+      scene.addEventListener(_level__WEBPACK_IMPORTED_MODULE_11__["GAME_RETRY_EVENT"].type, this.handleGameRetry);
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
-      var component;
-
-      switch (this.state.gameState) {
-        case 'menu':
-          component = Object(inferno__WEBPACK_IMPORTED_MODULE_5__["createComponentVNode"])(2, _MainMenu__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            "onStart": function onStart() {
-              return _this2.setState(function () {
-                return {
-                  gameState: 'inGame'
-                };
-              });
-            }
-          });
-          break;
-
-        case 'inGame':
-          component = Object(inferno__WEBPACK_IMPORTED_MODULE_5__["createComponentVNode"])(2, _GameInterface__WEBPACK_IMPORTED_MODULE_7__["default"], {
-            "onToolbarSelection": this.props.scene.handleToolbarSelection
-          }, null, {
-            "onComponentDidMount": this.props.scene.startGame
-          });
-          break;
-
-        case 'gameOver':
-          component = Object(inferno__WEBPACK_IMPORTED_MODULE_5__["createComponentVNode"])(2, _GameOver__WEBPACK_IMPORTED_MODULE_8__["default"]);
-          break;
-      }
-
-      return component;
+      return this.state.gameState === 'menu' ? this.getMainMenu() : this.getGameInterface();
     }
   }]);
 
   return UserInterface;
-}(inferno__WEBPACK_IMPORTED_MODULE_5__["Component"]);
+}(inferno__WEBPACK_IMPORTED_MODULE_7__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (UserInterface);
 
