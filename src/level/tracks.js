@@ -1,8 +1,8 @@
 export const DIRECTIONS = {
-    UP: { row: -1, col: 0, type: 'UP' },
-    LEFT: { row: 0, col: -1, type: 'LEFT' },
-    DOWN: { row: 1, col: 0, type: 'DOWN' },
-    RIGHT: { row: 0, col: 1, type: 'RIGHT' }
+    UP: { row: -1, col: 0, type: 'UP', orientation: 0 },
+    LEFT: { row: 0, col: -1, type: 'LEFT', orientation: 90 },
+    DOWN: { row: 1, col: 0, type: 'DOWN', orientation: 180 },
+    RIGHT: { row: 0, col: 1, type: 'RIGHT', orientation: 270 },
 };
 
 export const VERTICAL = 'VERTICAL';
@@ -33,44 +33,54 @@ export const TRACK_TYPES_TO_SPRITE_MAP = {
 export const TRACK_TYPES_MAP = {
     TOP_RIGHT: {
         LEFT: DIRECTIONS.DOWN,
-        UP: DIRECTIONS.RIGHT
+        UP: DIRECTIONS.RIGHT,
     },
     TOP_LEFT: {
         RIGHT: DIRECTIONS.DOWN,
-        UP: DIRECTIONS.LEFT
+        UP: DIRECTIONS.LEFT,
     },
     BOTTOM_LEFT: {
         RIGHT: DIRECTIONS.UP,
-        DOWN: DIRECTIONS.LEFT
+        DOWN: DIRECTIONS.LEFT,
     },
     BOTTOM_RIGHT: {
         LEFT: DIRECTIONS.UP,
-        DOWN: DIRECTIONS.RIGHT
+        DOWN: DIRECTIONS.RIGHT,
     },
     VERTICAL: {
         DOWN: DIRECTIONS.DOWN,
-        UP: DIRECTIONS.UP
+        UP: DIRECTIONS.UP,
     },
     HORIZONTAL: {
         LEFT: DIRECTIONS.LEFT,
-        RIGHT: DIRECTIONS.RIGHT
+        RIGHT: DIRECTIONS.RIGHT,
     },
     HORIZONTAL2: {
         LEFT: DIRECTIONS.LEFT,
-        RIGHT: DIRECTIONS.RIGHT
-    }
+        RIGHT: DIRECTIONS.RIGHT,
+    },
 };
 
-export const TRACKS_ROTATION = [VERTICAL, TOP_RIGHT, HORIZONTAL, BOTTOM_RIGHT, BOTTOM_LEFT, HORIZONTAL2, TOP_LEFT];
+export const TRACKS_ROTATION = [
+    VERTICAL,
+    TOP_RIGHT,
+    HORIZONTAL,
+    BOTTOM_RIGHT,
+    BOTTOM_LEFT,
+    HORIZONTAL2,
+    TOP_LEFT,
+];
 
 export const convertTrackTypeToNewDirection = (track, direction) => {
     const trackType = TRACK_TYPES_MAP[track.type];
-    
+
     return trackType ? trackType[direction.type] : null;
 };
 
 export const getNextRotation = (track) => {
     const index = TRACKS_ROTATION.indexOf(track.type);
 
-    return (index === TRACKS_ROTATION.length - 1) ? TRACKS_ROTATION[0] : TRACKS_ROTATION[index+1];
+    return index === TRACKS_ROTATION.length - 1
+        ? TRACKS_ROTATION[0]
+        : TRACKS_ROTATION[index + 1];
 };
