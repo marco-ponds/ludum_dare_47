@@ -3471,7 +3471,6 @@ var Intro = /*#__PURE__*/function (_Level) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleToolbarSelection", function (selection) {
-      console.log(selection);
       _this.toolbarSelection = selection;
     });
 
