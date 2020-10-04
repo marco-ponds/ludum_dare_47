@@ -3226,6 +3226,8 @@ var assets = {
     tracks_bottom_left: '/assets/textures/tracks_bottom_left.png'
   },
   audio: {
+    'engine': '/assets/audio/engine.wav',
+    'crash': '/assets/audio/crash.wav',
     'click': '/assets/audio/click.wav'
   }
 };
@@ -3437,6 +3439,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/boulder */ "./src/level/scripts/boulder.js");
 /* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tracks */ "./src/level/tracks.js");
 /* harmony import */ var _ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../ui/UserInterface */ "./src/ui/UserInterface.js");
+/* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./sounds */ "./src/level/sounds.js");
 
 
 
@@ -3458,6 +3461,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 
@@ -3520,10 +3524,11 @@ var Intro = /*#__PURE__*/function (_Level) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleRemoveTrack", function (removedTrack) {
-      var gridPosition = removedTrack.gridPosition;
       _this.tracks = _this.tracks.filter(function (track) {
-        return track.gridPosition !== gridPosition;
+        return !Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, removedTrack.gridPosition);
       });
+      console.log(_this.tracks, _this.tracks.length);
+      removedTrack.dispose();
 
       _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
@@ -3557,8 +3562,9 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.boulders = [];
       _this.obstacleInterval = setInterval(_this.rollForObstacle, 1000);
 
-      _this.addTrain(); //this.addTrainCarriage();
+      _this.addTrain();
 
+      _this.addTrainCarriage();
 
       _this.addCursor();
     });
@@ -3593,8 +3599,10 @@ var Intro = /*#__PURE__*/function (_Level) {
       this.trainHead.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_HEAD"]);
       this.trainHead.setPosition(position);
       this.trainHead.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], true, {
-        tracks: this.tracks
+        tracks: this.tracks,
+        level: this
       });
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["playEngineSound"])();
     }
   }, {
     key: "addTrainCarriage",
@@ -3831,15 +3839,12 @@ var BoulderScript = /*#__PURE__*/function (_BaseScript) {
       }
 
       this.boulder.goTo(position, this.speed).then(function () {
-        var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, _this.tracks);
+        var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, _this.level.tracks);
 
         if (track) {
           _this.level.handleRemoveTrack(track);
-
-          track.dispose();
         }
 
-        console.log(track);
         _this.position = {
           row: row,
           col: col
@@ -3884,6 +3889,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
 /* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+/* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../sounds */ "./src/level/sounds.js");
 
 
 
@@ -3893,6 +3899,7 @@ __webpack_require__.r(__webpack_exports__);
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 
@@ -3939,7 +3946,8 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
   }, {
     key: "handleFailure",
     value: function handleFailure() {
-      console.log('boom');
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["playCrashSound"])();
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["stopEngineSound"])();
     }
   }, {
     key: "moveTrainCarriage",
@@ -4141,6 +4149,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
 /* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+/* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../sounds */ "./src/level/sounds.js");
 
 
 
@@ -4150,6 +4159,7 @@ __webpack_require__.r(__webpack_exports__);
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 
@@ -4172,9 +4182,11 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(TrainScript, [{
     key: "start",
     value: function start(train, _ref) {
-      var tracks = _ref.tracks;
+      var tracks = _ref.tracks,
+          level = _ref.level;
       this.tracks = tracks;
       this.train = train;
+      this.level = level;
       this.speed = 800;
       this.position = {
         row: 3,
@@ -4182,8 +4194,11 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       };
       this.oldDirection = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
       this.direction = _tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN;
-      this.train.setRotation(_tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN.orientation * (Math.PI / 180));
-      this.train.addEventListener(TRACK_CHANGE_EVENT.type, this.handleTrackChange);
+      this.train.setRotation(_tracks__WEBPACK_IMPORTED_MODULE_7__["DIRECTIONS"].DOWN.orientation * (Math.PI / 180)); // this.train.addEventListener(
+      //     TRACK_CHANGE_EVENT.type,
+      //     this.handleTrackChange
+      // );
+
       this.moveTrain();
     }
   }, {
@@ -4201,18 +4216,16 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       }
 
       return false;
-    }
-  }, {
-    key: "handleTrackChange",
-    value: function handleTrackChange(_ref2) {
-      var tracks = _ref2.tracks;
-      this.tracks = tracks;
-    }
+    } // handleTrackChange({ tracks }) {
+    //     this.tracks = tracks;
+    // }
+
   }, {
     key: "handleFailure",
     value: function handleFailure() {
       this.oldDirection = null;
-      console.log('boom');
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["playCrashSound"])();
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_8__["stopEngineSound"])();
     }
   }, {
     key: "moveTrain",
@@ -4227,7 +4240,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       var position = Object(_grid__WEBPACK_IMPORTED_MODULE_6__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_6__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_6__["SPRITE_SCALE"], true);
       this.train.setRotation(orientation * (Math.PI / 180));
       this.train.goTo(position, this.speed).then(function () {
-        var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, _this.tracks);
+        var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, _this.level.tracks);
 
         if (track) {
           _this.position = {
@@ -4251,6 +4264,43 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
 }(mage_engine__WEBPACK_IMPORTED_MODULE_5__["BaseScript"]);
 
 
+
+/***/ }),
+
+/***/ "./src/level/sounds.js":
+/*!*****************************!*\
+  !*** ./src/level/sounds.js ***!
+  \*****************************/
+/*! exports provided: playClickSound, playCrashSound, playEngineSound, stopEngineSound */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playClickSound", function() { return playClickSound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playCrashSound", function() { return playCrashSound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playEngineSound", function() { return playEngineSound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopEngineSound", function() { return stopEngineSound; });
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
+
+var playClickSound = function playClickSound() {
+  return new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('click').start();
+};
+var playCrashSound = function playCrashSound() {
+  return new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('crash').start();
+};
+var engineSound;
+var playEngineSound = function playEngineSound() {
+  engineSound = new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('engine', {
+    loop: true
+  });
+  engineSound.start();
+};
+var stopEngineSound = function stopEngineSound() {
+  if (engineSound) {
+    engineSound.stop();
+    engineSound = null;
+  }
+};
 
 /***/ }),
 
@@ -4453,6 +4503,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ToolbarItem__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ToolbarItem */ "./src/ui/GameInterface/ToolbarItem.js");
 /* harmony import */ var _level_tracks__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../level/tracks */ "./src/level/tracks.js");
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
+/* harmony import */ var _level_sounds__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../level/sounds */ "./src/level/sounds.js");
 
 
 
@@ -4470,12 +4521,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
-var TYPES = [_level_tracks__WEBPACK_IMPORTED_MODULE_9__["VERTICAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["HORIZONTAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_RIGHT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_RIGHT"]];
 
-var playClickSound = function playClickSound() {
-  var sound = new mage_engine__WEBPACK_IMPORTED_MODULE_10__["Sound"]('click');
-  sound.start();
-};
+var TYPES = [_level_tracks__WEBPACK_IMPORTED_MODULE_9__["VERTICAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["HORIZONTAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_RIGHT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_RIGHT"]];
 
 var Toolbar = /*#__PURE__*/function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Toolbar, _Component);
@@ -4516,7 +4563,7 @@ var Toolbar = /*#__PURE__*/function (_Component) {
         selection: type
       }); // play sound
 
-      playClickSound();
+      Object(_level_sounds__WEBPACK_IMPORTED_MODULE_11__["playClickSound"])();
       onToolbarSelection(type);
     }
   }, {
@@ -4621,6 +4668,8 @@ var GameOver = function GameOver() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
+/* harmony import */ var _level_sounds__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../level/sounds */ "./src/level/sounds.js");
+
 
 
 
@@ -4628,7 +4677,7 @@ var MainMenu = function MainMenu(_ref) {
   var onStart = _ref.onStart;
 
   var handleClick = function handleClick() {
-    new mage_engine__WEBPACK_IMPORTED_MODULE_1__["Sound"]('click').start();
+    Object(_level_sounds__WEBPACK_IMPORTED_MODULE_2__["playClickSound"])();
     onStart();
   };
 

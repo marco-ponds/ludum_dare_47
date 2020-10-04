@@ -7,6 +7,7 @@ import {
     SPRITE_SCALE,
 } from '../grid';
 import { DIRECTIONS } from '../tracks';
+import { playCrashSound, stopEngineSound } from '../sounds';
 
 export default class CarriageScript extends BaseScript {
     constructor() {
@@ -41,7 +42,8 @@ export default class CarriageScript extends BaseScript {
     }
 
     handleFailure() {
-        console.log('boom');
+        playCrashSound();
+        stopEngineSound();
     }
 
     moveTrainCarriage() {

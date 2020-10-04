@@ -10,6 +10,7 @@ import {
     isOnTrack,
     DIRECTIONS,
 } from '../tracks';
+import { stopEngineSound, playCrashSound } from '../sounds';
 
 export const TRACK_CHANGE_EVENT = {
     type: 'newTrack',
@@ -20,9 +21,10 @@ export default class TrainScript extends BaseScript {
         super('train');
     }
 
-    start(train, { tracks }) {
+    start(train, { tracks, level }) {
         this.tracks = tracks;
         this.train = train;
+        this.level = level;
 
         this.speed = 800;
 
@@ -32,10 +34,10 @@ export default class TrainScript extends BaseScript {
 
         this.train.setRotation(DIRECTIONS.DOWN.orientation * (Math.PI / 180));
 
-        this.train.addEventListener(
-            TRACK_CHANGE_EVENT.type,
-            this.handleTrackChange
-        );
+        // this.train.addEventListener(
+        //     TRACK_CHANGE_EVENT.type,
+        //     this.handleTrackChange
+        // );
 
         this.moveTrain();
     }
@@ -58,13 +60,14 @@ export default class TrainScript extends BaseScript {
         return false;
     }
 
-    handleTrackChange({ tracks }) {
-        this.tracks = tracks;
-    }
+    // handleTrackChange({ tracks }) {
+    //     this.tracks = tracks;
+    // }
 
     handleFailure() {
         this.oldDirection = null;
-        console.log('boom');
+        playCrashSound();
+        stopEngineSound();
     }
 
     moveTrain() {
@@ -82,7 +85,7 @@ export default class TrainScript extends BaseScript {
         this.train.setRotation(orientation * (Math.PI / 180));
 
         this.train.goTo(position, this.speed).then(() => {
-            const track = isOnTrack(position, this.tracks);
+            const track = isOnTrack(position, this.level.tracks);
 
             if (track) {
                 this.position = { row, col };

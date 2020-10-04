@@ -34,6 +34,7 @@ import BoulderScript from './scripts/boulder';
 
 import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP } from './tracks';
 import UserInterface from '../ui/UserInterface';
+import { playEngineSound } from './sounds';
 
 const BACKGROUND = 0xe3dbcc;//0x2f3640;
 const WHITE = 0xffffff;
@@ -85,7 +86,9 @@ export default class Intro extends Level {
         this.trainHead.addTag(TRAIN_HEAD);
         this.trainHead.setPosition(position);
 
-        this.trainHead.addScript(TRAIN, true, { tracks: this.tracks });
+        this.trainHead.addScript(TRAIN, true, { tracks: this.tracks, level: this });
+
+        playEngineSound();
     }
 
     addTrainCarriage() {
@@ -169,13 +172,17 @@ export default class Intro extends Level {
     };
 
     handleRemoveTrack = (removedTrack) => {
-        const { gridPosition } = removedTrack;
         this.tracks = this.tracks.filter(
-            (track) => track.gridPosition !== gridPosition
+            track => !areGridPositionsEqual(track.gridPosition, removedTrack.gridPosition)
         );
+
+        console.log(this.tracks, this.tracks.length);
+
+        removedTrack.dispose();
+
         this.trainHead.dispatchEvent({
             ...TRACK_CHANGE_EVENT,
-            tracks: this.tracks,
+            tracks: this.tracks
         });
     };
 
@@ -256,7 +263,7 @@ export default class Intro extends Level {
         this.boulders = [];
         this.obstacleInterval = setInterval(this.rollForObstacle, 1000);
         this.addTrain();
-        //this.addTrainCarriage();
+        this.addTrainCarriage();
         this.addCursor();
     };
 
