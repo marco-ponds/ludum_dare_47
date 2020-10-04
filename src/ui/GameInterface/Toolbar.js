@@ -8,7 +8,7 @@ const TYPES = [VERTICAL, HORIZONTAL, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RI
 
 const Score = ({ score }) => {
     return <li className='score'>
-        <p>{parseScore(score)} km</p>
+        <p>{parseScore(score)}</p>
     </li>
 }
 

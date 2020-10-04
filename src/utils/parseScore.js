@@ -1,1 +1,1 @@
-export const parseScore = score => score > 1000 ? (score/1000) : score;
+export const parseScore = score => score > 1000 ? `${(score/1000)} km` : `${score} m`;
