@@ -1,4 +1,5 @@
 import { Level, Sprite, Scene, Scripts } from 'mage-engine';
+import { getRandomInitialEdgePositionAndDirection } from '../utils/getRandomInitialEdgePositionAndDirection';
 import {
     GRID_HEIGHT,
     GRID_WIDTH,
@@ -21,6 +22,7 @@ import {
     TRAIN_HEAD,
     TRAIN,
     TRAIN_CARRIAGE,
+    BOULDER,
 } from './sprites';
 import CursorScript, {
     PLACE_TRACK_EVENT,
@@ -28,6 +30,8 @@ import CursorScript, {
 } from './scripts/cursor';
 import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
 import CarriageScript from './scripts/carriage';
+import BoulderScript from './scripts/boulder';
+
 import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP } from './tracks';
 import UserInterface from '../ui/UserInterface';
 
@@ -107,11 +111,68 @@ export default class Intro extends Level {
         });
     }
 
+    addBoulder() {
+        // get rid of disposed boulders from array
+        this.boulders = this.boulders.filter((boulder) => boulder.scripts[0]);
+        // max 5 boulders at a time
+        if (this.boulders.length <= 5) {
+            // create new boulder sprite
+            const newBoulder = new Sprite(SPRITE_SIZE, SPRITE_SIZE, BOULDER);
+            // get starting grid position and direction of boulder
+            const {
+                row,
+                col,
+                direction,
+            } = getRandomInitialEdgePositionAndDirection();
+            // get 'actual' starting position in 3D space
+            const position = getPositionFromRowAndCol(
+                row,
+                col,
+                SPRITE_SIZE,
+                SPRITE_SCALE,
+                true
+            );
+
+            const startingPos = { row, col };
+
+            newBoulder.addTag(BOULDER);
+            newBoulder.setPosition(position);
+            newBoulder.setScale({ x: TRAIN_SCALE, y: TRAIN_SCALE });
+            // start the boulder
+            newBoulder.addScript(BOULDER, true, {
+                startingPos,
+                direction,
+                tracks: this.tracks,
+                level: this,
+            });
+            // add the boulder to the array
+            this.boulders.push(newBoulder);
+        }
+    }
+
+    rollForObstacle = () => {
+        const result = Math.random();
+        if (result < 0.3) {
+            this.addBoulder();
+        }
+    };
+
     handlePlaceTrack = (event) => {
         const { position } = event;
 
         this.tracks.push(this.createTrackAtPosition(position));
 
+        this.trainHead.dispatchEvent({
+            ...TRACK_CHANGE_EVENT,
+            tracks: this.tracks,
+        });
+    };
+
+    handleRemoveTrack = (removedTrack) => {
+        const { gridPosition } = removedTrack;
+        this.tracks = this.tracks.filter(
+            (track) => track.gridPosition !== gridPosition
+        );
         this.trainHead.dispatchEvent({
             ...TRACK_CHANGE_EVENT,
             tracks: this.tracks,
@@ -192,7 +253,8 @@ export default class Intro extends Level {
     startGame = () => {
         this.buildLevel();
         this.buildInitialtracks();
-
+        this.boulders = [];
+        this.obstacleInterval = setInterval(this.rollForObstacle, 1000);
         this.addTrain();
         //this.addTrainCarriage();
         this.addCursor();
@@ -212,6 +274,7 @@ export default class Intro extends Level {
         Scripts.create(CURSOR, CursorScript);
         Scripts.create(TRAIN, TrainScript);
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);
+        Scripts.create(BOULDER, BoulderScript);
 
         this.tracks = [];
         this.toolbarSelection = VERTICAL;
@@ -219,5 +282,9 @@ export default class Intro extends Level {
         window.tracks = this.tracks;
 
         this.enableUI(UserInterface);
+    }
+
+    onBeforeDispose() {
+        clearInterval(this.obstacleInterval);
     }
 }

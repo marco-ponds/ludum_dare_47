@@ -8,7 +8,7 @@ import {
 } from '../grid';
 import { DIRECTIONS } from '../tracks';
 
-export default class TrainScript extends BaseScript {
+export default class CarriageScript extends BaseScript {
     constructor() {
         super('train_carriage');
     }

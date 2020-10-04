@@ -1,3 +1,5 @@
+import { getGridPositionFromCoordinates, areGridPositionsEqual } from './grid';
+
 export const DIRECTIONS = {
     UP: { row: -1, col: 0, type: 'UP', orientation: 0 },
     LEFT: { row: 0, col: -1, type: 'LEFT', orientation: 90 },
@@ -83,4 +85,15 @@ export const getNextRotation = (track) => {
     return index === TRACKS_ROTATION.length - 1
         ? TRACKS_ROTATION[0]
         : TRACKS_ROTATION[index + 1];
+};
+
+export const isOnTrack = (position, tracks) => {
+    const gridPosition = getGridPositionFromCoordinates(position);
+    const track = tracks
+        .filter((track) =>
+            areGridPositionsEqual(track.gridPosition, gridPosition)
+        )
+        .pop();
+
+    return track;
 };
