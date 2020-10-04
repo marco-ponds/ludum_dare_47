@@ -23,11 +23,12 @@ export default class TrainScript extends BaseScript {
         this.tracks = tracks;
         this.train = train;
 
-        this.speed = 500;
+        this.speed = 800;
 
         this.position = { row: 3, col: 3 };
-        this.oldDirection = DIRECTIONS.down;
+        this.oldDirection = DIRECTIONS.DOWN;
         this.direction = DIRECTIONS.DOWN;
+
         this.train.setRotation(DIRECTIONS.DOWN.orientation * (Math.PI / 180));
 
         this.train.addEventListener(
@@ -59,6 +60,9 @@ export default class TrainScript extends BaseScript {
             this.oldDirection = this.direction;
             this.direction = newDirection;
             return true;
+        } else {
+            this.direction = null;
+            this.oldDirection = null;
         }
 
         return false;
