@@ -22,6 +22,8 @@ const assets = {
         tracks_bottom_left: '/assets/textures/tracks_bottom_left.png',
     },
     audio: {
+        'engine': '/assets/audio/engine.wav',
+        'crash': '/assets/audio/crash.wav',
         'click': '/assets/audio/click.wav'
     }
 };

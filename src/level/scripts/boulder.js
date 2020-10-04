@@ -51,12 +51,11 @@ export default class BoulderScript extends BaseScript {
         }
 
         this.boulder.goTo(position, this.speed).then(() => {
-            const track = isOnTrack(position, this.tracks);
+            const track = isOnTrack(position, this.level.tracks);
             if (track) {
                 this.level.handleRemoveTrack(track);
-                track.dispose();
             }
-            console.log(track);
+
             this.position = { row, col };
             if (isInGrid(this.position)) {
                 this.moveBoulder();
