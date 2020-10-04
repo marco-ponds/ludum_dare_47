@@ -34,11 +34,6 @@ export default class TrainScript extends BaseScript {
 
         this.train.setRotation(DIRECTIONS.DOWN.orientation * (Math.PI / 180));
 
-        // this.train.addEventListener(
-        //     TRACK_CHANGE_EVENT.type,
-        //     this.handleTrackChange
-        // );
-
         this.moveTrain();
     }
 
@@ -60,14 +55,12 @@ export default class TrainScript extends BaseScript {
         return false;
     }
 
-    // handleTrackChange({ tracks }) {
-    //     this.tracks = tracks;
-    // }
-
     handleFailure() {
         this.oldDirection = null;
-        playCrashSound();
-        stopEngineSound();
+        // playCrashSound();
+        // stopEngineSound();
+
+        this.level.handleFailure();
     }
 
     moveTrain() {

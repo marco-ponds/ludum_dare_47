@@ -64,7 +64,7 @@
     margin-top: 2rem;
 }
 
-.start-button {
+.button {
     background-color: #EFBA54;
     border-radius: 0.12em;
     box-sizing: border-box;
@@ -80,8 +80,8 @@
     user-select: none;
 }
 
-.start-button:hover,
-.start-button:active {
+.button:hover,
+.button:active {
     background: #E09D37;
     border: 1px solid #6C4B19;
     box-shadow: 0px 2px #8E5D1F, 0px 4px #614B25, 0px 8px #BDB2A1;
@@ -140,4 +140,40 @@
 
 .toolbar li .text {
     font-size: 16px;
+}
+
+.game-over {
+    height: 80px;
+    width: 640px;
+    margin-left: calc(50% - 320px);
+    position: absolute;
+    /* margin-top: 150px; */
+    z-index: 200;
+    bottom: 14px;
+    padding: 8px;
+}
+
+.game-over-button {
+    float: right;
+    top: 13px;
+    margin-top: 16px;
+    margin-right: 16px;
+}
+
+.game-over-button:hover,
+.game-over-button:active {
+    margin-top: 14px;
+}
+
+.game-over-text {
+    display: inline-block;
+}
+
+.score-label {
+    font-size: 12px;
+}
+
+.score-value {
+    font-size: 42px;
+    margin: 0px 16px;
 }

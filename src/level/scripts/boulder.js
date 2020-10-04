@@ -29,7 +29,7 @@ export default class BoulderScript extends BaseScript {
         this.moveBoulder();
     }
 
-    handleFailure() {
+    removeBoulder() {
         this.boulder.dispose();
     }
 
@@ -60,7 +60,7 @@ export default class BoulderScript extends BaseScript {
             if (isInGrid(this.position)) {
                 this.moveBoulder();
             } else {
-                this.handleFailure();
+                this.removeBoulder();
             }
         });
     }
