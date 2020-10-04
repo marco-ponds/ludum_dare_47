@@ -21,6 +21,9 @@ const assets = {
         tracks_bottom_right: '/assets/textures/tracks_bottom_right.png',
         tracks_bottom_left: '/assets/textures/tracks_bottom_left.png',
     },
+    audio: {
+        'click': '/assets/audio/click.wav'
+    }
 };
 
 const config = {

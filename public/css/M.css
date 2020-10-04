@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Kamatic;
+    src: url('ka1.ttf');
+}
+
 body {
     overflow: hidden;
     margin: 0;
@@ -5,7 +10,7 @@ body {
     height: 100%;
     width: 100%;
     position: absolute;
-    font-family: Bangers, cursive;
+    font-family: Kamatic;
 }
 
 .visible {

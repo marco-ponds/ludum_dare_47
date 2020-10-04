@@ -3064,6 +3064,9 @@ var assets = {
     tracks_top_left: '/assets/textures/tracks_top_left.png',
     tracks_bottom_right: '/assets/textures/tracks_bottom_right.png',
     tracks_bottom_left: '/assets/textures/tracks_bottom_left.png'
+  },
+  audio: {
+    'click': '/assets/audio/click.wav'
   }
 };
 var config = {
@@ -3304,9 +3307,14 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
+<<<<<<< HEAD
 
 
 var BACKGROUND = 0x2f3640;
+=======
+var BACKGROUND = 0xe3dbcc; //0x2f3640;
+
+>>>>>>> styled toolbar, added sound on click
 var WHITE = 0xffffff;
 
 var Intro = /*#__PURE__*/function (_Level) {
@@ -3554,6 +3562,7 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "onCreate",
     value: function onCreate() {
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(2);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scene"].setClearColor(BACKGROUND);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_12__["default"]);
@@ -4287,6 +4296,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
 /* harmony import */ var _ToolbarItem__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ToolbarItem */ "./src/ui/GameInterface/ToolbarItem.js");
 /* harmony import */ var _level_tracks__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../level/tracks */ "./src/level/tracks.js");
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
 
 
 
@@ -4303,7 +4313,13 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
+
 var TYPES = [_level_tracks__WEBPACK_IMPORTED_MODULE_9__["VERTICAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["HORIZONTAL"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["TOP_RIGHT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_LEFT"], _level_tracks__WEBPACK_IMPORTED_MODULE_9__["BOTTOM_RIGHT"]];
+
+var playClickSound = function playClickSound() {
+  var sound = new mage_engine__WEBPACK_IMPORTED_MODULE_10__["Sound"]('click');
+  sound.start();
+};
 
 var Toolbar = /*#__PURE__*/function (_Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Toolbar, _Component);
@@ -4342,7 +4358,9 @@ var Toolbar = /*#__PURE__*/function (_Component) {
       var onToolbarSelection = this.props.onToolbarSelection;
       this.setState({
         selection: type
-      });
+      }); // play sound
+
+      playClickSound();
       onToolbarSelection(type);
     }
   }, {
