@@ -4943,7 +4943,13 @@ var MainMenu = function MainMenu(_ref) {
     onStart();
   };
 
-  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "main-menu fancy-text", Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "menu-container box", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-subtitle", "(Crazy Railway)", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "game-instructions", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", null, "Choo, choo! The train is moving, and it's your job to keep it that way!", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _InstructionDetails__WEBPACK_IMPORTED_MODULE_2__["default"])], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", "button", "Start", 16, {
+  return Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "main-menu fancy-text", Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "menu-container box", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h1", "game-title", "Ferrovia Folle", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h2", "game-subtitle", "(Crazy Railway)", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "h3", "credits", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])("A game by"), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(' '), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "a", null, "Marco Stagni", 16, {
+    "href": "http://www.marcostagni.com",
+    "target": "_blank"
+  }), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(' '), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])("and"), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createTextVNode"])(' '), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "a", null, "Danny Hunn", 16, {
+    "href": "https://github.com/DJHunn39",
+    "target": "_blank"
+  })], 0), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "div", "game-instructions", [Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "p", null, "Choo, choo! The train is moving, and it's your job to keep it that way!", 16), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createComponentVNode"])(2, _InstructionDetails__WEBPACK_IMPORTED_MODULE_2__["default"])], 4), Object(inferno__WEBPACK_IMPORTED_MODULE_0__["createVNode"])(1, "button", "button", "Start", 16, {
     "onClick": handleClick
   })], 4), 2);
 };

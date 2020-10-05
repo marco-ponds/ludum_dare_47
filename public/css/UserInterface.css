@@ -20,6 +20,20 @@
     margin-bottom: 1rem;
 }
 
+.credits {
+    font-size: 8pt;
+}
+
+.credits a {
+    text-decoration: none;
+    color: darkred;
+    transition: all 0.2s;
+}
+.credits a:hover {
+    text-decoration: none;
+    color: blue;
+}
+
 .main-menu {
     width: 100%;
     height: 100%;
@@ -38,7 +52,7 @@
 }
 
 .menu-container {
-    height: 600px;
+    height: 620px;
     width: 800px;
     margin: auto;
     margin-top: 50px;
