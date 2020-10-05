@@ -11,7 +11,7 @@
 .instruction-text {
     margin-left: 2rem;
     margin-right: 1rem;
-    text-align: center;
+    text-align: left;
 }
 
 .instruction-detail {
@@ -49,13 +49,7 @@
     position: absolute;
     z-index: 104;
     /* background: #E5DECF; */
-    background: repeating-linear-gradient(
-        45deg,
-        #e5decf,
-        #e5decf 30px,
-        #ddd7cc 0,
-        #ddd7cc 60px
-    );
+    background: repeating-linear-gradient( 45deg, #e5decf, #e5decf 30px, #ddd7cc 0, #ddd7cc 60px);
 }
 
 .menu-container {

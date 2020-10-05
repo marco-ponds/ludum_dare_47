@@ -7,7 +7,7 @@ const instructions = [
     {
         image: './assets/textures/tracks_vertical.png',
         text:
-            'This is a track! Pick one from the toolbar and place it wherever you want (or need) to!',
+            'This is a track! Pick one from the toolbar (you can use your keyboard too) and place it wherever you want (or need) to!',
     },
     {
         image: './assets/textures/boulder.png',
