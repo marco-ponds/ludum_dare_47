@@ -5,6 +5,7 @@ store.createStore(undefined, {}, true);
 
 const assets = {
     textures: {
+        fire: '/assets/textures/fire.png',
         cursor: '/assets/textures/cursor.png',
         train_head: '/assets/textures/train_head.png',
         train_carriage: '/assets/textures/train_carriage.png',

@@ -18,6 +18,9 @@ export const TRACK_TOP_RIGHT = 'tracks_top_right';
 export const TRACK_BOTTOM_LEFT = 'tracks_bottom_left';
 export const TRACK_BOTTOM_RIGHT = 'tracks_bottom_right';
 
+
+export const FIRE = 'fire';
+
 export const getGrassSprite = () =>
     GRASS_TYPES[Math.floor(Math.random() * GRASS_TYPES.length)];
 

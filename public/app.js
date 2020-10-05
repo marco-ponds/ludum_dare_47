@@ -3050,6 +3050,7 @@ __webpack_require__.r(__webpack_exports__);
 mage_engine__WEBPACK_IMPORTED_MODULE_0__["store"].createStore(undefined, {}, true);
 var assets = {
   textures: {
+    fire: '/assets/textures/fire.png',
     cursor: '/assets/textures/cursor.png',
     train_head: '/assets/textures/train_head.png',
     train_carriage: '/assets/textures/train_carriage.png',
@@ -3296,6 +3297,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./sounds */ "./src/level/sounds.js");
 /* harmony import */ var _obstacles__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./obstacles */ "./src/level/obstacles.js");
 /* harmony import */ var _scripts_tree__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/tree */ "./src/level/scripts/tree.js");
+/* harmony import */ var _scripts_fire__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./scripts/fire */ "./src/level/scripts/fire.js");
 
 
 
@@ -3317,6 +3319,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 
@@ -3684,6 +3687,7 @@ var Intro = /*#__PURE__*/function (_Level) {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_13__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TREE"], _scripts_tree__WEBPACK_IMPORTED_MODULE_18__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["FIRE"], _scripts_fire__WEBPACK_IMPORTED_MODULE_19__["default"]);
       this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_15__["default"]);
     }
   }, {
@@ -3704,22 +3708,26 @@ var Intro = /*#__PURE__*/function (_Level) {
 /*!********************************!*\
   !*** ./src/level/obstacles.js ***!
   \********************************/
-/*! exports provided: addBoulder, addTree, clearObstacles, rollForObstacle, startRollingForObstacle, stopRollingForObstacle */
+/*! exports provided: addBoulder, addTree, addFire, clearObstacles, rollForObstacle, startRollingForObstacle, stopRollingForObstacle */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addBoulder", function() { return addBoulder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addTree", function() { return addTree; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addFire", function() { return addFire; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearObstacles", function() { return clearObstacles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rollForObstacle", function() { return rollForObstacle; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startRollingForObstacle", function() { return startRollingForObstacle; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopRollingForObstacle", function() { return stopRollingForObstacle; });
-/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
-/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
-/* harmony import */ var _utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/getRandomPositions */ "./src/utils/getRandomPositions.js");
-/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
-/* harmony import */ var _scripts_tree__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/tree */ "./src/level/scripts/tree.js");
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
+/* harmony import */ var _utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/getRandomPositions */ "./src/utils/getRandomPositions.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
+/* harmony import */ var _scripts_tree__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/tree */ "./src/level/scripts/tree.js");
+
 
 
 
@@ -3728,6 +3736,7 @@ __webpack_require__.r(__webpack_exports__);
 var OBSTACLE_INTERVAL = 1000;
 var boulders = [];
 var trees = [];
+var fires = [];
 var obstaclesIntervalId;
 var addBoulder = function addBoulder(level) {
   // get rid of disposed boulders from array
@@ -3737,27 +3746,27 @@ var addBoulder = function addBoulder(level) {
 
   if (boulders.length <= 5) {
     // create new boulder sprite
-    var newBoulder = new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_1__["BOULDER"]); // get starting grid position and direction of boulder
+    var newBoulder = new mage_engine__WEBPACK_IMPORTED_MODULE_1__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_2__["BOULDER"]); // get starting grid position and direction of boulder
 
-    var _getRandomInitialEdge = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__["getRandomInitialEdgePositionAndDirection"])(),
+    var _getRandomInitialEdge = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_3__["getRandomInitialEdgePositionAndDirection"])(),
         row = _getRandomInitialEdge.row,
         col = _getRandomInitialEdge.col,
         direction = _getRandomInitialEdge.direction; // get 'actual' starting position in 3D space
 
 
-    var position = Object(_grid__WEBPACK_IMPORTED_MODULE_3__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"], true);
+    var position = Object(_grid__WEBPACK_IMPORTED_MODULE_4__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"], true);
     var startingPos = {
       row: row,
       col: col
     };
-    newBoulder.addTag(_sprites__WEBPACK_IMPORTED_MODULE_1__["BOULDER"]);
+    newBoulder.addTag(_sprites__WEBPACK_IMPORTED_MODULE_2__["BOULDER"]);
     newBoulder.setPosition(position);
     newBoulder.setScale({
-      x: _grid__WEBPACK_IMPORTED_MODULE_3__["TRAIN_SCALE"],
-      y: _grid__WEBPACK_IMPORTED_MODULE_3__["TRAIN_SCALE"]
+      x: _grid__WEBPACK_IMPORTED_MODULE_4__["TRAIN_SCALE"],
+      y: _grid__WEBPACK_IMPORTED_MODULE_4__["TRAIN_SCALE"]
     }); // start the boulder
 
-    newBoulder.addScript(_sprites__WEBPACK_IMPORTED_MODULE_1__["BOULDER"], true, {
+    newBoulder.addScript(_sprites__WEBPACK_IMPORTED_MODULE_2__["BOULDER"], true, {
       startingPos: startingPos,
       direction: direction,
       tracks: level.tracks,
@@ -3771,24 +3780,85 @@ var addTree = function addTree(level) {
   trees = trees.filter(function (tree) {
     return tree.scripts[0];
   });
-  var sprite = Object(_sprites__WEBPACK_IMPORTED_MODULE_1__["getTreeSprite"])();
-  var tree = new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], sprite);
-  var gridPosition = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__["getRandomPositionInGrid"])();
-  var position = Object(_grid__WEBPACK_IMPORTED_MODULE_3__["getPositionFromRowAndCol"])(gridPosition.row, gridPosition.col, _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"], true);
-  tree.addTag(_sprites__WEBPACK_IMPORTED_MODULE_1__["TREE"]);
+  var sprite = Object(_sprites__WEBPACK_IMPORTED_MODULE_2__["getTreeSprite"])();
+  var tree = new mage_engine__WEBPACK_IMPORTED_MODULE_1__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], sprite);
+  var gridPosition = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_3__["getRandomPositionInGrid"])();
+  var position = Object(_grid__WEBPACK_IMPORTED_MODULE_4__["getPositionFromRowAndCol"])(gridPosition.row, gridPosition.col, _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"], true);
+  tree.addTag(_sprites__WEBPACK_IMPORTED_MODULE_2__["TREE"]);
   tree.setScale({
-    x: _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"],
-    y: _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"]
+    x: _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"],
+    y: _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"]
   });
   tree.setPosition(position);
   var index = trees.length;
-  tree.addScript(_sprites__WEBPACK_IMPORTED_MODULE_1__["TREE"], true, {
+  tree.addScript(_sprites__WEBPACK_IMPORTED_MODULE_2__["TREE"], true, {
     tracks: level.tracks,
     level: level,
     index: index,
     position: gridPosition
   });
   trees.push(tree);
+};
+
+var findFirePosition = function findFirePosition(gridPosition) {
+  var tries = 0;
+
+  var _loop = function _loop() {
+    var newPosition = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_3__["getRandomPositionNearGrid"])(gridPosition);
+
+    if (!fires.filter(function (fire) {
+      return Object(_grid__WEBPACK_IMPORTED_MODULE_4__["areGridPositionsEqual"])(fire.gridPosition, newPosition);
+    }).length) {
+      return {
+        v: newPosition
+      };
+    }
+
+    tries++;
+  };
+
+  while (tries < 10) {
+    var _ret = _loop();
+
+    if (_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0___default()(_ret) === "object") return _ret.v;
+  }
+
+  return null;
+};
+
+var addFire = function addFire(level, fromPosition) {
+  fires = fires.filter(function (fire) {
+    return fire.scripts[0];
+  });
+  var fire = new mage_engine__WEBPACK_IMPORTED_MODULE_1__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_2__["FIRE"]);
+  var position, gridPosition;
+
+  if (fromPosition) {
+    gridPosition = findFirePosition(fromPosition);
+
+    if (!gridPosition) {
+      fire.dispose();
+      return;
+    }
+  } else {
+    gridPosition = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_3__["getRandomPositionInGrid"])();
+  }
+
+  position = Object(_grid__WEBPACK_IMPORTED_MODULE_4__["getPositionFromRowAndCol"])(gridPosition.row, gridPosition.col, _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"], true);
+  fire.gridPosition = gridPosition;
+  fire.addTag(_sprites__WEBPACK_IMPORTED_MODULE_2__["FIRE"]);
+  fire.setScale({
+    x: _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"],
+    y: _grid__WEBPACK_IMPORTED_MODULE_4__["SPRITE_SCALE"]
+  });
+  fire.setPosition(position);
+  fire.addScript(_sprites__WEBPACK_IMPORTED_MODULE_2__["FIRE"], true, {
+    tracks: level.tracks,
+    level: level,
+    position: gridPosition,
+    addFire: addFire
+  });
+  fires.push(fire);
 };
 var clearObstacles = function clearObstacles() {
   boulders.forEach(function (b) {
@@ -3799,16 +3869,23 @@ var clearObstacles = function clearObstacles() {
     return t.dispose();
   });
   trees = [];
+  fires.forEach(function (fire) {
+    return fire.dispose();
+  });
+  fires = [];
 };
 var rollForObstacle = function rollForObstacle(level) {
   var result = Math.random();
 
-  if (result < 0.25) {
-    addBoulder(level);
+  if (result < 0.25) {//addBoulder(level);
   }
 
   if (result < 0.12) {
     addTree(level);
+  }
+
+  if (result < 0.08) {
+    addFire(level);
   }
 };
 var startRollingForObstacle = function startRollingForObstacle(level) {
@@ -3993,7 +4070,7 @@ var CarriageScript = /*#__PURE__*/function (_BaseScript) {
       this.trainHead = trainHead;
       this.trainCarriage = trainCarriage;
       this.level = level;
-      this.speed = 1000;
+      this.speed = 1500;
       this.position = {
         row: 2,
         col: 3
@@ -4195,6 +4272,115 @@ var CursorScript = /*#__PURE__*/function (_BaseScript) {
 
 /***/ }),
 
+/***/ "./src/level/scripts/fire.js":
+/*!***********************************!*\
+  !*** ./src/level/scripts/fire.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FireScript; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+/* harmony import */ var _utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utils/randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
+/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../sprites */ "./src/level/sprites.js");
+
+
+
+
+
+
+
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+
+
+var FireScript = /*#__PURE__*/function (_BaseScript) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(FireScript, _BaseScript);
+
+  var _super = _createSuper(FireScript);
+
+  function FireScript() {
+    var _this;
+
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, FireScript);
+
+    _this = _super.call(this, 'fire');
+
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "removeFire", function () {
+      console.log('fire is dead');
+      clearInterval(_this.interval);
+
+      _this.fire.dispose();
+    });
+
+    return _this;
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(FireScript, [{
+    key: "start",
+    value: function start(fire, _ref) {
+      var _this2 = this;
+
+      var tracks = _ref.tracks,
+          level = _ref.level,
+          position = _ref.position,
+          addFire = _ref.addFire;
+      this.fire = fire;
+      this.position = position;
+      this.tracks = tracks;
+      this.level = level;
+      this.timeToDecay = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_10__["randomIntegerInRange"])(1000, 2000);
+      this.fireSpreadCheck = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_10__["randomIntegerInRange"])(100, 200);
+      this.maxFires = 2;
+      this.firesSpawned = 0;
+      this.interval = setInterval(function () {
+        if (Math.random() < 0.2) {
+          addFire(level, position);
+          clearInterval(_this2.interval);
+        }
+      }, this.fireSpreadCheck);
+      var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_9__["isOnTrack"])(position, this.level.tracks, false);
+
+      if (track) {
+        this.level.handleRemoveTrack(track);
+      }
+
+      setTimeout(this.removeFire, this.timeToDecay);
+    }
+  }]);
+
+  return FireScript;
+}(mage_engine__WEBPACK_IMPORTED_MODULE_7__["BaseScript"]);
+
+
+
+/***/ }),
+
 /***/ "./src/level/scripts/train.js":
 /*!************************************!*\
   !*** ./src/level/scripts/train.js ***!
@@ -4257,7 +4443,7 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
       this.tracks = tracks;
       this.train = train;
       this.level = level;
-      this.speed = 1000;
+      this.speed = 1500;
       this.position = {
         row: 3,
         col: 3
@@ -4474,7 +4660,7 @@ var stopEngineSound = function stopEngineSound() {
 /*!******************************!*\
   !*** ./src/level/sprites.js ***!
   \******************************/
-/*! exports provided: DIRT, GRASS_TYPES, TREE_TYPES, BOULDER, TREE, CURSOR, TRACK, TRAIN, TRAIN_HEAD, TRAIN_CARRIAGE, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, getGrassSprite, getTreeSprite */
+/*! exports provided: DIRT, GRASS_TYPES, TREE_TYPES, BOULDER, TREE, CURSOR, TRACK, TRAIN, TRAIN_HEAD, TRAIN_CARRIAGE, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, FIRE, getGrassSprite, getTreeSprite */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4495,6 +4681,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_TOP_RIGHT", function() { return TRACK_TOP_RIGHT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_BOTTOM_LEFT", function() { return TRACK_BOTTOM_LEFT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_BOTTOM_RIGHT", function() { return TRACK_BOTTOM_RIGHT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FIRE", function() { return FIRE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGrassSprite", function() { return getGrassSprite; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTreeSprite", function() { return getTreeSprite; });
 var DIRT = 'dirt';
@@ -4513,6 +4700,7 @@ var TRACK_TOP_LEFT = 'tracks_top_left';
 var TRACK_TOP_RIGHT = 'tracks_top_right';
 var TRACK_BOTTOM_LEFT = 'tracks_bottom_left';
 var TRACK_BOTTOM_RIGHT = 'tracks_bottom_right';
+var FIRE = 'fire';
 var getGrassSprite = function getGrassSprite() {
   return GRASS_TYPES[Math.floor(Math.random() * GRASS_TYPES.length)];
 };
@@ -5098,13 +5286,14 @@ var UserInterface = /*#__PURE__*/function (_Component) {
 /*!*****************************************!*\
   !*** ./src/utils/getRandomPositions.js ***!
   \*****************************************/
-/*! exports provided: getRandomInitialEdgePositionAndDirection, getRandomPositionInGrid */
+/*! exports provided: getRandomInitialEdgePositionAndDirection, getRandomPositionInGrid, getRandomPositionNearGrid */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRandomInitialEdgePositionAndDirection", function() { return getRandomInitialEdgePositionAndDirection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRandomPositionInGrid", function() { return getRandomPositionInGrid; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRandomPositionNearGrid", function() { return getRandomPositionNearGrid; });
 /* harmony import */ var _level_grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../level/grid */ "./src/level/grid.js");
 /* harmony import */ var _randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
 /* harmony import */ var _level_tracks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../level/tracks */ "./src/level/tracks.js");
@@ -5152,6 +5341,14 @@ var getRandomPositionInGrid = function getRandomPositionInGrid() {
   return {
     row: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"] - 1),
     col: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"] - 1)
+  };
+};
+var getRandomPositionNearGrid = function getRandomPositionNearGrid(position) {
+  var row = position.row + Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(-1, 1);
+  var col = position.col + Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(-1, 1);
+  return {
+    row: row < 0 ? 0 : row > _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"] - 1 ? _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"] - 1 : row,
+    col: col < 0 ? 0 : col > _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"] - 1 ? _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"] - 1 : col
   };
 };
 

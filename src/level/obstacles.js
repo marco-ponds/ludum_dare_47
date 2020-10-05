@@ -1,6 +1,6 @@
 import { Sprite } from 'mage-engine';
-import { BOULDER, TREE, getTreeSprite } from './sprites';
-import { getRandomInitialEdgePositionAndDirection, getRandomPositionInGrid } from '../utils/getRandomPositions';
+import { BOULDER, TREE, getTreeSprite, FIRE } from './sprites';
+import { getRandomInitialEdgePositionAndDirection, getRandomPositionInGrid, getRandomPositionNearGrid } from '../utils/getRandomPositions';
 
 import {
     GRID_HEIGHT,
@@ -21,6 +21,7 @@ const OBSTACLE_INTERVAL = 1000;
 
 let boulders = [];
 let trees = [];
+let fires = [];
 
 let obstaclesIntervalId;
 
@@ -28,7 +29,7 @@ export const addBoulder = (level) => {
     // get rid of disposed boulders from array
     boulders = boulders.filter((boulder) => boulder.scripts[0]);
     // max 5 boulders at a time
-    if (boulders.length <= 5) {
+    if (boulders.length <= 4) {
         // create new boulder sprite
         const newBoulder = new Sprite(SPRITE_SIZE, SPRITE_SIZE, BOULDER);
         // get starting grid position and direction of boulder
@@ -89,12 +90,65 @@ export const addTree = (level) => {
     trees.push(tree);
 };
 
+const findFirePosition = (gridPosition) => {
+    let tries = 0;
+
+    while (tries < 10) {
+        const newPosition = getRandomPositionNearGrid(gridPosition);
+
+        if (!fires.filter(fire => areGridPositionsEqual(fire.gridPosition, newPosition)).length) {
+            return newPosition;
+        }
+
+        tries++;
+    }
+
+    return null;
+}
+
+export const addFire = (level, fromPosition) => {
+    fires = fires.filter(fire => fire.scripts[0]);
+
+    const fire = new Sprite(SPRITE_SIZE, SPRITE_SIZE, FIRE);
+    let position, gridPosition;
+
+    if (fromPosition) {
+        gridPosition = findFirePosition(fromPosition);
+        if (!gridPosition) {
+            fire.dispose();
+            return;
+        }
+    } else {
+        gridPosition = getRandomPositionInGrid();
+    }
+
+    position = getPositionFromRowAndCol(
+        gridPosition.row,
+        gridPosition.col,
+        SPRITE_SIZE,
+        SPRITE_SCALE,
+        true
+    );
+
+    fire.gridPosition = gridPosition;
+    fire.addTag(FIRE);
+    fire.setScale({x: SPRITE_SCALE, y: SPRITE_SCALE });
+    fire.setPosition(position);
+
+    fire.addScript(FIRE, true, { tracks: level.tracks, level, position: gridPosition, addFire});
+
+    fires.push(fire);
+}
+
 export const clearObstacles = () => {
     boulders.forEach(b => b.dispose());
     boulders = [];
 
     trees.forEach(t => t.dispose());
     trees = [];
+
+    fires.forEach(fire => fire.dispose());
+    fires = [];
 };
 
 export const rollForObstacle = (level) => {
@@ -105,6 +159,10 @@ export const rollForObstacle = (level) => {
     
     if (result < 0.12) {
         addTree(level);
+    }
+
+    if (result < 0.08) {
+        addFire(level);
     }
 };
 

@@ -23,6 +23,7 @@ import {
     TRAIN_CARRIAGE,
     BOULDER,
     TREE,
+    FIRE,
 } from './sprites';
 import CursorScript, {
     PLACE_TRACK_EVENT,
@@ -37,6 +38,7 @@ import UserInterface from '../ui/UserInterface';
 import { playEngineSound, playCrashSound, stopEngineSound, playGameOver, playClickSound } from './sounds';
 import { startRollingForObstacle, stopRollingForObstacle, clearObstacles } from './obstacles';
 import TreeScript from './scripts/tree';
+import FireScript from './scripts/fire';
 
 const BACKGROUND = 0xe3dbcc;//0x2f3640;
 const WHITE = 0xffffff;
@@ -377,6 +379,8 @@ export default class Intro extends Level {
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);
         Scripts.create(BOULDER, BoulderScript);
         Scripts.create(TREE, TreeScript);
+        Scripts.create(FIRE, FireScript);
+        
         this.enableUI(UserInterface);
     }
 

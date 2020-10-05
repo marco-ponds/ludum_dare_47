@@ -26,7 +26,7 @@ export default class TrainScript extends BaseScript {
         this.train = train;
         this.level = level;
 
-        this.speed = 1200;
+        this.speed = 1500;
 
         this.position = { row: 3, col: 3 };
         this.oldDirection = DIRECTIONS.DOWN;
