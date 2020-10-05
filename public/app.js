@@ -3295,6 +3295,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ui_UserInterface__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../ui/UserInterface */ "./src/ui/UserInterface.js");
 /* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./sounds */ "./src/level/sounds.js");
 /* harmony import */ var _obstacles__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./obstacles */ "./src/level/obstacles.js");
+/* harmony import */ var _scripts_tree__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./scripts/tree */ "./src/level/scripts/tree.js");
 
 
 
@@ -3316,6 +3317,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
 
 
 
@@ -3397,7 +3399,6 @@ var Intro = /*#__PURE__*/function (_Level) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleTrackClick", function (event) {
-      //const nextRotation = getNextRotation(event.track);
       var index = _this.tracks.findIndex(function (track) {
         return Object(_grid__WEBPACK_IMPORTED_MODULE_8__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
       });
@@ -3682,6 +3683,7 @@ var Intro = /*#__PURE__*/function (_Level) {
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_11__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__["default"]);
       mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_13__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TREE"], _scripts_tree__WEBPACK_IMPORTED_MODULE_18__["default"]);
       this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_15__["default"]);
     }
   }, {
@@ -3702,13 +3704,12 @@ var Intro = /*#__PURE__*/function (_Level) {
 /*!********************************!*\
   !*** ./src/level/obstacles.js ***!
   \********************************/
-/*! exports provided: addBoulder, handleTreeRemoval, addTree, clearObstacles, rollForObstacle, startRollingForObstacle, stopRollingForObstacle */
+/*! exports provided: addBoulder, addTree, clearObstacles, rollForObstacle, startRollingForObstacle, stopRollingForObstacle */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addBoulder", function() { return addBoulder; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleTreeRemoval", function() { return handleTreeRemoval; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addTree", function() { return addTree; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearObstacles", function() { return clearObstacles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rollForObstacle", function() { return rollForObstacle; });
@@ -3766,19 +3767,14 @@ var addBoulder = function addBoulder(level) {
     boulders.push(newBoulder);
   }
 };
-var handleTreeRemoval = function handleTreeRemoval(_ref) {
-  var index = _ref.index;
-  trees.splice(index, 1);
-};
 var addTree = function addTree(level) {
+  trees = trees.filter(function (tree) {
+    return tree.scripts[0];
+  });
   var sprite = Object(_sprites__WEBPACK_IMPORTED_MODULE_1__["getTreeSprite"])();
   var tree = new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], sprite);
-
-  var _getRandomPositionInG = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__["getRandomPositionInGrid"])(),
-      row = _getRandomPositionInG.row,
-      col = _getRandomPositionInG.col;
-
-  var position = Object(_grid__WEBPACK_IMPORTED_MODULE_3__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"], true);
+  var gridPosition = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__["getRandomPositionInGrid"])();
+  var position = Object(_grid__WEBPACK_IMPORTED_MODULE_3__["getPositionFromRowAndCol"])(gridPosition.row, gridPosition.col, _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"], true);
   tree.addTag(_sprites__WEBPACK_IMPORTED_MODULE_1__["TREE"]);
   tree.setScale({
     x: _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"],
@@ -3789,9 +3785,9 @@ var addTree = function addTree(level) {
   tree.addScript(_sprites__WEBPACK_IMPORTED_MODULE_1__["TREE"], true, {
     tracks: level.tracks,
     level: level,
-    index: index
+    index: index,
+    position: gridPosition
   });
-  tree.addEventListener(_scripts_tree__WEBPACK_IMPORTED_MODULE_4__["TREE_GONE_EVENT"].type, handleTreeRemoval);
   trees.push(tree);
 };
 var clearObstacles = function clearObstacles() {
@@ -4348,34 +4344,27 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TREE_GONE_EVENT", function() { return TREE_GONE_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TreeScript; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
-/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
-/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
-/* harmony import */ var _utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utils/randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+/* harmony import */ var _utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
 
 
 
 
 
 
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -4388,17 +4377,17 @@ var TREE_GONE_EVENT = {
 };
 
 var TreeScript = /*#__PURE__*/function (_BaseScript) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(TreeScript, _BaseScript);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(TreeScript, _BaseScript);
 
   var _super = _createSuper(TreeScript);
 
   function TreeScript() {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, TreeScript);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, TreeScript);
 
     return _super.call(this, 'tree');
   }
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(TreeScript, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(TreeScript, [{
     key: "start",
     value: function start(tree, _ref) {
       var _this = this;
@@ -4411,8 +4400,8 @@ var TreeScript = /*#__PURE__*/function (_BaseScript) {
       this.position = position;
       this.tracks = tracks;
       this.level = level;
-      this.timeToDecay = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_9__["randomIntegerInRange"])(1000, 5000);
-      var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_8__["isOnTrack"])(position, this.level.tracks);
+      this.timeToDecay = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_8__["randomIntegerInRange"])(4000, 10000);
+      var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, this.level.tracks, false);
 
       if (track) {
         this.level.handleRemoveTrack(track);
@@ -4426,14 +4415,11 @@ var TreeScript = /*#__PURE__*/function (_BaseScript) {
     key: "removeTree",
     value: function removeTree(index) {
       this.tree.dispose();
-      this.tree.dispatchEvent(_objectSpread(_objectSpread({}, TREE_GONE_EVENT), {}, {
-        index: index
-      }));
     }
   }]);
 
   return TreeScript;
-}(mage_engine__WEBPACK_IMPORTED_MODULE_6__["BaseScript"]);
+}(mage_engine__WEBPACK_IMPORTED_MODULE_5__["BaseScript"]);
 
 
 
@@ -4540,7 +4526,7 @@ var getTreeSprite = function getTreeSprite() {
 /*!*****************************!*\
   !*** ./src/level/tracks.js ***!
   \*****************************/
-/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, getNextRotation, isOnTrack, transformTrackLifeToOpacity */
+/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, isOnTrack, transformTrackLifeToOpacity */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4564,7 +4550,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACKS_ROTATION", function() { return TRACKS_ROTATION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_TRACK_LIFE", function() { return MAX_TRACK_LIFE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "convertTrackTypeToNewDirection", function() { return convertTrackTypeToNewDirection; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextRotation", function() { return getNextRotation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOnTrack", function() { return isOnTrack; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "transformTrackLifeToOpacity", function() { return transformTrackLifeToOpacity; });
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
@@ -4653,12 +4638,9 @@ var convertTrackTypeToNewDirection = function convertTrackTypeToNewDirection(tra
   var trackType = TRACK_TYPES_MAP[track.type];
   return trackType ? trackType[direction.type] : null;
 };
-var getNextRotation = function getNextRotation(track) {
-  var index = TRACKS_ROTATION.indexOf(track.type);
-  return index === TRACKS_ROTATION.length - 1 ? TRACKS_ROTATION[0] : TRACKS_ROTATION[index + 1];
-};
 var isOnTrack = function isOnTrack(position, tracks) {
-  var gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_0__["getGridPositionFromCoordinates"])(position);
+  var convertToGrid = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var gridPosition = convertToGrid ? Object(_grid__WEBPACK_IMPORTED_MODULE_0__["getGridPositionFromCoordinates"])(position) : position;
   var track = tracks.filter(function (track) {
     return Object(_grid__WEBPACK_IMPORTED_MODULE_0__["areGridPositionsEqual"])(track.gridPosition, gridPosition);
   }).pop();

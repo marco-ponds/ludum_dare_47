@@ -63,18 +63,16 @@ export const addBoulder = (level) => {
     }
 };
 
-export const handleTreeRemoval = ({ index }) => {
-    trees.splice(index, 1);
-}
-
 export const addTree = (level) => {
+    trees = trees.filter((tree) => tree.scripts[0]);
+
     const sprite = getTreeSprite();
     const tree = new Sprite(SPRITE_SIZE, SPRITE_SIZE, sprite);
-    const { row, col } = getRandomPositionInGrid();
+    const gridPosition = getRandomPositionInGrid();
 
     const position = getPositionFromRowAndCol(
-        row,
-        col,
+        gridPosition.row,
+        gridPosition.col,
         SPRITE_SIZE,
         SPRITE_SCALE,
         true
@@ -86,8 +84,7 @@ export const addTree = (level) => {
 
     const index = trees.length;
 
-    tree.addScript(TREE, true, { tracks: level.tracks, level, index });
-    tree.addEventListener(TREE_GONE_EVENT.type, handleTreeRemoval);
+    tree.addScript(TREE, true, { tracks: level.tracks, level, index, position: gridPosition });
 
     trees.push(tree);
 };
