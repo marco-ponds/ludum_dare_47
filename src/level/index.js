@@ -31,9 +31,9 @@ import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
 import CarriageScript from './scripts/carriage';
 import BoulderScript from './scripts/boulder';
 
-import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL, transformTrackLifeToOpacity } from './tracks';
+import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL, transformTrackLifeToOpacity, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT } from './tracks';
 import UserInterface from '../ui/UserInterface';
-import { playEngineSound, playCrashSound, stopEngineSound, playGameOver } from './sounds';
+import { playEngineSound, playCrashSound, stopEngineSound, playGameOver, playClickSound } from './sounds';
 import { startRollingForObstacle, stopRollingForObstacle, clearObstacles } from './obstacles';
 
 const BACKGROUND = 0xe3dbcc;//0x2f3640;
@@ -49,6 +49,10 @@ export const GAME_RETRY_EVENT = {
 
 export const GAME_SCORE_EVENT = {
     type: 'gameScore'
+};
+
+export const TOOLBAR_SELECTION_CHANGE_EVENT = {
+    type: 'toolbarSelectionChange'
 };
 
 export default class Intro extends Level {
@@ -173,6 +177,53 @@ export default class Intro extends Level {
         }
     };
 
+    onKeyDown({ event }) {
+        switch(event.key) {
+            case '1':
+                this.dispatchEvent({
+                    ...TOOLBAR_SELECTION_CHANGE_EVENT,
+                    toolbarSelection: VERTICAL
+                });
+                playClickSound();
+                break;
+            case '2':
+                this.dispatchEvent({
+                    ...TOOLBAR_SELECTION_CHANGE_EVENT,
+                    toolbarSelection: HORIZONTAL
+                });
+                playClickSound();
+                break;
+            case '3':
+                this.dispatchEvent({
+                    ...TOOLBAR_SELECTION_CHANGE_EVENT,
+                    toolbarSelection: TOP_LEFT
+                });
+                playClickSound();
+                break;
+            case '4':
+                this.dispatchEvent({
+                    ...TOOLBAR_SELECTION_CHANGE_EVENT,
+                    toolbarSelection: TOP_RIGHT
+                });
+                playClickSound();
+                break;
+            case '5':
+                this.dispatchEvent({
+                    ...TOOLBAR_SELECTION_CHANGE_EVENT,
+                    toolbarSelection: BOTTOM_LEFT
+                });
+                playClickSound();
+                break;
+            case '6':
+                this.dispatchEvent({
+                    ...TOOLBAR_SELECTION_CHANGE_EVENT,
+                    toolbarSelection: BOTTOM_RIGHT
+                });
+                playClickSound();
+                break;
+        }
+    }
+
     handleToolbarSelection = (selection) => {
         this.toolbarSelection = selection;
     };
@@ -199,7 +250,7 @@ export default class Intro extends Level {
         track.setPosition(position);
         track.setColor(WHITE);
 
-        track.setOpacity(0.8);
+        track.setOpacity(1);
 
         track.type = trackType;
         track.gridPosition = getGridPositionFromCoordinates(position);
