@@ -14,6 +14,16 @@ const assets = {
         grass_2: '/assets/textures/grass_2.png',
         grass_3: '/assets/textures/grass_3.png',
 
+        tree_1: '/assets/textures/tree_1.png',
+        tree_2: '/assets/textures/tree_2.png',
+        tree_3: '/assets/textures/tree_3.png',
+        tree_4: '/assets/textures/tree_4.png',
+        tree_5: '/assets/textures/tree_5.png',
+        tree_6: '/assets/textures/tree_6.png',
+        tree_7: '/assets/textures/tree_7.png',
+        tree_8: '/assets/textures/tree_8.png',
+        tree_9: '/assets/textures/tree_9.png',
+
         tracks_vertical: '/assets/textures/tracks_vertical.png',
         tracks_horizontal: '/assets/textures/tracks_horizontal.png',
         tracks_top_right: '/assets/textures/tracks_top_right.png',
@@ -24,7 +34,9 @@ const assets = {
     audio: {
         'engine': '/assets/audio/engine.wav',
         'crash': '/assets/audio/crash.wav',
-        'click': '/assets/audio/click.wav'
+        'click': '/assets/audio/click.wav',
+        'start': '/assets/audio/start.wav',
+        'game_over': '/assets/audio/game_over.wav'
     }
 };
 

@@ -1,10 +1,9 @@
-import { Sound } from "mage-engine";
-import { playClickSound } from "../../level/sounds";
+import { playStartSound } from "../../level/sounds";
 
 const MainMenu = ({ onStart }) => {
     
     const handleClick = () => {
-        playClickSound();
+        playStartSound();
         onStart();
     };
 

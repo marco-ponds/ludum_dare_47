@@ -3218,6 +3218,15 @@ var assets = {
     grass_1: '/assets/textures/grass_1.png',
     grass_2: '/assets/textures/grass_2.png',
     grass_3: '/assets/textures/grass_3.png',
+    tree_1: '/assets/textures/tree_1.png',
+    tree_2: '/assets/textures/tree_2.png',
+    tree_3: '/assets/textures/tree_3.png',
+    tree_4: '/assets/textures/tree_4.png',
+    tree_5: '/assets/textures/tree_5.png',
+    tree_6: '/assets/textures/tree_6.png',
+    tree_7: '/assets/textures/tree_7.png',
+    tree_8: '/assets/textures/tree_8.png',
+    tree_9: '/assets/textures/tree_9.png',
     tracks_vertical: '/assets/textures/tracks_vertical.png',
     tracks_horizontal: '/assets/textures/tracks_horizontal.png',
     tracks_top_right: '/assets/textures/tracks_top_right.png',
@@ -3228,7 +3237,9 @@ var assets = {
   audio: {
     'engine': '/assets/audio/engine.wav',
     'crash': '/assets/audio/crash.wav',
-    'click': '/assets/audio/click.wav'
+    'click': '/assets/audio/click.wav',
+    'start': '/assets/audio/start.wav',
+    'game_over': '/assets/audio/game_over.wav'
   }
 };
 var config = {
@@ -3433,16 +3444,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
-/* harmony import */ var _utils_getRandomInitialEdgePositionAndDirection__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/getRandomInitialEdgePositionAndDirection */ "./src/utils/getRandomInitialEdgePositionAndDirection.js");
-/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
-/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
-/* harmony import */ var _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/cursor */ "./src/level/scripts/cursor.js");
-/* harmony import */ var _scripts_train__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/train */ "./src/level/scripts/train.js");
-/* harmony import */ var _scripts_carriage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/carriage */ "./src/level/scripts/carriage.js");
-/* harmony import */ var _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./scripts/boulder */ "./src/level/scripts/boulder.js");
-/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tracks */ "./src/level/tracks.js");
-/* harmony import */ var _ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../ui/UserInterface */ "./src/ui/UserInterface.js");
-/* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./sounds */ "./src/level/sounds.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
+/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
+/* harmony import */ var _scripts_cursor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./scripts/cursor */ "./src/level/scripts/cursor.js");
+/* harmony import */ var _scripts_train__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./scripts/train */ "./src/level/scripts/train.js");
+/* harmony import */ var _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./scripts/carriage */ "./src/level/scripts/carriage.js");
+/* harmony import */ var _scripts_boulder__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./scripts/boulder */ "./src/level/scripts/boulder.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./tracks */ "./src/level/tracks.js");
+/* harmony import */ var _ui_UserInterface__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../ui/UserInterface */ "./src/ui/UserInterface.js");
+/* harmony import */ var _sounds__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./sounds */ "./src/level/sounds.js");
+/* harmony import */ var _obstacles__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./obstacles */ "./src/level/obstacles.js");
 
 
 
@@ -3517,37 +3528,26 @@ var Intro = /*#__PURE__*/function (_Level) {
       }, 2000);
     });
 
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "rollForObstacle", function () {
-      var result = Math.random();
-
-      if (result < 0.3) {
-        _this.addBoulder();
-      }
-    });
-
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handlePlaceTrack", function (event) {
       var position = event.position;
 
       _this.tracks.push(_this.createTrackAtPosition(position));
 
-      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
+      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_11__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
       }));
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleRemoveTrack", function (removedTrack) {
       var index = _this.tracks.findIndex(function (track) {
-        return Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, removedTrack.gridPosition);
-      }); // this.tracks = this.tracks.filter(
-      //     track => !areGridPositionsEqual(track.gridPosition, removedTrack.gridPosition)
-      // );
-
+        return Object(_grid__WEBPACK_IMPORTED_MODULE_8__["areGridPositionsEqual"])(track.gridPosition, removedTrack.gridPosition);
+      });
 
       _this.tracks[index].dispose();
 
       _this.tracks.splice(index, 1);
 
-      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
+      _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_11__["TRACK_CHANGE_EVENT"]), {}, {
         tracks: _this.tracks
       }));
     });
@@ -3555,19 +3555,19 @@ var Intro = /*#__PURE__*/function (_Level) {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleTrackClick", function (event) {
       //const nextRotation = getNextRotation(event.track);
       var index = _this.tracks.findIndex(function (track) {
-        return Object(_grid__WEBPACK_IMPORTED_MODULE_9__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
+        return Object(_grid__WEBPACK_IMPORTED_MODULE_8__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
       });
 
       if (_this.tracks[index]) {
         _this.tracks[index].type = _this.toolbarSelection;
 
-        _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][_this.toolbarSelection]);
+        _this.tracks[index].setTextureMap(_tracks__WEBPACK_IMPORTED_MODULE_14__["TRACK_TYPES_TO_SPRITE_MAP"][_this.toolbarSelection]);
 
-        _this.tracks[index].life = _tracks__WEBPACK_IMPORTED_MODULE_15__["MAX_TRACK_LIFE"];
+        _this.tracks[index].life = _tracks__WEBPACK_IMPORTED_MODULE_14__["MAX_TRACK_LIFE"];
 
         _this.tracks[index].setOpacity(1);
 
-        _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_12__["TRACK_CHANGE_EVENT"]), {}, {
+        _this.trainHead.dispatchEvent(_objectSpread(_objectSpread({}, _scripts_train__WEBPACK_IMPORTED_MODULE_11__["TRACK_CHANGE_EVENT"]), {}, {
           tracks: _this.tracks
         }));
       }
@@ -3607,13 +3607,14 @@ var Intro = /*#__PURE__*/function (_Level) {
       _this.tracks = [];
       _this.environment = [];
       _this.score = 0;
-      _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
+      _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_14__["VERTICAL"];
 
       _this.buildLevel();
 
       _this.buildInitialtracks();
 
-      _this.boulders = []; // this.obstacleInterval = setInterval(this.rollForObstacle, 1000);
+      _this.boulders = [];
+      Object(_obstacles__WEBPACK_IMPORTED_MODULE_17__["startRollingForObstacle"])(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this));
 
       _this.addTrain();
 
@@ -3626,13 +3627,13 @@ var Intro = /*#__PURE__*/function (_Level) {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "stopGame", function () {
       _this.tracks = [];
-      _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"];
-      clearInterval(_this.obstacleInterval);
+      _this.toolbarSelection = _tracks__WEBPACK_IMPORTED_MODULE_14__["VERTICAL"];
+      Object(_obstacles__WEBPACK_IMPORTED_MODULE_17__["stopRollingForObstacle"])();
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "deteriorateTrack", function (track) {
       track.life = track.life - 1;
-      var opacity = Object(_tracks__WEBPACK_IMPORTED_MODULE_15__["transformTrackLifeToOpacity"])(track);
+      var opacity = Object(_tracks__WEBPACK_IMPORTED_MODULE_14__["transformTrackLifeToOpacity"])(track);
 
       if (track.life > 0) {
         track.setOpacity(opacity);
@@ -3647,96 +3648,57 @@ var Intro = /*#__PURE__*/function (_Level) {
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Intro, [{
     key: "addCursor",
     value: function addCursor() {
-      this.cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(0, 0, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], false, true);
+      this.cursor = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(0, 0, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"], false, true);
       this.cursor.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_9__["CURSOR_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_9__["CURSOR_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_8__["CURSOR_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_8__["CURSOR_SCALE"]
       });
-      this.cursor.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
+      this.cursor.addTag(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
       this.cursor.setPosition(position);
-      this.cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"]);
-      this.cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["PLACE_TRACK_EVENT"].type, this.handlePlaceTrack);
-      this.cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["TRACK_CLICK_EVENT"].type, this.handleTrackClick);
+      this.cursor.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"]);
+      this.cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["PLACE_TRACK_EVENT"].type, this.handlePlaceTrack);
+      this.cursor.addEventListener(_scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["TRACK_CLICK_EVENT"].type, this.handleTrackClick);
     }
   }, {
     key: "addTrain",
     value: function addTrain() {
-      this.trainHead = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_HEAD"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(_grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_TRAIN_POSITION"].row, _grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_TRAIN_POSITION"].col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
+      this.trainHead = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_HEAD"]);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(_grid__WEBPACK_IMPORTED_MODULE_8__["INITIAL_TRAIN_POSITION"].row, _grid__WEBPACK_IMPORTED_MODULE_8__["INITIAL_TRAIN_POSITION"].col, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"], true);
       this.trainHead.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"]
       });
-      this.trainHead.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_HEAD"]);
+      this.trainHead.addTag(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_HEAD"]);
       this.trainHead.setPosition(position);
-      this.trainHead.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], true, {
+      this.trainHead.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], true, {
         tracks: this.tracks,
         level: this
       });
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["playEngineSound"])();
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_16__["playEngineSound"])();
     }
   }, {
     key: "addTrainCarriage",
     value: function addTrainCarriage() {
-      this.trainCarriage = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"]);
-      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(_grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_CARRIAGE_POSITION"].row, _grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_CARRIAGE_POSITION"].col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
+      this.trainCarriage = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"]);
+      var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(_grid__WEBPACK_IMPORTED_MODULE_8__["INITIAL_CARRIAGE_POSITION"].row, _grid__WEBPACK_IMPORTED_MODULE_8__["INITIAL_CARRIAGE_POSITION"].col, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"], true);
       this.trainCarriage.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_8__["TRAIN_SCALE"]
       });
-      this.trainCarriage.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"]);
+      this.trainCarriage.addTag(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"]);
       this.trainCarriage.setPosition(position);
-      this.trainCarriage.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], true, {
+      this.trainCarriage.addScript(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], true, {
         trainHead: this.trainHead,
         level: this
       });
     }
   }, {
-    key: "addBoulder",
-    value: function addBoulder() {
-      // get rid of disposed boulders from array
-      this.boulders = this.boulders.filter(function (boulder) {
-        return boulder.scripts[0];
-      }); // max 5 boulders at a time
-
-      if (this.boulders.length <= 5) {
-        // create new boulder sprite
-        var newBoulder = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"]); // get starting grid position and direction of boulder
-
-        var _getRandomInitialEdge = Object(_utils_getRandomInitialEdgePositionAndDirection__WEBPACK_IMPORTED_MODULE_8__["getRandomInitialEdgePositionAndDirection"])(),
-            row = _getRandomInitialEdge.row,
-            col = _getRandomInitialEdge.col,
-            direction = _getRandomInitialEdge.direction; // get 'actual' starting position in 3D space
-
-
-        var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"], true);
-        var startingPos = {
-          row: row,
-          col: col
-        };
-        newBoulder.addTag(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"]);
-        newBoulder.setPosition(position);
-        newBoulder.setScale({
-          x: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"],
-          y: _grid__WEBPACK_IMPORTED_MODULE_9__["TRAIN_SCALE"]
-        }); // start the boulder
-
-        newBoulder.addScript(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], true, {
-          startingPos: startingPos,
-          direction: direction,
-          tracks: this.tracks,
-          level: this
-        }); // add the boulder to the array
-
-        this.boulders.push(newBoulder);
-      }
-    }
-  }, {
     key: "handleFailure",
     value: function handleFailure() {
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["playCrashSound"])();
-      Object(_sounds__WEBPACK_IMPORTED_MODULE_17__["stopEngineSound"])();
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_16__["playCrashSound"])();
+      Object(_sounds__WEBPACK_IMPORTED_MODULE_16__["stopEngineSound"])();
+      setTimeout(_sounds__WEBPACK_IMPORTED_MODULE_16__["playGameOver"], 2000);
       this.dispatchEvent(_objectSpread(_objectSpread({}, GAME_OVER_EVENT), {}, {
         score: this.score
       }));
@@ -3745,41 +3707,41 @@ var Intro = /*#__PURE__*/function (_Level) {
     key: "createTrackAtPosition",
     value: function createTrackAtPosition(position, type) {
       var trackType = type ? type : this.toolbarSelection;
-      var sprite = _tracks__WEBPACK_IMPORTED_MODULE_15__["TRACK_TYPES_TO_SPRITE_MAP"][trackType];
-      var track = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], sprite);
+      var sprite = _tracks__WEBPACK_IMPORTED_MODULE_14__["TRACK_TYPES_TO_SPRITE_MAP"][trackType];
+      var track = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], sprite);
       track.setScale({
-        x: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"],
-        y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
+        x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
+        y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
       });
-      track.addTags([_sprites__WEBPACK_IMPORTED_MODULE_10__["TRACK"]]);
+      track.addTags([_sprites__WEBPACK_IMPORTED_MODULE_9__["TRACK"]]);
       track.setPosition(position);
       track.setColor(WHITE);
       track.setOpacity(0.8);
       track.type = trackType;
-      track.gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getGridPositionFromCoordinates"])(position);
-      track.life = _tracks__WEBPACK_IMPORTED_MODULE_15__["MAX_TRACK_LIFE"];
+      track.gridPosition = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getGridPositionFromCoordinates"])(position);
+      track.life = _tracks__WEBPACK_IMPORTED_MODULE_14__["MAX_TRACK_LIFE"];
       return track;
     }
   }, {
     key: "buildLevel",
     value: function buildLevel() {
-      for (var row = 0; row < _grid__WEBPACK_IMPORTED_MODULE_9__["GRID_HEIGHT"]; row++) {
-        for (var col = 0; col < _grid__WEBPACK_IMPORTED_MODULE_9__["GRID_WIDTH"]; col++) {
-          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]);
-          var dirt = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_10__["DIRT"]);
-          var grass = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SIZE"], Object(_sprites__WEBPACK_IMPORTED_MODULE_10__["getGrassSprite"])());
+      for (var row = 0; row < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_HEIGHT"]; row++) {
+        for (var col = 0; col < _grid__WEBPACK_IMPORTED_MODULE_8__["GRID_WIDTH"]; col++) {
+          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]);
+          var dirt = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_9__["DIRT"]);
+          var grass = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], Object(_sprites__WEBPACK_IMPORTED_MODULE_9__["getGrassSprite"])());
           dirt.addTags(['background', 'dirt']);
           grass.addTags(['background', 'grass']);
           dirt.setOpacity(0.5);
           grass.setOpacity(0.7);
           dirt.setScale({
-            x: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"],
-            y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
+            x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
+            y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
           });
           dirt.setPosition(position);
           grass.setScale({
-            x: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"],
-            y: _grid__WEBPACK_IMPORTED_MODULE_9__["SPRITE_SCALE"]
+            x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
+            y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
           });
           grass.setPosition(position);
           this.environment.push(dirt);
@@ -3790,7 +3752,7 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "buildInitialtracks",
     value: function buildInitialtracks() {
-      var _iterator = _createForOfIteratorHelper(_grid__WEBPACK_IMPORTED_MODULE_9__["INITIAL_TRACKS"]),
+      var _iterator = _createForOfIteratorHelper(_grid__WEBPACK_IMPORTED_MODULE_8__["INITIAL_TRACKS"]),
           _step;
 
       try {
@@ -3799,7 +3761,7 @@ var Intro = /*#__PURE__*/function (_Level) {
           var row = trackPosition.row,
               col = trackPosition.col,
               type = trackPosition.type;
-          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_9__["getPositionFromRowAndCol"])(row, col);
+          var position = Object(_grid__WEBPACK_IMPORTED_MODULE_8__["getPositionFromRowAndCol"])(row, col);
           this.tracks.push(this.createTrackAtPosition(position, type));
         }
       } catch (err) {
@@ -3811,7 +3773,7 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "updateScore",
     value: function updateScore(track) {
-      if (track.type === _tracks__WEBPACK_IMPORTED_MODULE_15__["VERTICAL"] && track.type === _tracks__WEBPACK_IMPORTED_MODULE_15__["HORIZONTAL"]) {
+      if (track.type === _tracks__WEBPACK_IMPORTED_MODULE_14__["VERTICAL"] && track.type === _tracks__WEBPACK_IMPORTED_MODULE_14__["HORIZONTAL"]) {
         this.score += 100; // each straight track is 100m
       } else {
         this.score += 50; // each curve is a bit less
@@ -3824,13 +3786,13 @@ var Intro = /*#__PURE__*/function (_Level) {
   }, {
     key: "onCreate",
     value: function onCreate() {
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(0.1); //Scene.setClearColor(BACKGROUND);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Audio"].setVolume(2); //Scene.setClearColor(BACKGROUND);
 
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_11__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_12__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_13__["default"]);
-      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_10__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_14__["default"]);
-      this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_16__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["CURSOR"], _scripts_cursor__WEBPACK_IMPORTED_MODULE_10__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN"], _scripts_train__WEBPACK_IMPORTED_MODULE_11__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["TRAIN_CARRIAGE"], _scripts_carriage__WEBPACK_IMPORTED_MODULE_12__["default"]);
+      mage_engine__WEBPACK_IMPORTED_MODULE_7__["Scripts"].create(_sprites__WEBPACK_IMPORTED_MODULE_9__["BOULDER"], _scripts_boulder__WEBPACK_IMPORTED_MODULE_13__["default"]);
+      this.enableUI(_ui_UserInterface__WEBPACK_IMPORTED_MODULE_15__["default"]);
     }
   }, {
     key: "onBeforeDispose",
@@ -3843,6 +3805,134 @@ var Intro = /*#__PURE__*/function (_Level) {
 }(mage_engine__WEBPACK_IMPORTED_MODULE_7__["Level"]);
 
 
+
+/***/ }),
+
+/***/ "./src/level/obstacles.js":
+/*!********************************!*\
+  !*** ./src/level/obstacles.js ***!
+  \********************************/
+/*! exports provided: addBoulder, handleTreeRemoval, addTree, clearObstacles, rollForObstacle, startRollingForObstacle, stopRollingForObstacle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addBoulder", function() { return addBoulder; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleTreeRemoval", function() { return handleTreeRemoval; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addTree", function() { return addTree; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearObstacles", function() { return clearObstacles; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rollForObstacle", function() { return rollForObstacle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startRollingForObstacle", function() { return startRollingForObstacle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopRollingForObstacle", function() { return stopRollingForObstacle; });
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
+/* harmony import */ var _sprites__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sprites */ "./src/level/sprites.js");
+/* harmony import */ var _utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/getRandomPositions */ "./src/utils/getRandomPositions.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
+/* harmony import */ var _scripts_tree__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/tree */ "./src/level/scripts/tree.js");
+
+
+
+
+
+var OBSTACLE_INTERVAL = 1000;
+var boulders = [];
+var trees = [];
+var obstaclesIntervalId;
+var addBoulder = function addBoulder(level) {
+  // get rid of disposed boulders from array
+  boulders = boulders.filter(function (boulder) {
+    return boulder.scripts[0];
+  }); // max 5 boulders at a time
+
+  if (boulders.length <= 5) {
+    // create new boulder sprite
+    var newBoulder = new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _sprites__WEBPACK_IMPORTED_MODULE_1__["BOULDER"]); // get starting grid position and direction of boulder
+
+    var _getRandomInitialEdge = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__["getRandomInitialEdgePositionAndDirection"])(),
+        row = _getRandomInitialEdge.row,
+        col = _getRandomInitialEdge.col,
+        direction = _getRandomInitialEdge.direction; // get 'actual' starting position in 3D space
+
+
+    var position = Object(_grid__WEBPACK_IMPORTED_MODULE_3__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"], true);
+    var startingPos = {
+      row: row,
+      col: col
+    };
+    newBoulder.addTag(_sprites__WEBPACK_IMPORTED_MODULE_1__["BOULDER"]);
+    newBoulder.setPosition(position);
+    newBoulder.setScale({
+      x: _grid__WEBPACK_IMPORTED_MODULE_3__["TRAIN_SCALE"],
+      y: _grid__WEBPACK_IMPORTED_MODULE_3__["TRAIN_SCALE"]
+    }); // start the boulder
+
+    newBoulder.addScript(_sprites__WEBPACK_IMPORTED_MODULE_1__["BOULDER"], true, {
+      startingPos: startingPos,
+      direction: direction,
+      tracks: level.tracks,
+      level: level
+    }); // add the boulder to the array
+
+    boulders.push(newBoulder);
+  }
+};
+var handleTreeRemoval = function handleTreeRemoval(_ref) {
+  var index = _ref.index;
+  trees.splice(index, 1);
+};
+var addTree = function addTree(level) {
+  var sprite = Object(_sprites__WEBPACK_IMPORTED_MODULE_1__["getTreeSprite"])();
+  var tree = new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], sprite);
+
+  var _getRandomPositionInG = Object(_utils_getRandomPositions__WEBPACK_IMPORTED_MODULE_2__["getRandomPositionInGrid"])(),
+      row = _getRandomPositionInG.row,
+      col = _getRandomPositionInG.col;
+
+  var position = Object(_grid__WEBPACK_IMPORTED_MODULE_3__["getPositionFromRowAndCol"])(row, col, _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"], true);
+  tree.addTag(_sprites__WEBPACK_IMPORTED_MODULE_1__["TREE"]);
+  tree.setScale({
+    x: _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"],
+    y: _grid__WEBPACK_IMPORTED_MODULE_3__["SPRITE_SCALE"]
+  });
+  tree.setPosition(position);
+  var index = trees.length;
+  tree.addScript(_sprites__WEBPACK_IMPORTED_MODULE_1__["TREE"], true, {
+    tracks: level.tracks,
+    level: level,
+    index: index
+  });
+  tree.addEventListener(_scripts_tree__WEBPACK_IMPORTED_MODULE_4__["TREE_GONE_EVENT"].type, handleTreeRemoval);
+  trees.push(tree);
+};
+var clearObstacles = function clearObstacles() {
+  boulders.forEach(function (b) {
+    return b.dispose();
+  });
+  boulders = [];
+  trees.forEach(function (t) {
+    return t.dispose();
+  });
+  trees = [];
+};
+var rollForObstacle = function rollForObstacle(level) {
+  var result = Math.random();
+
+  if (result < 0.25) {
+    addBoulder(level);
+  }
+
+  if (result < 0.12) {
+    addTree(level);
+  }
+};
+var startRollingForObstacle = function startRollingForObstacle(level) {
+  obstaclesIntervalId = setInterval(function () {
+    return rollForObstacle(level);
+  }, OBSTACLE_INTERVAL);
+};
+var stopRollingForObstacle = function stopRollingForObstacle() {
+  clearInterval(obstaclesIntervalId);
+};
 
 /***/ }),
 
@@ -4357,26 +4447,136 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
 
 /***/ }),
 
-/***/ "./src/level/sounds.js":
-/*!*****************************!*\
-  !*** ./src/level/sounds.js ***!
-  \*****************************/
-/*! exports provided: playClickSound, playCrashSound, playEngineSound, stopEngineSound */
+/***/ "./src/level/scripts/tree.js":
+/*!***********************************!*\
+  !*** ./src/level/scripts/tree.js ***!
+  \***********************************/
+/*! exports provided: TREE_GONE_EVENT, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TREE_GONE_EVENT", function() { return TREE_GONE_EVENT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TreeScript; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+/* harmony import */ var _utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utils/randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
+
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var TREE_GONE_EVENT = {
+  type: 'treeGone'
+};
+
+var TreeScript = /*#__PURE__*/function (_BaseScript) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(TreeScript, _BaseScript);
+
+  var _super = _createSuper(TreeScript);
+
+  function TreeScript() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, TreeScript);
+
+    return _super.call(this, 'tree');
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(TreeScript, [{
+    key: "start",
+    value: function start(tree, _ref) {
+      var _this = this;
+
+      var tracks = _ref.tracks,
+          level = _ref.level,
+          position = _ref.position,
+          index = _ref.index;
+      this.tree = tree;
+      this.position = position;
+      this.tracks = tracks;
+      this.level = level;
+      this.timeToDecay = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_9__["randomIntegerInRange"])(1000, 5000);
+      var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_8__["isOnTrack"])(position, this.level.tracks);
+
+      if (track) {
+        this.level.handleRemoveTrack(track);
+      }
+
+      setTimeout(function () {
+        return _this.removeTree(index);
+      }, this.timeToDecay);
+    }
+  }, {
+    key: "removeTree",
+    value: function removeTree(index) {
+      this.tree.dispose();
+      this.tree.dispatchEvent(_objectSpread(_objectSpread({}, TREE_GONE_EVENT), {}, {
+        index: index
+      }));
+    }
+  }]);
+
+  return TreeScript;
+}(mage_engine__WEBPACK_IMPORTED_MODULE_6__["BaseScript"]);
+
+
+
+/***/ }),
+
+/***/ "./src/level/sounds.js":
+/*!*****************************!*\
+  !*** ./src/level/sounds.js ***!
+  \*****************************/
+/*! exports provided: playStartSound, playClickSound, playCrashSound, playGameOver, playEngineSound, stopEngineSound */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playStartSound", function() { return playStartSound; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playClickSound", function() { return playClickSound; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playCrashSound", function() { return playCrashSound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playGameOver", function() { return playGameOver; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "playEngineSound", function() { return playEngineSound; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopEngineSound", function() { return stopEngineSound; });
 /* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
 
+var playStartSound = function playStartSound() {
+  return new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('start').start();
+};
 var playClickSound = function playClickSound() {
   return new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('click').start();
 };
 var playCrashSound = function playCrashSound() {
   return new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('crash').start();
+};
+var playGameOver = function playGameOver() {
+  return new mage_engine__WEBPACK_IMPORTED_MODULE_0__["Sound"]('game_over').start();
 };
 var engineSound;
 var playEngineSound = function playEngineSound() {
@@ -4398,14 +4598,16 @@ var stopEngineSound = function stopEngineSound() {
 /*!******************************!*\
   !*** ./src/level/sprites.js ***!
   \******************************/
-/*! exports provided: DIRT, GRASS_TYPES, BOULDER, CURSOR, TRACK, TRAIN, TRAIN_HEAD, TRAIN_CARRIAGE, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, getGrassSprite */
+/*! exports provided: DIRT, GRASS_TYPES, TREE_TYPES, BOULDER, TREE, CURSOR, TRACK, TRAIN, TRAIN_HEAD, TRAIN_CARRIAGE, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, getGrassSprite, getTreeSprite */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DIRT", function() { return DIRT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GRASS_TYPES", function() { return GRASS_TYPES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TREE_TYPES", function() { return TREE_TYPES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BOULDER", function() { return BOULDER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TREE", function() { return TREE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CURSOR", function() { return CURSOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK", function() { return TRACK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRAIN", function() { return TRAIN; });
@@ -4418,9 +4620,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_BOTTOM_LEFT", function() { return TRACK_BOTTOM_LEFT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACK_BOTTOM_RIGHT", function() { return TRACK_BOTTOM_RIGHT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGrassSprite", function() { return getGrassSprite; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTreeSprite", function() { return getTreeSprite; });
 var DIRT = 'dirt';
 var GRASS_TYPES = ['grass_1', 'grass_2', 'grass_3'];
+var TREE_TYPES = ['tree_1', 'tree_2', 'tree_3', 'tree_4', 'tree_5', 'tree_6', 'tree_7', 'tree_8', 'tree_9'];
 var BOULDER = 'boulder';
+var TREE = 'tree';
 var CURSOR = 'cursor';
 var TRACK = 'track';
 var TRAIN = 'train';
@@ -4434,6 +4639,9 @@ var TRACK_BOTTOM_LEFT = 'tracks_bottom_left';
 var TRACK_BOTTOM_RIGHT = 'tracks_bottom_right';
 var getGrassSprite = function getGrassSprite() {
   return GRASS_TYPES[Math.floor(Math.random() * GRASS_TYPES.length)];
+};
+var getTreeSprite = function getTreeSprite() {
+  return TREE_TYPES[Math.floor(Math.random() * TREE_TYPES.length)];
 };
 
 /***/ }),
@@ -4786,9 +4994,7 @@ var GameOver = function GameOver(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var inferno__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! inferno */ "./node_modules/inferno/index.esm.js");
-/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mage-engine */ "../Mage/dist/mage.js");
-/* harmony import */ var _level_sounds__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../level/sounds */ "./src/level/sounds.js");
-
+/* harmony import */ var _level_sounds__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../level/sounds */ "./src/level/sounds.js");
 
 
 
@@ -4796,7 +5002,7 @@ var MainMenu = function MainMenu(_ref) {
   var onStart = _ref.onStart;
 
   var handleClick = function handleClick() {
-    Object(_level_sounds__WEBPACK_IMPORTED_MODULE_2__["playClickSound"])();
+    Object(_level_sounds__WEBPACK_IMPORTED_MODULE_1__["playStartSound"])();
     onStart();
   };
 
@@ -4945,16 +5151,17 @@ var UserInterface = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
-/***/ "./src/utils/getRandomInitialEdgePositionAndDirection.js":
-/*!***************************************************************!*\
-  !*** ./src/utils/getRandomInitialEdgePositionAndDirection.js ***!
-  \***************************************************************/
-/*! exports provided: getRandomInitialEdgePositionAndDirection */
+/***/ "./src/utils/getRandomPositions.js":
+/*!*****************************************!*\
+  !*** ./src/utils/getRandomPositions.js ***!
+  \*****************************************/
+/*! exports provided: getRandomInitialEdgePositionAndDirection, getRandomPositionInGrid */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRandomInitialEdgePositionAndDirection", function() { return getRandomInitialEdgePositionAndDirection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getRandomPositionInGrid", function() { return getRandomPositionInGrid; });
 /* harmony import */ var _level_grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../level/grid */ "./src/level/grid.js");
 /* harmony import */ var _randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
 /* harmony import */ var _level_tracks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../level/tracks */ "./src/level/tracks.js");
@@ -4997,6 +5204,12 @@ var getRandomInitialEdgePositionAndDirection = function getRandomInitialEdgePosi
   }
 
   return rowColDirection;
+};
+var getRandomPositionInGrid = function getRandomPositionInGrid() {
+  return {
+    row: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_HEIGHT"] - 1),
+    col: Object(_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_1__["randomIntegerInRange"])(0, _level_grid__WEBPACK_IMPORTED_MODULE_0__["GRID_WIDTH"] - 1)
+  };
 };
 
 /***/ }),

@@ -99,7 +99,7 @@
     width: 720px;
     margin: auto;
     padding: 8px 0;
-    padding-bottom: 16px;
+    padding-bottom: 4px;
     margin-bottom: 16px;
     background: #f0ede5;
     border: 1px solid #acaba8;
@@ -138,8 +138,35 @@
     position: relative;
 }
 
-.toolbar .toolbar-item .text {
-    font-size: 16px;
+.toolbar .toolbar-item::after {
+    font-size: 12px;
+    position: absolute;
+    margin-top: -18px;
+    margin-left: 4px;
+}
+
+.toolbar .toolbar-item:nth-child(2)::after {
+    content: '1';
+}
+
+.toolbar .toolbar-item:nth-child(3)::after {
+    content: '2';
+}
+
+.toolbar .toolbar-item:nth-child(4)::after {
+    content: '3';
+}
+
+.toolbar .toolbar-item:nth-child(5)::after {
+    content: '4';
+}
+
+.toolbar .toolbar-item:nth-child(6)::after {
+    content: '5';
+}
+
+.toolbar .toolbar-item:nth-child(7)::after {
+    content: '6';
 }
 
 .game-over {
@@ -167,6 +194,7 @@
 
 .game-over-text {
     display: inline-block;
+    padding-left: 16px;
 }
 
 .score-label {
@@ -202,8 +230,8 @@
 
 .score p::after {
     content: 'score:';
-    font-size: 12px;
+    font-size: 10px;
     position: absolute;
-    top: 38px;
+    top: 19px;
     left: 32px;
 }
