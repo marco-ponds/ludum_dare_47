@@ -20,6 +20,9 @@
     margin-bottom: 1rem;
 }
 
+.instruction-container {
+    padding-top: 10px; 
+}
 .credits {
     font-size: 8pt;
 }
@@ -29,6 +32,7 @@
     color: darkred;
     transition: all 0.2s;
 }
+
 .credits a:hover {
     text-decoration: none;
     color: blue;
@@ -42,20 +46,14 @@
     position: absolute;
     z-index: 104;
     /* background: #E5DECF; */
-    background: repeating-linear-gradient(
-        45deg,
-        #e5decf,
-        #e5decf 30px,
-        #ddd7cc 0,
-        #ddd7cc 60px
-    );
+    background: repeating-linear-gradient( 45deg, #e5decf, #e5decf 30px, #ddd7cc 0, #ddd7cc 60px);
 }
 
 .menu-container {
-    height: 620px;
+    height: 700px;
     width: 800px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 36px;
 }
 
 .box {
@@ -98,8 +96,14 @@
 }
 
 .game-instructions {
-    /* height: 132px; */
-    margin-top: 2rem;
+    margin: 24px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+    background: #FEFEFE;
+    border: 1px solid #BDB8AD;
+    border-top: 4px solid #CCC4B5;
+    box-shadow: inset 0px 3px 0px #DEDDDC;
 }
 
 .button {
