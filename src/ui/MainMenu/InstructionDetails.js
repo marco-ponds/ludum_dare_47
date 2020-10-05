@@ -5,7 +5,7 @@ const instructions = [
             "This is the train! It's heavy, so it'll wear down any tracks it runs on.",
     },
     {
-        image: './assets/textures/track_straight.png',
+        image: './assets/textures/tracks_vertical.png',
         text:
             'This is a track! Pick one from the toolbar and place it wherever you want (or need) to!',
     },
