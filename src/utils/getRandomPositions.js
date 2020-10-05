@@ -41,3 +41,13 @@ export const getRandomPositionInGrid = () => ({
     row: randomIntegerInRange(0, GRID_HEIGHT - 1),
     col: randomIntegerInRange(0, GRID_WIDTH - 1)
 });
+
+export const getRandomPositionNearGrid = (position) => {
+    const row = position.row + (randomIntegerInRange(-1, 1));
+    const col = position.col + (randomIntegerInRange(-1, 1));
+    
+    return ({
+        row: row < 0 ? 0 : row > GRID_HEIGHT - 1 ? GRID_HEIGHT - 1 : row,
+        col: col < 0 ? 0 : col > GRID_WIDTH - 1 ? GRID_WIDTH - 1 : col
+    });
+}
