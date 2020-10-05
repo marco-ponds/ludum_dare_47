@@ -23,6 +23,19 @@
 .instruction-container {
     padding-top: 10px;
 }
+.credits {
+    font-size: 8pt;
+}
+
+.credits a {
+    text-decoration: none;
+    color: darkred;
+    transition: all 0.2s;
+}
+.credits a:hover {
+    text-decoration: none;
+    color: blue;
+}
 
 .main-menu {
     width: 100%;
