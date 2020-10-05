@@ -22,6 +22,7 @@ import {
     TRAIN,
     TRAIN_CARRIAGE,
     BOULDER,
+    TREE,
 } from './sprites';
 import CursorScript, {
     PLACE_TRACK_EVENT,
@@ -31,10 +32,11 @@ import TrainScript, { TRACK_CHANGE_EVENT } from './scripts/train';
 import CarriageScript from './scripts/carriage';
 import BoulderScript from './scripts/boulder';
 
-import { VERTICAL, getNextRotation, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL, transformTrackLifeToOpacity, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT } from './tracks';
+import { VERTICAL, TRACK_TYPES_TO_SPRITE_MAP, MAX_TRACK_LIFE, HORIZONTAL, transformTrackLifeToOpacity, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT } from './tracks';
 import UserInterface from '../ui/UserInterface';
 import { playEngineSound, playCrashSound, stopEngineSound, playGameOver, playClickSound } from './sounds';
 import { startRollingForObstacle, stopRollingForObstacle, clearObstacles } from './obstacles';
+import TreeScript from './scripts/tree';
 
 const BACKGROUND = 0xe3dbcc;//0x2f3640;
 const WHITE = 0xffffff;
@@ -157,7 +159,6 @@ export default class Intro extends Level {
     };
 
     handleTrackClick = (event) => {
-        //const nextRotation = getNextRotation(event.track);
         const index = this.tracks.findIndex((track) =>
             areGridPositionsEqual(track.gridPosition, event.track.gridPosition)
         );
@@ -375,6 +376,7 @@ export default class Intro extends Level {
         Scripts.create(TRAIN, TrainScript);
         Scripts.create(TRAIN_CARRIAGE, CarriageScript);
         Scripts.create(BOULDER, BoulderScript);
+        Scripts.create(TREE, TreeScript);
         this.enableUI(UserInterface);
     }
 

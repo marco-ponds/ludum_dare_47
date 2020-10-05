@@ -27,9 +27,9 @@ export default class TreeScript extends BaseScript {
         this.tracks = tracks;
         this.level = level;
 
-        this.timeToDecay = randomIntegerInRange(1000, 5000);
+        this.timeToDecay = randomIntegerInRange(4000, 10000);
 
-        const track = isOnTrack(position, this.level.tracks);
+        const track = isOnTrack(position, this.level.tracks, false);
         if (track) {
             this.level.handleRemoveTrack(track);
         }
@@ -39,10 +39,5 @@ export default class TreeScript extends BaseScript {
 
     removeTree(index) {
         this.tree.dispose();
-
-        this.tree.dispatchEvent({
-            ...TREE_GONE_EVENT,
-            index
-        });
     }
 }

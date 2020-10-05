@@ -81,16 +81,8 @@ export const convertTrackTypeToNewDirection = (track, direction) => {
     return trackType ? trackType[direction.type] : null;
 };
 
-export const getNextRotation = (track) => {
-    const index = TRACKS_ROTATION.indexOf(track.type);
-
-    return index === TRACKS_ROTATION.length - 1
-        ? TRACKS_ROTATION[0]
-        : TRACKS_ROTATION[index + 1];
-};
-
-export const isOnTrack = (position, tracks) => {
-    const gridPosition = getGridPositionFromCoordinates(position);
+export const isOnTrack = (position, tracks, convertToGrid = true) => {
+    const gridPosition = convertToGrid ? getGridPositionFromCoordinates(position) : position;
     const track = tracks
         .filter((track) =>
             areGridPositionsEqual(track.gridPosition, gridPosition)
