@@ -3399,7 +3399,6 @@ var Intro = /*#__PURE__*/function (_Level) {
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2___default()(_this), "handleTrackClick", function (event) {
-      //const nextRotation = getNextRotation(event.track);
       var index = _this.tracks.findIndex(function (track) {
         return Object(_grid__WEBPACK_IMPORTED_MODULE_8__["areGridPositionsEqual"])(track.gridPosition, event.track.gridPosition);
       });
@@ -3788,8 +3787,7 @@ var addTree = function addTree(level) {
     level: level,
     index: index,
     position: gridPosition
-  }); // tree.addEventListener(TREE_GONE_EVENT.type, handleTreeRemoval);
-
+  });
   trees.push(tree);
 };
 var clearObstacles = function clearObstacles() {
@@ -4346,6 +4344,27 @@ var TrainScript = /*#__PURE__*/function (_BaseScript) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TREE_GONE_EVENT", function() { return TREE_GONE_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TreeScript; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var mage_engine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mage-engine */ "./node_modules/mage-engine/dist/mage.js");
+/* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../grid */ "./src/level/grid.js");
+/* harmony import */ var _tracks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tracks */ "./src/level/tracks.js");
+/* harmony import */ var _utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/randomIntegerInRange */ "./src/utils/randomIntegerInRange.js");
+
+
+
+
+
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -4360,6 +4379,7 @@ var TREE_GONE_EVENT = {
 var TreeScript = /*#__PURE__*/function (_BaseScript) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(TreeScript, _BaseScript);
 
+  var _super = _createSuper(TreeScript);
 
   function TreeScript() {
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, TreeScript);
@@ -4380,7 +4400,7 @@ var TreeScript = /*#__PURE__*/function (_BaseScript) {
       this.position = position;
       this.tracks = tracks;
       this.level = level;
-      this.timeToDecay = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_8__["randomIntegerInRange"])(1000, 5000);
+      this.timeToDecay = Object(_utils_randomIntegerInRange__WEBPACK_IMPORTED_MODULE_8__["randomIntegerInRange"])(4000, 10000);
       var track = Object(_tracks__WEBPACK_IMPORTED_MODULE_7__["isOnTrack"])(position, this.level.tracks, false);
 
       if (track) {
@@ -4506,7 +4526,7 @@ var getTreeSprite = function getTreeSprite() {
 /*!*****************************!*\
   !*** ./src/level/tracks.js ***!
   \*****************************/
-/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, getNextRotation, isOnTrack, transformTrackLifeToOpacity */
+/*! exports provided: DIRECTIONS, VERTICAL, HORIZONTAL, HORIZONTAL2, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, TRACK_VERTICAL, TRACK_HORIZONTAL, TRACK_TOP_LEFT, TRACK_TOP_RIGHT, TRACK_BOTTOM_LEFT, TRACK_BOTTOM_RIGHT, TRACK_TYPES_TO_SPRITE_MAP, TRACK_TYPES_MAP, TRACKS_ROTATION, MAX_TRACK_LIFE, convertTrackTypeToNewDirection, isOnTrack, transformTrackLifeToOpacity */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4530,7 +4550,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRACKS_ROTATION", function() { return TRACKS_ROTATION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_TRACK_LIFE", function() { return MAX_TRACK_LIFE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "convertTrackTypeToNewDirection", function() { return convertTrackTypeToNewDirection; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextRotation", function() { return getNextRotation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isOnTrack", function() { return isOnTrack; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "transformTrackLifeToOpacity", function() { return transformTrackLifeToOpacity; });
 /* harmony import */ var _grid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./grid */ "./src/level/grid.js");
@@ -4618,10 +4637,6 @@ var MAX_TRACK_LIFE = 3;
 var convertTrackTypeToNewDirection = function convertTrackTypeToNewDirection(track, direction) {
   var trackType = TRACK_TYPES_MAP[track.type];
   return trackType ? trackType[direction.type] : null;
-};
-var getNextRotation = function getNextRotation(track) {
-  var index = TRACKS_ROTATION.indexOf(track.type);
-  return index === TRACKS_ROTATION.length - 1 ? TRACKS_ROTATION[0] : TRACKS_ROTATION[index + 1];
 };
 var isOnTrack = function isOnTrack(position, tracks) {
   var convertToGrid = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
