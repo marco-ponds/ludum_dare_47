@@ -280,8 +280,8 @@ export default class Intro extends Level {
                 dirt.addTags(['background', 'dirt']);
                 grass.addTags(['background', 'grass']);
 
-                dirt.setOpacity(0.5);
-                grass.setOpacity(0.7);
+                dirt.setOpacity(0.4);
+                grass.setOpacity(0.5);
 
                 dirt.setScale({ x: SPRITE_SCALE, y: SPRITE_SCALE });
                 dirt.setPosition(position);

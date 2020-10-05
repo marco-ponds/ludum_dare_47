@@ -3623,8 +3623,8 @@ var Intro = /*#__PURE__*/function (_Level) {
           var grass = new mage_engine__WEBPACK_IMPORTED_MODULE_7__["Sprite"](_grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SIZE"], Object(_sprites__WEBPACK_IMPORTED_MODULE_9__["getGrassSprite"])());
           dirt.addTags(['background', 'dirt']);
           grass.addTags(['background', 'grass']);
-          dirt.setOpacity(0.5);
-          grass.setOpacity(0.7);
+          dirt.setOpacity(0.4);
+          grass.setOpacity(0.5);
           dirt.setScale({
             x: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"],
             y: _grid__WEBPACK_IMPORTED_MODULE_8__["SPRITE_SCALE"]
@@ -4866,7 +4866,7 @@ var instructions = [{
   image: './assets/textures/train_head.png',
   text: "This is the train! It's heavy, so it'll wear down any tracks it runs on."
 }, {
-  image: './assets/textures/track_straight.png',
+  image: './assets/textures/tracks_vertical.png',
   text: 'This is a track! Pick one from the toolbar and place it wherever you want (or need) to!'
 }, {
   image: './assets/textures/boulder.png',
