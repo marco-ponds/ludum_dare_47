@@ -4,6 +4,8 @@
 
 .instruction-image {
     margin-left: 1rem;
+    height: 42px;
+    width: 42px;
 }
 
 .instruction-text {
@@ -21,8 +23,9 @@
 }
 
 .instruction-container {
-    padding-top: 10px; 
+    padding-top: 10px;
 }
+
 .credits {
     font-size: 8pt;
 }
@@ -46,14 +49,21 @@
     position: absolute;
     z-index: 104;
     /* background: #E5DECF; */
-    background: repeating-linear-gradient( 45deg, #e5decf, #e5decf 30px, #ddd7cc 0, #ddd7cc 60px);
+    background: repeating-linear-gradient(
+        45deg,
+        #e5decf,
+        #e5decf 30px,
+        #ddd7cc 0,
+        #ddd7cc 60px
+    );
 }
 
 .menu-container {
-    height: 700px;
+    height: 630px;
     width: 800px;
     margin: auto;
-    margin-top: 36px;
+    margin-top: 20px;
+    padding-bottom: 24px;
 }
 
 .box {
@@ -100,10 +110,10 @@
     padding: 16px;
     text-align: center;
     position: relative;
-    background: #FEFEFE;
-    border: 1px solid #BDB8AD;
-    border-top: 4px solid #CCC4B5;
-    box-shadow: inset 0px 3px 0px #DEDDDC;
+    background: #fefefe;
+    border: 1px solid #bdb8ad;
+    border-top: 4px solid #ccc4b5;
+    box-shadow: inset 0px 3px 0px #dedddc;
 }
 
 .button {
