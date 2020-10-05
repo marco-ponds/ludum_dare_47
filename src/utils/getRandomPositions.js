@@ -36,3 +36,8 @@ export const getRandomInitialEdgePositionAndDirection = () => {
     }
     return rowColDirection;
 };
+
+export const getRandomPositionInGrid = () => ({
+    row: randomIntegerInRange(0, GRID_HEIGHT - 1),
+    col: randomIntegerInRange(0, GRID_WIDTH - 1)
+});
