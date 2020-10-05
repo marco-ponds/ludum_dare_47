@@ -85,7 +85,6 @@ export const addTree = (level) => {
     const index = trees.length;
 
     tree.addScript(TREE, true, { tracks: level.tracks, level, index, position: gridPosition });
-    // tree.addEventListener(TREE_GONE_EVENT.type, handleTreeRemoval);
 
     trees.push(tree);
 };
